@@ -1,19 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
+"use client";
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { saveAs } from "file-saver";
-import { backup, recover, fetchAll } from "./DexieDatabase";
-import { Db } from '@/utils/Db';
+import { useRouter } from 'next/navigation';
+import { MenuData } from '@/lib/MenuData';
+import { getSessionStorageSize } from '@/lib/utils';
 
-
-const MenuItem = ({ Href, Title }) => {
-    return <Link href={Href} className="px-1 mb-2 hover:border-l-2 border-indigo-400 underline-offset-4 decoration-4 decoration-indigo-300 hover:text-indigo-800">{Title}</Link>
-}
 
 
 const MenuWraper = ({ Title, children }) => {
-    return <div className="flex flex-col p-2 md:p-4 items-center bg-pink-50">
+    return <div className="flex flex-col p-2 md:p-4 items-center bg-gradient-to-t from-white to-pink-100 rounded-lg">
         <h1 className='w-full text-start text-xs font-bold text-gray-500 italic'>{Title}</h1>
         <div className="flex flex-col items-start">
             {children}
@@ -22,253 +17,128 @@ const MenuWraper = ({ Title, children }) => {
 }
 
 
-const Layout = ({ Title, children }) => {
-    const [menu, setMenu] = useState(false);
-    const [msg, setMsg] = useState("");
+const MenuItem = ({ Href, Title, Menu }) => {
+    const router = useRouter();
+    const cmdClick = () => {
+        router.push(Href);
+        Menu(false);
+    }
+    return (
+        <button onClick={cmdClick} className="px-1 mb-2 hover:border-l-2 border-indigo-400 underline-offset-4 decoration-4 decoration-indigo-300 hover:text-indigo-400">{Title}</button>
+    )
+}
 
-    const [user, setUser] = useState(false);
-    const [dataExists, setDataExists] = useState(false);
+
+
+const Layout = ({ children }) => {
+    const [menu, setMenu] = useState(false);
+    const [useSize, setUseSize] = useState("0");
+    const [readSize, setReadSize] = useState("0");
+
     const router = useRouter();
 
-    useEffect(() => {
-
-        let log = sessionStorage.getItem("login");
-        if (log === "login") {
-            setUser(true);
-        } else {
-            setUser(false);
+    const getSessionStorageSize = () => {
+        let totalSize = 0;
+        const keys = Object.keys(localStorage);
+        for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            totalSize += localStorage[key].length;
         }
-
-        const dataCheck = async () => {
-            try {
-                const staffData = await fetchAll("staff");
-                staffData.length > 0 ? setDataExists(true) : setDataExists(false);
-                setMsg("Data exists.");
-            }
-            catch (err) {
-                console.log(err);
-                setMsg("No data found.");
-            }
-            
-        }
-        dataCheck();
-
-
-    }, [msg])
-
-    const logoutHandler = () => {
-        sessionStorage.clear();
-        setUser(false);
-        router.push("/");
+        return totalSize / (1024 * 1024); // Returns size in characters (MB)
     }
 
-    const menuBarHandler = (e) => {
-        if (e.target.id === 'big_menu') {
+
+    useEffect(() => {
+        const user = sessionStorage.getItem('log');
+        if (!user) {
+            router.push('/');
+        }
+
+        const readingLength = localStorage.getItem('readinglen');
+        if (readingLength) {
+            const jsonLen = JSON.parse(readingLength);
+            setReadSize(jsonLen.len);
+        }else{
+            setReadSize("0"); 
+        }
+
+        setUseSize(getSessionStorageSize());
+
+    }, [router]);
+
+
+    const logOutHandler = () => {
+        sessionStorage.removeItem('log');
+        router.push('/');
+    }
+
+
+    const menuBackClickHandler = (e) => {
+        const id = e.target.id;
+        if (id === 'menuBack') {
             setMenu(false);
         }
     }
 
-    const hambergHandle = () => {
-        let log = sessionStorage.getItem("login");
-        if (log) {
-            setUser(true);
-        } else {
-            setUser(false);
-        }
 
 
-        setMenu(true);
-    }
-
-    const backupHandler = async () => {
-        try {
-            const data = await backup();
-            const json = JSON.stringify(data);
-            const blob = new Blob([json], { type: "application/json" });
-            const fileName = `${new Date().toISOString()}-dexie-db.json`;
-            saveAs(blob, fileName);
-            console.log(`Downloaded database as "${fileName}"`);
-        } catch (error) {
-            console.error("Error downloading JSON file:", error);
-            throw error;
-        }
-    }
-
-    const goHome = (e) => {
-        e.preventDefault()
-        router.push("/");
-    }
 
 
-    const initDBHandler = async () => {
-        try {
-            const staff_data = await fetchAll("staff");
-            if (staff_data.length > 0) {
-                console.log("Data already exists.");
-                setMsg("Data available.");
-                return false;
-            } else {
-                await recover(Db);
-                console.log("Data restore successfully completed.");
-                setMsg("No Data!.");
-            }
-        } catch (error) {
-            console.error('Error occurred during database recovery:', error)
-        }
-    }
+
 
 
     return (
         <>
-            <Head>
-                <title>{Title ? Title + "-Aslam Zaman" : "Aslam Zaman"}</title>
-                <meta name="description" content="Generated by create next app" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/logo.jpg" />
-            </Head>
-            <div className="w-screen h-screen flex flex-col justify-between">
-                <header>
-                    <nav className="w-full h-[60px] px-6 border-b flex justify-between items-center shadow-lg">
-                        <button onClick={goHome}>
-                            <span className="text-lg font-bold">Aslam</span>
-                        </button>
-
-                        <div className="flex items-center space-x-3">
-                            <div className="cursor-pointer group">
-                                {user ? <button onClick={logoutHandler}>Logout</button> : <Link href="/log">Login</Link>}
-                            </div>
-
-
-                            <button onClick={hambergHandle}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                                </svg>
-                            </button>
-                        </div>
-                    </nav>
-                </header>
-
-                <main className="w-full h-[calc(100vh-110px)]">
-                    <div className="w-full h-full p-6 overflow-auto">
-                        {children}
-                    </div>
-                </main>
-
-                <footer className="w-full h-[50px] px-6 flex justify-center items-center border-t-2 border-gray-100">
-                    <p>Copyright @ 2023 Aslam Zaman</p>
-                </footer>
-
-
-                {/* Big menu */}
-                <div id="big_menu" onClick={menuBarHandler} className={`absolute ${menu ? 'block' : 'hidden'} inset-0 bg-slate-900 bg-opacity-20`}>
-                    <div className="w-full min-h-fit bg-white">
-                        <div id="header" className="w-full h-12 shadow-lg flex justify-between items-center p-4">
-                            <h1 className="text-xl font-bold">Menu</h1>
-                            <button onClick={() => setMenu(false)}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-                        <div id="body" className="grid grid-cols-2 md:grid-cols-4  lg:grid-cols-5 gap-2 md:gap-3 p-4 shadow-sm">
-
-                            <MenuWraper Title="Settings">
-                                <MenuItem Href="/project" Title="Project" />
-                                <MenuItem Href="/post" Title="Post" />
-                                <MenuItem Href="/gender" Title="Gender" />
-                                <MenuItem Href="/place" Title="Place" />
-                                <MenuItem Href="/unit" Title="Unit" />
-                                <MenuItem Href="/district" Title="District" />
-                                <MenuItem Href="/staff" Title="Staff" />
-                                <MenuItem Href="/author" Title="Author" />
-                                <MenuItem Href="/ta" Title="TA" />
-                                <MenuItem Href="/da" Title="DA" />
-                                <MenuItem Href="/price" Title="Price" />
-                            </MenuWraper>
-
-                            <MenuWraper Title="Construction">
-                                <MenuItem Href="/construction/brickflatsolling" Title="Brick Flat Solling" />
-                                <MenuItem Href="/construction/brickwork" Title="Brick Works" />
-                                <MenuItem Href="/construction/ccwork" Title="CC Works" />
-                                <MenuItem Href="/construction/rccwork" Title="RCC Works" />
-                                <MenuItem Href="/construction/plasterworks" Title="Plaster Works" />
-                            </MenuWraper>
-
-
-                            <MenuWraper Title="Bills">
-                                <MenuItem Href="/bills/bkash" Title="Bkash Bill" />
-                                <MenuItem Href="/bills/electric" Title="Electric Bill" />
-                                <MenuItem Href="/bills/tabill" Title="TA Bill" />
-                                <MenuItem Href="/bills/localta" Title="Local TA" />
-                                <MenuItem Href="/bills/mobile_bill" Title="Mobile Bill" />
-                                <MenuItem Href="/bills/link3" Title="Link3" />
-                                <MenuItem Href="/bills/anybill" Title="Any Bill" />
-                            </MenuWraper>
-
-
-                            <MenuWraper Title="Calculation">
-                                <MenuItem Href="/octen" Title="Octen" />
-                                <MenuItem Href="/property" Title="Property" />
-                                <MenuItem Href="/converter" Title="Land Area Converter" />
-                                <MenuItem Href="/uni" Title="Unique Id" />
-                                {user?<MenuItem Href="/code" Title="Code" />:null}  
-                                <MenuItem Href="/inword" Title="Inword" />
-                                <MenuItem Href="/vattax" Title="Vat Tax Calculator" />
-                                <MenuItem Href="/benefit" Title="Staff Benefit Calculator" />
-                            </MenuWraper>
-
-
-                            <MenuWraper Title="Bayprostab">
-                                <MenuItem Href="/bayprostab" Title="Bayprostab" />
-                                <MenuItem Href="/bayprostabexecution" Title="Bayprostab Execution" />
-                                <MenuItem Href="/rent" Title="House rent" />
-                                <MenuItem Href="/sewerage" Title="Sewerage" />        
-                                <MenuItem Href="/unitsalary" Title="Unit Salary" />
-                            </MenuWraper>
-
-                            <MenuWraper Title="Documents">
-                                <MenuItem Href="/honda" Title="Honda" />
-                                <MenuItem Href="/land" Title="Land" />
-                                <MenuItem Href="/doc" Title="Doc" />
-                                <MenuItem Href="/format" Title="Formats" />
-                                <MenuItem Href="/leave" Title="Leave Application" />
-                                <MenuItem Href="/salarycertificate" Title="Salary Certificate" />
-                                <MenuItem Href="/experiencecertificate" Title="Experience Certificate" />
-                                <MenuItem Href="/authorizeletter" Title="Authorize Letter" />
-                                <MenuItem Href="/letter" Title="Letter Write" />
-                            </MenuWraper>
-
-
-
-                            <MenuWraper Title="Certificate">
-                                <MenuItem Href={user ? "/certificate" : "#"} Title="Certificate COL" />
-                                <MenuItem Href={user ? "/certificate/col2" : "#"} Title="Certificate COL-2" />
-                                <MenuItem Href={user ? "/certificate/col3" : "#"} Title="Certificate COL-3" />
-                                <MenuItem Href={user ? "/certificate/certificategeneral" : "#"} Title="Certificate General" />
-                            </MenuWraper>
-
-
-
-                            <MenuWraper Title="Backup/Restore">
-                                {dataExists ? (
-                                    <>
-                                        <input type="button" onClick={backupHandler} className="px-1 mb-2 hover:border-l-2 border-indigo-400 underline-offset-4 decoration-4 decoration-indigo-300 hover:text-indigo-800 cursor-pointer" value="Backup Database" />
-                                        <MenuItem Href="/databaserecover" Title="Database Restore" />
-                                    </>
-                                ) : (
-
-                                    <input type="button" onClick={initDBHandler} className="px-1 mb-2 hover:border-l-2 border-indigo-400 underline-offset-4 decoration-4 decoration-indigo-300 hover:text-indigo-800 cursor-pointer" value="Database Recover" />
-
-                                )}
-                            </MenuWraper>
-
-                        </div>
-
-                    </div>
+            <header id="top" className="fixed h-[60px] top-0 left-0 right-0 px-4 lg:px-6 bg-gray-100 border-b-2 border-white flex justify-between items-center shadow-lg z-10">
+                <div className="text-lg font-bold">
+                    {menu ? (<h1>Menu</h1>) : (<Link href="/dashboard">ASLAM</Link>)}
                 </div>
-                {/* /Big menu */}
+                <p className='font-[xs] text-gray-400'>{parseFloat(useSize).toFixed(3)} MB/{readSize}</p>
+                <button onClick={() => menu ? setMenu(false) : setMenu(true)}>
+                    {menu ? (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    )}
+                </button>
+            </header>
 
-            </div >
+            {menu && (
+                <nav className="fixed w-full top-[60px] z-10">
+
+                    <div id="menuBack" onClick={menuBackClickHandler} className='w-full h-[calc(100vh-60px)] p-4 bg-gray-400 shadow-lg transition duration-500 overflow-auto'>
+                        <div className='w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-3'>
+                            {
+                                MenuData.map((m, i) => {
+                                    const btn = m.group;
+                                    return (
+                                        <MenuWraper Title={m.title} key={i}>
+                                            {btn.map((b, j) => <MenuItem Href={b.url} Title={b.label} Menu={(data) => setMenu(data)} key={j} />)}
+                                        </MenuWraper>
+                                    )
+                                })
+                            }
+                            <MenuWraper Title="Log">
+                                <button onClick={logOutHandler} className="px-1 mb-2 hover:border-l-2 border-indigo-400 underline-offset-4 decoration-4 decoration-indigo-300 hover:text-indigo-400">Log Out</button>
+                            </MenuWraper>
+                        </div>
+                    </div>
+                </nav>)}
+
+
+            <main className="w-full mt-[60px] bg-white">
+                <div className='p-2 overflow-auto'>
+                    {children}
+                </div>
+                <div className='my-40'></div>
+            </main>
+
+
+            <footer className="w-full py-10 text-center text-sm bg-gray-100 border-t-2 border-white">
+                <p className='text-center'>Copyright @ 2024 Aslam Zaman. Email: aslamcmes@gmail.com</p>
+            </footer>
         </>
     )
 }

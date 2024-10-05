@@ -1,91 +1,94 @@
 import React, { useState } from "react";
-import { TextEn, TextNum, BtnSubmit, DropdownEn } from "../../components/Form";
-import { Close } from "../Icons";
-
-import { fetchAll } from "../../components/DexieDatabase";
-import { addItem } from "../LocalDatabase"
+import { TextEn, BtnSubmit } from "@/components/Form";
+import { addDataToFirebase } from "@/lib/utils";
 
 
-
-const Add = ({ Msg }) => {
-    const [mobiles, setMobiles] = useState([]);
-    const [name, setName] = useState("");
-    const [num, setNum] = useState("");
-    const [taka, setTaka] = useState("");
-
+const Add = ({ message }) => {
+    const [registeredUser, setRegisteredUser] = useState('');
+    const [presentUser, setPresentUser] = useState('');
+    const [mobileNo, setMobileNo] = useState('');
     const [show, setShow] = useState(false);
 
 
-    const addtHandler = async () => {
-        setShow(true);
-        Msg("Ready to add new");
-
-        const getData = async () => {
-            try {
-              const staffs = await fetchAll("mobile");
-              setMobiles(staffs);
-            } catch (err) {
-              console.log(err);
-            }
-          }
-          getData();
-
-        setName("Office & Organization");
-        setNum("01711439324");
-        setTaka("");
+    const resetVariables = () => {
+        setRegisteredUser('');
+        setPresentUser('');
+        setMobileNo('');
     }
 
-    const saveHandler = async (e) => {
-        e.preventDefault();
-        let obj = {
-            id: Date.now(),
-            name: name,
-            num: num,
-            taka: taka
-        }
 
-        let local = addItem("mobile", obj);
-        Msg(local.message);
+    const showAddForm = () => {
+        setShow(true);
+        resetVariables();
+    }
+
+
+    const closeAddForm = () => {
         setShow(false);
     }
 
-    const nameChangeHandler = (e) => {
-        setName(e.target.value);
-        let x = mobiles.find(t => t.name === e.target.value);
-        setNum(x.mobile);
+
+    const createObject = () => {
+        return {
+            registeredUser: registeredUser,
+            presentUser: presentUser,
+            mobileNo: mobileNo 
+        }
     }
 
+
+    const saveHandler = async (e) => {
+        e.preventDefault();
+        try {
+            const newObject = createObject();
+            const msg = addDataToFirebase("mobile",newObject);
+            message(msg);
+          } catch (error) {
+              console.error("Error saving mobile data:", error);
+              message("Error saving mobile data.");
+         }finally {
+           setShow(false);
+         }
+    }
 
 
     return (
         <>
-            <div className={`fixed inset-0 py-16 bg-gray-900 ${show ? 'block' : 'hidden'}  bg-opacity-60 overflow-auto`}>
-                <div className="w-11/12 md:w-8/12 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
-                    <div className="px-6 md:px-6 py-2 flex justify-between items-center border-b border-gray-300">
-                        <h1 className="text-xl font-bold text-blue-600">Add New</h1>
-                        <Close Click={() => { setShow(false); Msg("Data ready") }} Size="w-9 h-9" />
+            {show && (
+                <div className="fixed inset-0 py-16 bg-black bg-opacity-30 backdrop-blur-sm z-10 overflow-auto">
+                    <div className="w-11/12 md:w-1/2 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
+                        <div className="px-6 md:px-6 py-2 flex justify-between items-center border-b border-gray-300">
+                            <h1 className="text-xl font-bold text-blue-600">Add New Data</h1>
+                            <button onClick={closeAddForm} className="w-8 h-8 p-0.5 bg-gray-50 hover:bg-gray-300 rounded-md transition duration-500">
+                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-full h-full stroke-black">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                             </button>
+                        </div>
+                        <div className="px-6 pb-6 text-black">
+                            <form onSubmit={saveHandler}>
+                                <div className="grid grid-cols-1 gap-4 my-4">
+                                    <TextEn Title="Registereduser" Id="registeredUser" Change={e => setRegisteredUser(e.target.value)} Value={registeredUser} Chr={150} />
+                                    <TextEn Title="Presentuser" Id="presentUser" Change={e => setPresentUser(e.target.value)} Value={presentUser} Chr={150} />
+                                    <TextEn Title="Mobileno" Id="mobileNo" Change={e => setMobileNo(e.target.value)} Value={mobileNo} Chr={50} />                                      
+                                </div>
+                                <div className="w-full flex justify-start">                        
+                                <input type="button" onClick={closeAddForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />
+                                <BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />   
+                                </div>
+                            </form>
+                        </div>
                     </div>
-
-                    <div className="px-6 pb-6 text-black">
-                    <form onSubmit={saveHandler} >
-                            <DropdownEn Title="Name" Id="name" Change={nameChangeHandler} Value={name}>
-                                {mobiles.map(m => <option value={m.name} key={m.id}>{m.name}</option>)}
-                            </DropdownEn>
-
-                            <TextEn Title="Num" Id="num" Change={(e) => { setNum(e.target.value) }} Value={num} Chr="50" />
-                            <TextNum Title="Taka" Id="taka" Change={(e) => { setTaka(e.target.value) }} Value={taka} />
-                            <BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />
-                        </form>
-                    </div>
-
                 </div>
-            </div>
-            <button onClick={addtHandler} className="w-7 h-7 mr-2 bg-indigo-700 hover:bg-indigo-900 text-white flex justify-center items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
+            )}
+            <button onClick={showAddForm} className="px-1 py-1 bg-blue-500 hover:bg-blue-700 rounded-md transition duration-500" title="Add New">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" className="w-7 h-7 stroke-white hover:stroke-gray-100">
+                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
             </button>
         </>
     )
 }
 export default Add;
+
+  

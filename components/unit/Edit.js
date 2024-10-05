@@ -1,85 +1,94 @@
+
 import React, { useState } from "react";
-import { TextEn, TextBn, BtnSubmit } from "../Form";
-import { Close } from "../Icons";
-import { fetchOne, updateOne } from "../DexieDatabase";
+import { TextEn, BtnSubmit, TextBn } from "@/components/Form";
+import { addDataToFirebase, putDataToAPI } from "@/lib/utils";
 
 
-
-
-const Edit = ({ Msg, Id }) => {
-    const [nm_en, setNm_en] = useState("");
-    const [nm_bn, setNm_bn] = useState("");
-
+const Edit = ({ message, id, data }) => {
+    const [nmEn, setNmEn] = useState('');
+    const [nmBn, setNmBn] = useState('');
+    const [nmUn, setNmUn] = useState('');
+    const [createdAt, setCreatedAt] = useState('');
     const [show, setShow] = useState(false);
 
 
-    const editHandler = async () => {
+    const showEditForm = () => {
+        console.log(id);
         setShow(true);
-        Msg("Ready to edit");
-        console
         try {
-            const unitData = await fetchOne("unit", Id);
-            if (unitData) {
-                const { nm_en, nm_bn } = unitData;
-                setNm_en(nm_en);
-                setNm_bn(nm_bn);
-            } else {
-                setNm_en("");
-                setNm_bn("");
-            }
+            const { nmEn, nmBn, nmUn, createdAt } = data;
+            setNmEn(nmEn);
+            setNmBn(nmBn);
+            setNmUn(nmUn);
+            setCreatedAt(createdAt);
         } catch (err) {
-            console.log(`Error fetching unit data: ${error}`);
+            console.log(err);
         }
     };
 
 
-    const createUnitData = () => {
+    const closeEditForm = () => {
+        setShow(false);
+    };
+
+
+    const createObject = () => {
         return {
-            id: Id,
-            nm_en: nm_en,
-            nm_bn: nm_bn
+            nmEn: nmEn,
+            nmBn: nmBn,
+            nmUn: nmUn,
+            createdAt: createdAt
         }
     }
+
 
     const saveHandler = async (e) => {
         e.preventDefault();
         try {
-            const unitData = createUnitData();
-            const updatedUnitId = await updateOne("unit", unitData);
-            console.log(`Unit with id ${updatedUnitId} updated successfully.`);
-            Msg("Data updated successfully.");
+            const newObject = createObject();
+            const msg = await addDataToFirebase("unit",id, newObject);
+            message(msg);
         } catch (error) {
-            console.log(`Error updating unit data: ${error}`);
-            Msg("Data updating error");
+            console.error("Error saving unit data:", error);
+            message("Error saving unit data.");
+        } finally {
+            setShow(false);
         }
-        setShow(false);
     }
+
 
     return (
         <>
-            <div className={`fixed inset-0 py-16 bg-gray-900 ${show ? 'block' : 'hidden'}  bg-opacity-60 overflow-auto`}>
-                <div className="w-11/12 md:w-8/12 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
-                    <div className="px-6 md:px-6 py-2 flex justify-between items-center border-b border-gray-300">
-                        <h1 className="text-xl font-bold text-blue-600">Edit Existing</h1>
-                        <Close Click={() => { setShow(false); Msg("Data ready") }} Size="w-8 h-8" />
+            {show && (
+                <div className="fixed inset-0 py-16 bg-black bg-opacity-30 backdrop-blur-sm z-10 overflow-auto">
+                    <div className="w-11/12 md:w-1/2 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
+                        <div className="px-6 md:px-6 py-2 flex justify-between items-center border-b border-gray-300">
+                            <h1 className="text-xl font-bold text-blue-600">Edit Existing Data</h1>
+                            <button onClick={closeEditForm} className="w-8 h-8 p-0.5 bg-gray-50 hover:bg-gray-300 rounded-md transition duration-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-full h-full stroke-black">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+
+                        </div>
+                        <div className="px-6 pb-6 text-black">
+                            <form onSubmit={saveHandler} >
+                                <div className="grid grid-cols-1 gap-4 my-4">
+                                    <TextEn Title="Nmen" Id="nmEn" Change={e => setNmEn(e.target.value)} Value={nmEn} Chr={50} />
+                                    <TextBn Title="Nmbn" Id="nmBn" Change={e => setNmBn(e.target.value)} Value={nmBn} Chr={50} />
+                                    <TextEn Title="Nmun" Id="nmUn" Change={e => setNmUn(e.target.value)} Value={nmUn} Chr={50} />
+                                </div>
+                                <div className="w-full flex justify-start">
+                                    <input type="button" onClick={closeEditForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />
+                                    <BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />
+                                </div>
+                            </form>
+                        </div>
                     </div>
-
-                    <div className="px-6 pb-6 text-black">
-                        <form onSubmit={saveHandler} >
-                            <div className="grid grid-cols-1 gap-4 my-4">
-                                <TextEn Title="English Name" Id="nm_en" Change={e => setNm_en(e.target.value)} Value={nm_en} Chr="50" />
-                                <TextBn Title="Bangla Name" Id="nm_bn" Change={e => setNm_bn(e.target.value)} Value={nm_bn} Chr="50" />
-                            </div>
-                            <span onClick={() => { setShow(false); Msg("Data ready") }} className="text-center mt-3 mx-0.5 px-4 py-2.5 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 bg-red-600 hover:bg-red-800 text-white mr-1 cursor-pointer">Close</span>
-                            <BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />
-                        </form>
-                    </div>
-
-
                 </div>
-            </div>
-            <button onClick={editHandler} title="Edit" className="w-8 h-8 rounded-full hover:bg-gray-200 mr-1 flex justify-center items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
+            )}
+            <button onClick={showEditForm} title="Edit" className="px-1 py-1 hover:bg-teal-300 rounded-md transition duration-500">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5 stroke-black hover:stroke-blue-800 transition duration-500">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
                 </svg>
             </button>
@@ -87,3 +96,9 @@ const Edit = ({ Msg, Id }) => {
     )
 }
 export default Edit;
+
+
+
+
+
+

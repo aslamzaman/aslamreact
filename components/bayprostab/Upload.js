@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { BtnEn } from "../Form";
 import { Close } from "../Icons";
+import { sessionStorageSetItem } from "@/lib/utils";
 
 
-const Upload = ({ Msg }) => {
+const Upload = ({ message }) => {
 	const [file, setFile] = useState(null);
 
 
@@ -12,7 +13,6 @@ const Upload = ({ Msg }) => {
 
 	const showModal = () => {
 		setShow(true);
-		Msg("Ready to upload");
 	}
 
 
@@ -20,20 +20,14 @@ const Upload = ({ Msg }) => {
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = (() => {
-				let checkData = JSON.parse(reader.result)[0];
-				if (!checkData.item) {
-					Msg("Data not match!");
-					setShow(false);
-					return false;
-				};
-
-				localStorage.setItem("bayprostab", reader.result);
-				Msg("Data loaded successfully");
+				let jsonData = JSON.parse(reader.result);
+				sessionStorageSetItem("bayprostab", jsonData);
+				message("Data loaded successfully");
 				setShow(false);
 			})
 			reader.readAsText(file);
 		} else {
-			Msg("Please select a file.");
+			message("Please select a file.");
 			setShow(false);
 		}
 	}
@@ -49,11 +43,11 @@ const Upload = ({ Msg }) => {
 					</div>
 
 					<div className="p-6 text-black">
-						<input type="file" onChange={(e) => { setFile(e.target.files[0]); }} className="w-full px-4 py-1.5 text-gray-600 ring-1 focus:ring-4 ring-blue-300 outline-none rounded duration-300" accept="application/javascript" />
+						<input type="file" onChange={(e) => { setFile(e.target.files[0]); }} className="w-full px-4 py-1.5 text-gray-600 ring-1 focus:ring-4 ring-blue-300 outline-none rounded duration-300" accept="application/json" />
 					</div>
 
 					<div className="px-6 py-6 flex justify-end items-center border-t border-gray-300">
-						<BtnEn Title="Close" Click={() => { setShow(false); Msg("Data ready") }} Class="bg-red-600 hover:bg-red-800 text-white mr-1" />
+						<BtnEn Title="Close" Click={() => { setShow(false); message("Data ready") }} Class="bg-red-600 hover:bg-red-800 text-white mr-1" />
 						<BtnEn Title="Upload" Click={uploadHandler} Class="bg-blue-600 hover:bg-blue-800 text-white" />
 					</div>
 				</div>
@@ -67,3 +61,4 @@ const Upload = ({ Msg }) => {
 	)
 }
 export default Upload;
+

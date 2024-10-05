@@ -1,212 +1,177 @@
 import React, { useState } from "react";
-import { TextEn, TextBn, TextDt, TextNum, DropdownEn, BtnSubmit } from "../Form";
-import { Close } from "../Icons";
-import { insertOne, fetchAll } from "../DexieDatabase";
+import { TextEn, BtnSubmit, DropdownEn, TextBn, TextDt, TextNum } from "@/components/Form";
+import { addDataToFirebase, formatedDate, postDataToAPI } from "@/lib/utils";
 
 
-const Add = ({ Msg }) => {
-	const [nm_un, setNm_un] = useState("");
-	const [nm_en, setNm_en] = useState("");
-	const [nm_bn, setNm_bn] = useState("");
-	const [dt, setDt] = useState("");
-	const [sal, setSal] = useState("");
-	const [mobile, setMobile] = useState("");
-	const [address, setAddress] = useState("");
-	const [district_id, setDistrict_id] = useState("");
-	const [gender_id, setGender_id] = useState("");
-	const [post_id, setPost_id] = useState("");
-	const [project_id, setProject_id] = useState("");
-	const [picture_id, setPicture_id] = useState("");
-	const [emp_id, setEmp_id] = useState("");
-	const [status, setStatus] = useState("");
-	const [place_id, setPlace_id] = useState("");
-	const [unit_id, setUnit_id] = useState("");
-	const [remarks, setRemarks] = useState("");
+const Add = ({ message }) => {
+    const [nmEn, setNmEn] = useState('');
+    const [nmBn, setNmBn] = useState('');
+    const [nmUn, setNmUn] = useState('');
+    const [joinDt, setJoinDt] = useState('');
+    const [mobile, setMobile] = useState('');
+    const [genderId, setGenderId] = useState('');
+    const [postId, setPostId] = useState('');
+    const [projectId, setProjectId] = useState('');
+    const [pictureUrl, setPictureUrl] = useState('');
+    const [empId, setEmpId] = useState('');
+    const [placeId, setPlaceId] = useState('');
+    const [unitId, setUnitId] = useState('');
+    const [status, setStatus] = useState('');
+    const [remarks, setRemarks] = useState('');
+    const [salary, setSalary] = useState('');
 
-	const [show, setShow] = useState(false);
+    const [show, setShow] = useState(false);
 
-	const [genders, setGenders] = useState([]);
-	const [posts, setPosts] = useState([]);
-	const [projects, setProjects] = useState([]);
-	const [places, setPlaces] = useState([]);
-	const [units, setUnits] = useState([]);
-	const [districts, setDistricts] = useState([]);
+    const [genders, setGenders] = useState([]);
+    const [posts, setPosts] = useState([]);
+    const [projects, setProjects] = useState([]);
+    const [places, setPlaces] = useState([]);
+    const [units, setUnits] = useState([]);
 
-	const resetStateVariables = () => {
-		Msg("Ready to add new");
-		setNm_un("");
-		setNm_en("");
-		setNm_bn("");
-		setDt("");
-		setSal("");
-		setMobile("");
-		setAddress("");
-		setDistrict_id("");
-		setGender_id("");
-		setPost_id("");
-		setProject_id("");
-		setPicture_id("");
-		setEmp_id("");
-		setStatus("");
-		setPlace_id("");
-		setUnit_id("");
-		setRemarks("");
-	}
-
-	const addNewHandler = async () => {
-		setShow(true);
-		resetStateVariables();
-		try {
-			const [genderData, postData, projectData, placeData, unitData, districtData] = await Promise.all([
-				fetchAll("gender"),
-				fetchAll("post"),
-				fetchAll("project"),
-				fetchAll("place"),
-				fetchAll("unit"),
-				fetchAll("district")
-			]);
-			setGenders(genderData);
-			setPosts(postData);
-			setProjects(projectData);
-			setPlaces(placeData);
-			setUnits(unitData);
-			setDistricts(districtData);
-		}
-		catch (err) {
-			console.log(err);
-		}
-	}
-
-	const createStaffObject = () => {
-		return {
-			id: Date.now(),
-			nm_un: nm_un,
-			nm_en: nm_en,
-			nm_bn: nm_bn,
-			dt: dt,
-			sal: sal,
-			mobile: mobile,
-			address: address,
-			district_id: district_id,
-			gender_id: gender_id,
-			post_id: post_id,
-			project_id: project_id,
-			picture_id: 1,
-			emp_id: emp_id,
-			status: status,
-			place_id: place_id,
-			unit_id: unit_id,
-			remarks: remarks
-		}
-	}
-
-	const saveHandler = async (e) => {
-		e.preventDefault();
-		try {
-			const newStaffData = createStaffObject();
-			await insertOne("staff", newStaffData);
-			Msg("Data saved successfully.");
-		} catch (error) {
-			console.log(`Error saving staff data: ${error}`);
-			Msg("Error saving staff data.");
-		}
-		setShow(false);
-	}
-
-	return (
-		<>
-			<div className={`fixed inset-0 py-16 bg-gray-900 ${show ? 'block' : 'hidden'}  bg-opacity-60 overflow-auto`}>
-				<div className="w-11/12 md:w-8/12 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
-					<div className="px-6 md:px-6 py-2 flex justify-between items-center border-b border-gray-300">
-						<h1 className="text-xl font-bold text-blue-600">Add New</h1>
-						<Close Click={() => { setShow(false); Msg("Data ready") }} Size="w-8 h-8" />
-					</div>
-
-					<div className="px-6 pb-6 text-black">
-						<form onSubmit={saveHandler}>
-							<div className="grid grid-cols-1 gap-4 my-4">
-								<TextEn Title="Name-Unicode" Id="nm_un" Change={e => setNm_un(e.target.value)} Value={nm_un} Chr="50" />
-								<TextEn Title="Name-English" Id="nm_en" Change={e => setNm_en(e.target.value)} Value={nm_en} Chr="50" />
-								<TextBn Title="Name-Bijoy" Id="nm_bn" Change={e => setNm_bn(e.target.value)} Value={nm_bn} Chr="50" />
-								<TextDt Title="Joining Date" Id="dt" Change={e => setDt(e.target.value)} Value={dt} />
-								<TextNum Title="Salary" Id="sal" Change={e => setSal(e.target.value)} Value={sal} />
-								<TextEn Title="Mobile" Id="mobile" Change={e => setMobile(e.target.value)} Value={mobile} Chr="50" />
-								<TextEn Title="Address" Id="address" Change={e => setAddress(e.target.value)} Value={address} Chr="150" />
-
-								<DropdownEn Title="District" Id="District_id" Change={e => setDistrict_id(e.target.value)} Value={district_id}>
-									{
-										districts.length ? districts.map(dis => {
-											return <option value={dis.id} key={dis.id}>{dis.name}</option>
-										})
-											: null
-									}
-								</DropdownEn>
-
-								<DropdownEn Title="Gender" Id="gender_id" Change={e => setGender_id(e.target.value)} Value={gender_id}>
-									{
-										genders.length ? genders.map(gen => {
-											return <option value={gen.id} key={gen.id}>{gen.name}</option>
-										})
-											: null
-									}
-								</DropdownEn>
-								<DropdownEn Title="Post" Id="post_id" Change={e => setPost_id(e.target.value)} Value={post_id}>
-									{
-										posts.length ? posts.map(pos => {
-											return <option value={pos.id} key={pos.id}>{pos.nm_en}</option>
-										})
-											: null
-									}
-								</DropdownEn>
-								<DropdownEn Title="Project" Id="project_id" Change={e => setProject_id(e.target.value)} Value={project_id}>
-									{
-										projects.length ? projects.map(prj => {
-											return <option value={prj.id} key={prj.id}>{prj.name}</option>
-										})
-											: null
-									}
-								</DropdownEn>
-								<TextEn Title="Employee Id" Id="emp_id" Change={e => setEmp_id(e.target.value)} Value={emp_id} Chr="50" />
-
-								<DropdownEn Title="Status" Id="status" Change={e => setStatus(e.target.value)} Value={status}>
-									<option value="1">Current Staff</option>
-									<option value="0">Terminate Staff</option>
-								</DropdownEn>
-
-								<DropdownEn Title="Place" Id="place_id" Change={e => setPlace_id(e.target.value)} Value={place_id}>
-									{
-										places.length ? places.map(plc => {
-											return <option value={plc.id} key={plc.id}>{plc.name}</option>
-										})
-											: null
-									}
-								</DropdownEn>
-
-								<DropdownEn Title="Unit" Id="unit_id" Change={e => setUnit_id(e.target.value)} Value={unit_id}>
-									{
-										units.length ? units.map(unt => {
-											return <option value={unt.id} key={unt.id}>{unt.nm_en}</option>
-										})
-											: null
-									}
-								</DropdownEn>
+    const resetVariables = () => {
+        setNmEn('');
+        setNmBn('');
+        setNmUn('');
+        setJoinDt(formatedDate(new Date()));
+        setMobile('');
+        setGenderId('');
+        setPostId('');
+        setProjectId('');
+        setPictureUrl('');
+        setEmpId('');
+        setPlaceId('');
+        setUnitId('');
+        setStatus('');
+        setRemarks('');
+        setSalary('');
+    }
 
 
-								<TextEn Title="Remarks" Id="remarks" Change={e => setRemarks(e.target.value)} Value={remarks} Chr="150" />
-							</div>
-							<span onClick={() => { setShow(false); Msg("Data ready") }} className="text-center mt-3 mx-0.5 px-4 py-2.5 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 bg-red-600 hover:bg-red-800 text-white mr-1 cursor-pointer">Close</span>
-							<BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />
-						</form>
-					</div>
+    const showAddForm = async () => {
+        setShow(true);
+        resetVariables();
+        try {
+            const [responseGender, responsePost, responseProject, responsePlace, responseUnit] = await Promise.all([
+                fetchDataFromAPI("gender"),
+                fetchDataFromAPI("post"),
+                fetchDataFromAPI("project"),
+                fetchDataFromAPI("place"),
+                fetchDataFromAPI("unit")
+            ]);
+            setGenders(responseGender);
+            setPosts(responsePost);
+            setProjects(responseProject);
+            setPlaces(responsePlace);
+            setUnits(responseUnit);
+        } catch (error) {
+            console.error('Failed to fetch delivery data:', error);
+        }
+    }
 
-				</div>
-			</div>
-			<button onClick={addNewHandler} title="Add" className="w-8 h-8 rounded-full hover:bg-gray-50 mr-1 flex justify-center items-center">
-				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
-					<path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-				</svg>
-			</button>
-		</>
-	)
+
+    const closeAddForm = () => {
+        setShow(false);
+    }
+
+
+    const createObject = () => {
+        return {
+            nmEn: nmEn,
+            nmBn: nmBn,
+            nmUn: nmUn,
+            joinDt: joinDt,
+            mobile: mobile,
+            genderId: genderId,
+            postId: postId,
+            projectId: projectId,
+            pictureUrl: pictureUrl,
+            empId: empId,
+            placeId: placeId,
+            unitId: unitId,
+            status: status,
+            remarks: remarks,
+            salary: salary
+        }
+    }
+
+
+    const saveHandler = async (e) => {
+        e.preventDefault();
+        try {
+            const newObject = createObject();
+            const msg = addDataToFirebase('staff', newObject);
+            message(msg);
+        } catch (error) {
+            console.error("Error saving staff data:", error);
+            message("Error saving staff data.");
+        } finally {
+            setShow(false);
+        }
+    }
+
+
+    return (
+        <>
+            {show && (
+                <div className="fixed inset-0 py-16 bg-black bg-opacity-30 backdrop-blur-sm z-10 overflow-auto">
+                    <div className="w-11/12 md:w-1/2 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
+                        <div className="px-6 md:px-6 py-2 flex justify-between items-center border-b border-gray-300">
+                            <h1 className="text-xl font-bold text-blue-600">Add New Data</h1>
+                            <button onClick={closeAddForm} className="w-8 h-8 p-0.5 bg-gray-50 hover:bg-gray-300 rounded-md transition duration-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-full h-full stroke-black">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div className="px-6 pb-6 text-black">
+                            <form onSubmit={saveHandler}>
+                                <div className="grid grid-cols-1 gap-4 my-4">
+                                    <TextEn Title="Name (English)" Id="nmEn" Change={e => setNmEn(e.target.value)} Value={nmEn} Chr={50} />
+                                    <TextBn Title="Name (Bangla)" Id="nmBn" Change={e => setNmBn(e.target.value)} Value={nmBn} Chr={50} />
+                                    <TextBn Title="Name (Unicode)" Id="nmUn" Change={e => setNmUn(e.target.value)} Value={nmUn} Chr={50} />
+                                    <TextDt Title="Joining Date" Id="joinDt" Change={e => setJoinDt(e.target.value)} Value={joinDt} />
+                                    <TextEn Title="Mobile" Id="mobile" Change={e => setMobile(e.target.value)} Value={mobile} Chr={50} />
+                                    <DropdownEn Title="Gender" Id="genderId" Change={e => setGenderId(e.target.value)} Value={genderId}>
+                                        {genders.length ? genders.map(gender => <option value={gender._id} key={gender._id}>{gender.name}</option>) : null}
+                                    </DropdownEn>
+                                    <DropdownEn Title="Post" Id="postId" Change={e => setPostId(e.target.value)} Value={postId}>
+                                        {posts.length ? posts.map(post => <option value={post._id} key={post._id}>{post.nmEn}</option>) : null}
+                                    </DropdownEn>
+
+
+                                    <DropdownEn Title="Project" Id="projectId" Change={e => setProjectId(e.target.value)} Value={projectId}>
+                                        {projects.length ? projects.map(project => <option value={project._id} key={project._id}>{project.name}</option>) : null}
+                                    </DropdownEn>
+                                    <TextEn Title="Picture Url" Id="pictureUrl" Change={e => setPictureUrl(e.target.value)} Value={pictureUrl} Chr={250} />
+                                    <TextEn Title="Employee Id" Id="empId" Change={e => setEmpId(e.target.value)} Value={empId} Chr={50} />
+
+                                    <DropdownEn Title="Place" Id="placeId" Change={e => setPlaceId(e.target.value)} Value={placeId}>
+                                        {places.length ? places.map(place => <option value={place._id} key={place._id}>{place.name}</option>) : null}
+                                    </DropdownEn>
+
+                                    <DropdownEn Title="Unit" Id="unitId" Change={e => setUnitId(e.target.value)} Value={unitId}>
+                                        {units.length ? units.map(unit => <option value={unit._id} key={unit._id}>{unit.nmEn}</option>) : null}
+                                    </DropdownEn>
+                                    <TextNum Title="Status" Id="status" Change={e => setStatus(e.target.value)} Value={status} />
+                                    <TextNum Title="Salary" Id="salary" Change={e => setSalary(e.target.value)} Value={salary} />
+                                    <TextEn Title="Remarks" Id="remarks" Change={e => setRemarks(e.target.value)} Value={remarks} Chr={250} />
+                                </div>
+                                <div className="w-full flex justify-start">
+                                    <input type="button" onClick={closeAddForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />
+                                    <BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
+            <button onClick={showAddForm} className="px-1 py-1 bg-blue-500 hover:bg-blue-700 rounded-md transition duration-500" title="Add New">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" className="w-7 h-7 stroke-white hover:stroke-gray-100">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+            </button>
+        </>
+    )
 }
 export default Add;
+

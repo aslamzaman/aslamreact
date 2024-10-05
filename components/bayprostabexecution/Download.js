@@ -1,18 +1,24 @@
 import React from "react";
-import { saveAs } from "file-saver";
+import { sessionStorageGetItem } from "@/lib/utils";
 
 
-const Download = ({ Msg }) => {
+const Download = ({ message }) => {
 
 
   const downloadHandler = () => {
-    let localData = localStorage.getItem("bayprostabexecution");
+    let localData = sessionStorageGetItem("bayprostabexecution");
     if (localData) {
-      const blob = new Blob([localData], { type: "application/json" });
-      saveAs(blob, `${new Date().toISOString()}-bayprostabexecution.js`);
-      Msg("Data download successfully.");
+      const blob = new Blob([JSON.stringify(localData)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${new Date().toISOString()}-backup-bayprostabexecution.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      message("Data download successfully.");
     } else {
-      Msg("Data not available.");
+      message("Data not available.");
     }
   }
 
@@ -28,3 +34,4 @@ const Download = ({ Msg }) => {
 
 };
 export default Download;
+

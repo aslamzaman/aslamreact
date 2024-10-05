@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { TextDt, TextTm, TextBn, BtnEn, TextNum, BtnSubmit, DropdownBn, TextEnDisabled } from "../Form";
-import { Close } from "../Icons";
-import { editItem, updateItem } from "../LocalDatabase";
+import { TextDt, TextTm, TextBn, TextNum, BtnSubmit, DropdownBn, TextEnDisabled } from "@/components/Form";
+import { Close } from "@/components/Icons";
+import { localStorageUpdateItem } from "@/lib/utils";
+const date_format = dt => new Date(dt).toISOString().split('T')[0];
+
 
 const vehicles = [
     { id: 1, item: "evm" },
@@ -18,7 +20,7 @@ const vehicles = [
 ]
 
 
-const Edit = ({ Msg, Id }) => {
+const Edit = ({ message, Id, data }) => {
     const [dt, setDt] = useState("");
     const [place1, setPlace1] = useState("");
     const [tm1, setTm1] = useState("");
@@ -32,28 +34,20 @@ const Edit = ({ Msg, Id }) => {
 
     const [takaOnOff, setTakaOnOff] = useState(false);
 
-    const resetStateVariables = () => {
-        Msg("Ready to edit existing");
-        setDt(Lib.util.dateFormat(new Date(), "-"));
-        setPlace1("");
-        setT1("");
-        setPlace2("");
-        setT2("");
-        setVehicle("wba©vwiZ");
-        setTaka("");
-        setCause("");
-        setTakaOnOff(true);
-    }
+
+    const closeEditForm = () => {
+        setShow(false);
+     };
+
 
     const editHandler = () => {
         setShow(true);
-        Msg("Ready to edit");
-
         try {
-            const tabillData = editItem("tabill", Id);
-            if (tabillData) {
-                const { dt, place1, tm1, place2, tm2, vehicle, taka, cause } = tabillData;
-                setDt(dt);
+         //   console.log(data)
+            const findData = data;
+            if (findData) {
+                const { dt, place1, tm1, place2, tm2, vehicle, taka, cause } = findData;
+                setDt(date_format(dt));
                 setPlace1(place1);
                 setTm1(tm1);
                 setPlace2(place2);
@@ -62,11 +56,11 @@ const Edit = ({ Msg, Id }) => {
                 setTaka(taka);
                 setCause(cause);
 
-              if(vehicle==="wba©vwiZ"){
-                setTakaOnOff(true);
-              }else{
-                setTakaOnOff(false);
-              }
+                if (vehicle === "wba©vwiZ") {
+                    setTakaOnOff(true);
+                } else {
+                    setTakaOnOff(false);
+                }
 
             } else {
                 resetStateVariables();
@@ -91,18 +85,22 @@ const Edit = ({ Msg, Id }) => {
         }
     }
 
+
+
     const saveHandler = (e) => {
         e.preventDefault();
         try {
             const tabillData = createLocaltaObject();
-            const updatedtabill = updateItem("tabill", Id, tabillData);
-            Msg(updatedtabill.message);
+            const updatedtabill = localStorageUpdateItem("tabill", Id, tabillData);
+            message(updatedtabill);
         } catch (error) {
-            Msg(updatedtabill.message);
+            message(updatedtabill);
             console.log(`Error updating localta data: ${error}`);
         }
         setShow(false);
     }
+
+
 
     const vehicleChange = (e) => {
         setVehicle(e.target.value);
@@ -134,21 +132,17 @@ const Edit = ({ Msg, Id }) => {
                                 <TextBn Title="Place2" Id="place2" Change={e => setPlace2(e.target.value)} Value={place2} Chr="50" />
                                 <TextTm Title="Time2" Id="tm2" Change={e => setTm2(e.target.value)} Value={tm2} />
                                 <DropdownBn Title="Vehicle" Id="vehicle" Change={vehicleChange} Value={vehicle}>
-                                    {
-                                        vehicles.map((v, i) => {
-                                            return <option value={v.item} key={i}>{v.item}</option>
-                                        })
-                                    }
-                                </DropdownBn>                               
-                                {
-                                    takaOnOff
-                                        ? <TextEnDisabled Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} />
-                                        : <TextNum Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} />
-                                }  
+                                    {vehicles.map((v, i) => <option value={v.item} key={i}>{v.item}</option>)}
+                                </DropdownBn>
+                                {takaOnOff
+                                    ? <TextEnDisabled Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} />
+                                    : <TextNum Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} />}
                                 <TextBn Title="Cause" Id="cause" Change={e => setCause(e.target.value)} Value={cause} Chr="100" />
                             </div>
-                            <BtnEn Title="Close" Click={() => { setShow(false); Msg("Data ready") }} Class="bg-red-600 hover:bg-red-800 text-white" />
-                            <BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />
+                            <div className="w-full flex justify-start">
+                                <input type="button" onClick={closeEditForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />
+                                <BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />
+                            </div>
                         </form>
                     </div>
                 </div>

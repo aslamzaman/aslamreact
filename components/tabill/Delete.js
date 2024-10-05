@@ -1,25 +1,25 @@
 import React, { useState } from "react";
-import { BtnEn } from "../Form";
-import { Close } from "../Icons";
-import { deleteItem } from "../LocalDatabase";
+import { BtnEn } from "@/components/Form";
+import { Close } from "@/components/Icons";
+import { localStorageDeleteItem } from "@/lib/utils";
 
 
-const Delete = ({ Msg, Id }) => {
+const Delete = ({ message, Id }) => {
     const [show, setShow] = useState(false);
 
 
     const deleteHandler = () => {
         setShow(true);
-        Msg("Ready to delete.");
+        message("Ready to delete.");
     }
 
 
     const removeHandler = () => {
         try {
-            let deletedItem = deleteItem("tabill", Id);
-            Msg(deletedItem.message);
+            let msg = localStorageDeleteItem("tabill", Id);
+            message(msg);
         } catch (error) {
-            Msg(deletedItem.message);
+            message(error);
             console.log(`Error deleting data: ${error}`);
         }
         setShow(false);
@@ -41,7 +41,7 @@ const Delete = ({ Msg, Id }) => {
                     </div>
 
                     <div className="px-6 py-6 flex justify-end items-center border-t border-gray-300">
-                        <BtnEn Title="Close" Click={() => { setShow(false); Msg("Data ready") }} Class="bg-red-600 hover:bg-red-800 text-white mr-1" />
+                        <BtnEn Title="Close" Click={() => { setShow(false); message("Data ready") }} Class="bg-red-600 hover:bg-red-800 text-white mr-1" />
                         <BtnEn Title="Yes" Click={removeHandler} Class="bg-blue-600 hover:bg-blue-800 text-white" />
                     </div>
                 </div>
