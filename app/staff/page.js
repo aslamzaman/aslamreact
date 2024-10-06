@@ -33,25 +33,19 @@ const Staff = () => {
                 ]);
 
                 const joinCollection = staffs.map(staff => {
-                    const matchProject = projects.find(project => project.id === staff.projectId);
-                    const matchGender = genders.find(gender => gender.id === staff.genderId);
-                    const matchUnit = units.find(unit => unit.id === staff.unitId);
-                    const matchPost = posts.find(post => post.id === staff.postId);
-                    const matchPlace = places.find(place => place.id === staff.placeId);
                     return {
                         ...staff,
-                        project: matchProject,
-                        gender: matchGender,
-                        unit: matchUnit,
-                        post: matchPost,
-                        place: matchPlace
+                        project: projects.find(project => project.id === staff.projectId) || {},
+                        gender: genders.find(gender => gender.id === staff.genderId) || {},
+                        unit: units.find(unit => unit.id === staff.unitId) || {},
+                        post: posts.find(post => post.id === staff.postId) || {},
+                        place: places.find(place => place.id === staff.placeId) || {}
                     }
                 })
-console.log(joinCollection);
+                console.log(joinCollection);
 
-                const sortData = staffs.sort((a, b) => parseInt(a.empId) < parseInt(b.empId) ? -1 : 1)
-                // console.log(sortData);
-                setStaffs(sortData);
+                const sortedStaffs = joinCollection.sort((a, b) => parseInt(a.empId) - parseInt(b.empId));
+                setStaffs(sortedStaffs);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -59,6 +53,8 @@ console.log(joinCollection);
         };
         getData();
 
+        // 20-15 =5
+        // hgf
     }, [msg]);
 
 
@@ -108,15 +104,15 @@ console.log(joinCollection);
                                         <td className="text-center py-2 px-4">
                                             <span className="font-bold"> Employee ID: {staff.empId}</span><br />
                                             <span className={tiro.className}> {staff.nmUn}</span><br />
-                                            {staff.nmEn} - {staff.postId.nmEn}<br />
-                                            ({staff.genderId.name})<br />
+                                            {staff.nmEn} - {staff.post.nmEn}<br />
+                                            ({staff.gender.name})<br />
                                             Joining Date: {date_format(staff.joinDt)}<br />
-                                            SC/Field: {staff.placeId.name} - Mobile: {staff.mobile}<br />
+                                            SC/Field: {staff.place.name} - Mobile: {staff.mobile}<br />
                                             Remarks: {staff.remarks}<br />
                                         </td>
-                                        <td className="text-center py-2 px-4">{staff.projectId.name}</td>
+                                        <td className="text-center py-2 px-4">{staff.project.name}</td>
                                         <td className="text-center py-2 px-4">{staff.salary}</td>
-                                        <td className={`text-center py-2 px-4 ${tiro.className}`}>{staff.unitId.nmUn}</td>
+                                        <td className={`text-center py-2 px-4 ${tiro.className}`}>{staff.unit.nmUn}</td>
                                         <td className="text-center py-2 px-4">{staff.remarks}</td>
                                         <td className="h-44 flex justify-end items-center space-x-1 mt-1 mr-2">
                                             <Edit message={messageHandler} id={staff.id} data={staff} />

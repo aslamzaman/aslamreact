@@ -16,12 +16,24 @@ const Ta = () => {
         const fetchData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const data = await getDataFromFirebase("ta");
-                setTas(data);
+                const [tas, units] = await Promise.all([
+                    getDataFromFirebase("ta"),
+                    getDataFromFirebase("unit")
+                ]);
+                const joinCollection = tas.map(ta => {
+                    return {
+                        ...ta,
+                        unit: units.find(unit => unit.id === ta.unitId) || {}
+                    }
+                });
+
+                const sortedTas = joinCollection.sort((a, b) => a.unit.nmEn.localeCompare(b.unit.nmEn));
+                console.log(sortedTas);
+                setTas(sortedTas);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error fetching data:", error);
-                setMsg("Failed to fetch data");
+                setWaitMsg('Failed to fetch data. Please try again.');
             }
         };
         fetchData();
@@ -59,12 +71,12 @@ const Ta = () => {
                         <tbody>
                             {tas.length ? (
                                 tas.map((ta, i) => (
-                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={ta._id}>
-                                        <td className="text-start py-2 px-4">{i+1}. {ta.unitId.nmEn}</td>
+                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={ta.id}>
+                                        <td className="text-start py-2 px-4">{i + 1}.  {ta.unit.nmEn}</td>
                                         <td className="text-center py-2 px-4">{ta.tk}</td>
                                         <td className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
-                                            <Edit message={messageHandler} id={ta._id} data={ta} />
-                                            <Delete message={messageHandler} id={ta._id} data={ta} />
+                                            <Edit message={messageHandler} id={ta.id} data={ta} />
+                                            <Delete message={messageHandler} id={ta.id} data={ta} />
                                         </td>
                                     </tr>
                                 ))

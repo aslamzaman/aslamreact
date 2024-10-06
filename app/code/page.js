@@ -143,16 +143,17 @@ const Code = () => {
     }
 
 
-    const JonGenerate = () => {
-        const tbls = prompt("Tables name");
+    const JoinCollections = () => {
+        const tbls = prompt("Collections name");
         if (tbls === null || tbls === '') return false;
         const sp = tbls.split(',');
 
-        const tbName = sp.map(t => ' ' + t.trim() + 'Response').toString();
+
+        const tbName = sp.map(t => ' ' + t.trim() + 's').toString();
 
         let str = "";
         str = str + 'import React, { useState, useEffect } from "react";\n';
-        str = str + 'import {fetchAll} from "@/lib/DexieDatabase";\n';
+        str = str + 'import {getDataFromFirebase} from "@/lib/utils";\n';
         str = str + "\n";
 
         str = str + `    const [${sp[0].trim()}s, set${titleCase(sp[0].trim())}s] = useState([]);\n`;
@@ -161,60 +162,42 @@ const Code = () => {
 
 
         str = str + "    const fetchData = async () => {\n";
+        str = str + "        setWaitMsg('Please Wait...');\n";
         str = str + "        try {\n";
         str = str + "            const [" + tbName + " ] = await Promise.all([\n";
         let s1 = "";
         for (let i = 0; i < sp.length - 1; i++) {
-            s1 = s1 + '                fetchAll("' + sp[i].trim() + '"),\n';
+            s1 = s1 + '                getDataFromFirebase("' + sp[i].trim() + '"),\n';
         }
 
-        s1 = s1 + '                fetchAll("' + sp[sp.length - 1].trim() + '")\n';
+        s1 = s1 + '                getDataFromFirebase("' + sp[sp.length - 1].trim() + '")\n';
         str = str + s1;
         str = str + "            ]);\n\n"
 
 
-        let s3 = "";
-        for (let i = 0; i < sp.length; i++) {
-            s3 = s3 + `            const ${sp[i].trim()}Data = ${sp[i].trim() + 'Response'}.data;\n`;
-        }
-        str = str + s3;
         str = str + "\n";
-        str = str + `            const jointData = ${sp[0].trim()}Data.map(${sp[0].trim()}=>{\n`;
-
-        let m1 = "";
-        for (let i = 1; i < sp.length; i++) {
-            m1 = m1 + '                const match' + titleCase(sp[i].trim()) + ' = ' + sp[i].trim() + 'Data.find(' + sp[i].trim() + ' => parseInt(' + sp[i].trim() + '.id) === parseInt(' + sp[0].trim() + '.' + sp[i].trim() + '_id));\n';
-        }
-        str = str + m1;
-
-
+        str = str + `            const joinCollection = ${sp[0].trim()}s.map(${sp[0].trim()}=>{\n`;
         str = str + `                return {\n`;
         str = str + '                   ...' + sp[0].trim() + ',\n';
 
         let m3 = "";
         for (let i = 1; i < sp.length - 1; i++) {
-            m3 = m3 + '                   ' + sp[i].trim() + ' : match' + titleCase(sp[i].trim()) + '? match' + titleCase(sp[i].trim()) + ".name : 'Error!',\n";
+            m3 = m3 + '                   ' + sp[i].trim() + ' : '+ sp[i].trim() + 's.find(' + sp[i].trim() + ' => ' + sp[i].trim() + '.id === ' + sp[0].trim() + '.' + sp[i].trim() + 'Id) || {},\n';;
         }
 
-        m3 = m3 + '                   ' + sp[sp.length - 1].trim() + ' : match' + titleCase(sp[sp.length - 1].trim()) + '? match' + titleCase(sp[sp.length - 1].trim()) + ".name : 'Error!'\n";
-
-
+        m3 = m3 + '                   ' + sp[sp.length - 1].trim() + ' : '+ sp[sp.length - 1].trim() + 's.find(' + sp[sp.length - 1].trim() + ' => ' + sp[sp.length - 1].trim() + '.id ===' + sp[0].trim() + '.' + sp[sp.length - 1].trim() + 'Id) || {}\n';;
 
         str = str + m3;
-
-
         str = str + `                }\n`;
-
-
         str = str + `            });\n`;
         str = str + "\n";
 
-        str = str + "            const result = jointData.sort((a, b) => parseInt(b.id) > parseInt(a.id) ? 1 : -1);\n";
-        str = str + "            set" + titleCase(sp[0]) + "s(result);\n";
-
-
+        str = str + "            const sorted" + titleCase(sp[0])+ "s  = joinCollection.sort((a, b) => new Date(b.createdAt).getTime()- new Date(b.createdAt).getTime());\n";
+        str = str + "            set" + titleCase(sp[0]) + "s(sorted"+ titleCase(sp[0])+"s);\n";
+         str = str + "            setWaitMsg('');\n";
         str = str + "        } catch (error) {\n";
         str = str + '            console.error("Error fetching data:", error);\n';
+        str = str + "            setWaitMsg('Failed to fetch data. Please try again.');\n";
         str = str + "        }\n";
 
         str = str + "    };\n";
@@ -283,7 +266,7 @@ const Code = () => {
                         <BtnEn Title="Two Part" Click={TwoPartHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="One Page" Click={OnePartHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="DropdownById" Click={DropdownById} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Joint Table" Click={JonGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="Joint Table" Click={JoinCollections} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Excel" Click={ExcelGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Help" Click={HelpPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                     </div>

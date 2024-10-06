@@ -19,6 +19,7 @@ const Edit = ({ message, id, data }) => {
     const [status, setStatus] = useState('');
     const [remarks, setRemarks] = useState('');
     const [salary, setSalary] = useState('');
+    const [createdAt, setCreatedAt] = useState('');
     const [show, setShow] = useState(false);
 
     const [genders, setGenders] = useState([]);
@@ -46,22 +47,23 @@ const Edit = ({ message, id, data }) => {
             setUnits(responseUnit);
 
 
-            const { nmEn, nmBn, nmUn, joinDt, mobile, genderId, postId, projectId, pictureUrl, empId, placeId, unitId, status, remarks, salary } = data;
+            const { nmEn, nmBn, nmUn, joinDt, mobile, gender, post, project, pictureUrl, empId, place, unit, status, remarks, salary, createdAt } = data;
             setNmEn(nmEn);
             setNmBn(nmBn);
             setNmUn(nmUn);
             setJoinDt(formatedDate(joinDt));
             setMobile(mobile);
-            setGenderId(genderId._id);
-            setPostId(postId._id);
-            setProjectId(projectId._id);
+            setGenderId(gender.id);
+            setPostId(post.id);
+            setProjectId(project.id);
             setPictureUrl(pictureUrl);
             setEmpId(empId);
-            setPlaceId(placeId._id);
-            setUnitId(unitId._id);
+            setPlaceId(place.id);
+            setUnitId(unit.id);
             setStatus(status);
             setRemarks(remarks);
             setSalary(salary);
+            setCreatedAt(createdAt);
         } catch (error) {
             console.error('Failed to fetch delivery data:', error);
         }
@@ -89,7 +91,8 @@ const Edit = ({ message, id, data }) => {
             unitId: unitId,
             status: status,
             remarks: remarks,
-            salary: salary
+            salary: salary,
+            createdAt: createdAt
         }
     }
 
@@ -133,25 +136,25 @@ const Edit = ({ message, id, data }) => {
                                     <TextDt Title="Joining Date" Id="joinDt" Change={e => setJoinDt(e.target.value)} Value={joinDt} />
                                     <TextEn Title="Mobile" Id="mobile" Change={e => setMobile(e.target.value)} Value={mobile} Chr={50} />
                                     <DropdownEn Title="Gender" Id="genderId" Change={e => setGenderId(e.target.value)} Value={genderId}>
-                                        {genders.length ? genders.map(gender => <option value={gender._id} key={gender._id}>{gender.name}</option>) : null}
+                                        {genders.length ? genders.map(gender => <option value={gender.id} key={gender.id}>{gender.name}</option>) : null}
                                     </DropdownEn>
                                     <DropdownEn Title="Post" Id="postId" Change={e => setPostId(e.target.value)} Value={postId}>
-                                        {posts.length ? posts.map(post => <option value={post._id} key={post._id}>{post.nmEn}</option>) : null}
+                                        {posts.length ? posts.map(post => <option value={post.id} key={post.id}>{post.nmEn}</option>) : null}
                                     </DropdownEn>
 
 
                                     <DropdownEn Title="Project" Id="projectId" Change={e => setProjectId(e.target.value)} Value={projectId}>
-                                        {projects.length ? projects.map(project => <option value={project._id} key={project._id}>{project.name}</option>) : null}
+                                        {projects.length ? projects.map(project => <option value={project.id} key={project.id}>{project.name}</option>) : null}
                                     </DropdownEn>
                                     <TextEn Title="Picture Url" Id="pictureUrl" Change={e => setPictureUrl(e.target.value)} Value={pictureUrl} Chr={250} />
                                     <TextEn Title="Employee Id" Id="empId" Change={e => setEmpId(e.target.value)} Value={empId} Chr={50} />
 
                                     <DropdownEn Title="Place" Id="placeId" Change={e => setPlaceId(e.target.value)} Value={placeId}>
-                                        {places.length ? places.map(place => <option value={place._id} key={place._id}>{place.name}</option>) : null}
+                                        {places.length ? places.map(place => <option value={place.id} key={place.id}>{place.name}</option>) : null}
                                     </DropdownEn>
 
                                     <DropdownEn Title="Unit" Id="unitId" Change={e => setUnitId(e.target.value)} Value={unitId}>
-                                        {units.length ? units.map(unit => <option value={unit._id} key={unit._id}>{unit.nmEn}</option>) : null}
+                                        {units.length ? units.map(unit => <option value={unit.id} key={unit.id}>{unit.nmEn}</option>) : null}
                                     </DropdownEn>
                                     <TextNum Title="Status" Id="status" Change={e => setStatus(e.target.value)} Value={status} />
                                     <TextNum Title="Salary" Id="salary" Change={e => setSalary(e.target.value)} Value={salary} />
