@@ -23,8 +23,33 @@ const Staff = () => {
         const getData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const data = await getDataFromFirebase("staff");
-                const sortData = data.sort((a, b) => parseInt(a.empId) < parseInt(b.empId) ? -1 : 1)
+                const [staffs, projects, genders, units, posts, places] = await Promise.all([
+                    getDataFromFirebase("staff"),
+                    getDataFromFirebase("project"),
+                    getDataFromFirebase("gender"),
+                    getDataFromFirebase("unit"),
+                    getDataFromFirebase("post"),
+                    getDataFromFirebase("place")
+                ]);
+
+                const joinCollection = staffs.map(staff => {
+                    const matchProject = projects.find(project => project.id === staff.projectId);
+                    const matchGender = genders.find(gender => gender.id === staff.genderId);
+                    const matchUnit = units.find(unit => unit.id === staff.unitId);
+                    const matchPost = posts.find(post => post.id === staff.postId);
+                    const matchPlace = places.find(place => place.id === staff.placeId);
+                    return {
+                        ...staff,
+                        project: matchProject,
+                        gender: matchGender,
+                        unit: matchUnit,
+                        post: matchPost,
+                        place: matchPlace
+                    }
+                })
+console.log(joinCollection);
+
+                const sortData = staffs.sort((a, b) => parseInt(a.empId) < parseInt(b.empId) ? -1 : 1)
                 // console.log(sortData);
                 setStaffs(sortData);
                 setWaitMsg('');

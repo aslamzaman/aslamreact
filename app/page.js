@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { BtnSubmit, TextEn, TextPw } from "@/components/Form";
 import { useRouter } from "next/navigation";
+import { getDataFromFirebase } from "@/lib/utils";
 
 
 
@@ -20,8 +21,10 @@ export default function Home() {
     const loadUser = async () => {
       setMsg("Please wait....");
       try {
-        console.log("Home Page")
-
+        const data = await getDataFromFirebase('log');
+        setUserData(data);
+        console.log(data)
+        setMsg("");
       } catch (error) {
         console.error("Error fetching data:", error);
         setMsg("Failed to fetch data");
@@ -32,12 +35,18 @@ export default function Home() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    //  const result = userData.find(u => u.user_name === user && u.pw === pw);
-
-    sessionStorage.setItem('log', true);
-    router.push('/dashboard');
-
-
+    try {
+      const result = userData.find(u => u.name === user && u.pw === pw);
+      if (result) {
+        sessionStorage.setItem('log', true);
+        router.push('/dashboard');
+      } else {
+        setMsg('User name or password not match!')
+        router.push('/');
+      }
+    } catch (error) {
+      console.error("Data not matched ", error);
+    }
   };
 
 
