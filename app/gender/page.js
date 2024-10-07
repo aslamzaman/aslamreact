@@ -18,9 +18,9 @@ const Gender = () => {
       setWaitMsg('Please Wait...');
       try {
         const data = await getDataFromFirebase("gender");
-        const sort = data.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
-        console.log(sort);
-        setGenders(sort);
+        const sortedData = data.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
+        console.log(sortedData);
+        setGenders(sortedData);
         setWaitMsg('');
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -35,16 +35,6 @@ const Gender = () => {
   }
 
 
-  const dd = () => {
-    const fld = "staff, post, gender";
-    const field = fld.split(",");
-    const result = field.map(f => `${f.trim()}s`);
-    const destructure = result.toString();
-    const promiseData = field.map(f => `getDataFromFirebase("${f.trim()}")`).join(",\n");
-   // const joinTable = field.map(f => `${f.trim()}: ${f.trim()}s.find(${f.trim()} => parseInt(post.id) === parseInt(staff.post_id))`)
-    console.log(destructure);
-  }
- //  posts.find(post => post.id === staff.postId) || {},
   return (
     <>
       <div className="w-full mb-3 mt-8">
@@ -52,7 +42,6 @@ const Gender = () => {
         <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
         <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
       </div>
-      <button onClick={dd}>Button Click</button>
       <div className="px-4 lg:px-6">
         <div className="p-4 overflow-auto">
           <table className="w-full border border-gray-200">
@@ -60,7 +49,7 @@ const Gender = () => {
               <tr className="w-full bg-gray-200">
                 <th className="text-center border-b border-gray-200 px-4 py-1">Name</th>
                 <th className="w-[95px] border-b border-gray-200 px-4 py-2">
-                  <div className="w-[90px] h-[45px] font-normal flex justify-end space-x-2 p-1">
+                  <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1 font-normal">
                     {/* <Print data={genders} /> */}
                     <Add message={messageHandler} />
                   </div>

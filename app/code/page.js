@@ -11,9 +11,6 @@ import LayoutPage from "@/components/code/LayoutPage";
 import Help_code from "@/components/code/HelpCode";
 import TwoPart from "@/components/code/TowPart";
 import OnePage from "@/components/code/OnePage";
-import ModelPage from "@/components/code/ModelPage";
-import RoutePage from "@/components/code/RoutePage";
-import RouteDynamicPage from "@/components/code/RouteDynamicPage";
 import Excle from "@/components/code/Excel";
 
 
@@ -47,7 +44,7 @@ const Code = () => {
         const newTbl = localStorage.getItem('tbl');
         const newFld = localStorage.getItem('fld');
         setTbl(newTbl ? newTbl : "post");
-        setFld(newFld ? newFld : "_id, name, address, isDeleted");
+        setFld(newFld ? newFld : "name, address, createdAt");
     }, []);
 
 
@@ -115,15 +112,14 @@ const Code = () => {
         let url = '`${process.env.NEXT_PUBLIC_BASE_URL}/api/' + tbl[0] + '`';
 
         let str = 'import { TextEn, BtnSubmit, DropdownEn } from "@/components/Form";\n';
-        str = str + 'import { fetchData } from "@/lib/utils/FetchData";\n';
-        str = str + "\n";
+        str = str + 'import {getDataFromFirebase} from "@/lib/utils";\n';
         str = str + "\n";
         str = str + `const [${tbl[0]}s, set${titleCase(tbl[0])}s] = useState([]);\n`;
         str = str + "\n";
         str = str + "\n";
 
         str = str + "try {\n";
-        str = str + "    const response" + titleCase(tbl[0]) + " = await fetchData(" + url + ");\n";
+        str = str + "    const response" + titleCase(tbl[0]) + ' = await getDataFromFirebase("'+tbl[0]+'");\n';
         str = str + "   set" + titleCase(tbl[0]) + "s(response" + titleCase(tbl[0]) + ");\n";
         str = str + "} catch (error) {\n";
         str = str + "    console.error('Failed to fetch delivery data:', error);\n";
@@ -134,7 +130,7 @@ const Code = () => {
 
 
         str = str + `                                    <DropdownEn Title="${titleCase(tbl[0])}" Id="${tbl[1]}" Change={e=> set${FirstCap(tbl[1])}(e.target.value)} Value={${tbl[1]}}>\n`;
-        str = str + `                                        {${tbl[0]}s.length?${tbl[0]}s.map(${tbl[0]}=><option value={${tbl[0]}._id} key={${tbl[0]}._id}>{${tbl[0]}._id}</option>):null}\n`;
+        str = str + `                                        {${tbl[0]}s.length?${tbl[0]}s.map(${tbl[0]}=><option value={${tbl[0]}.id} key={${tbl[0]}.id}>{${tbl[0]}.id}</option>):null}\n`;
 
         str = str + `                                    </DropdownEn>\n`;
 
@@ -153,7 +149,7 @@ const Code = () => {
 
         let str = "";
         str = str + 'import React, { useState, useEffect } from "react";\n';
-        str = str + 'import {getDataFromFirebase} from "@/lib/utils";\n';
+        str = str + 'import {getDataFromFirebase, sortArray} from "@/lib/utils";\n';
         str = str + "\n";
 
         str = str + `    const [${sp[0].trim()}s, set${titleCase(sp[0].trim())}s] = useState([]);\n`;
@@ -191,9 +187,8 @@ const Code = () => {
         str = str + `                }\n`;
         str = str + `            });\n`;
         str = str + "\n";
-
-        str = str + "            const sorted" + titleCase(sp[0])+ "s  = joinCollection.sort((a, b) => new Date(b.createdAt).getTime()- new Date(b.createdAt).getTime());\n";
-        str = str + "            set" + titleCase(sp[0]) + "s(sorted"+ titleCase(sp[0])+"s);\n";
+        str = str + "            const sortedData = joinCollection.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));\n";
+        str = str + "            set" + titleCase(sp[0]) + "s(sortedData);\n";
          str = str + "            setWaitMsg('');\n";
         str = str + "        } catch (error) {\n";
         str = str + '            console.error("Error fetching data:", error);\n';
@@ -213,20 +208,6 @@ const Code = () => {
         setResult(e.target.value);
     }
 
-    const ModelPageGenerate = () => {
-        setTitleText(`lib/models/${titleCase(tbl)}Model.js`);
-        setResult(ModelPage(tbl, fld));
-    }
-
-    const RoutePageGenerate = () => {
-        setTitleText(`app/api/${tbl}/route.js`);
-        setResult(RoutePage(tbl, fld));
-    }
-
-    const RouteDynamicPageGenerate = () => {
-        setTitleText(`app/api/${tbl}/[id]/route.js`);
-        setResult(RouteDynamicPage(tbl, fld));
-    }
 
     const ExcelGenerate = () => {
         setTitleText(`components/${tbl}/Excel.js`);
@@ -244,7 +225,7 @@ const Code = () => {
                 </div>
 
                 <div className="col-span-4">
-                    <TextEn Title="Column (_id,  name, address, isDeleted)" Id="fld" Change={e => setFld(e.target.value)} Value={fld} Chr={500} />
+                    <TextEn Title="Column (name, address, createdAt)" Id="fld" Change={e => setFld(e.target.value)} Value={fld} Chr={500} />
                 </div>
             </div>
             <div className="w-full px-4 grid grid-cols-3 gap-4">
@@ -253,16 +234,10 @@ const Code = () => {
 
                         <BtnEn Title="Page" Click={PageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="LayoutPage" Click={LayoutPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Route" Click={RoutePageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="DynamicRoute" Click={RouteDynamicPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-
                         <BtnEn Title="Add" Click={AddGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Edit" Click={EditGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Delete" Click={DeleteGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Print" Click={PrintGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        
-                        <BtnEn Title="Model" Click={ModelPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-
                         <BtnEn Title="Two Part" Click={TwoPartHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="One Page" Click={OnePartHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="DropdownById" Click={DropdownById} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />

@@ -24,13 +24,11 @@ const Add = (tbl, datas) => {
 
     let dd = "";
     data.map((d, i) => {
-        if( i < data.length-1){
-        if (i > 0) {
-            i === (data.length - 2)
-                ? dd = dd + `                                            <TextEn Title="${titleCase(d)}" Id="${d}" Change={e => set${FirstCap(d)}(e.target.value)} Value={${d}} Chr={50} />`
-                : dd = dd + `                                            <TextEn Title="${titleCase(d)}" Id="${d}" Change={e => set${FirstCap(d)}(e.target.value)} Value={${d}} Chr={50} />\n`;
+        if (i < data.length - 1) {
+                i === (data.length - 2)
+                    ? dd = dd + `                                            <TextEn Title="${titleCase(d)}" Id="${d}" Change={e => set${FirstCap(d)}(e.target.value)} Value={${d}} Chr={50} />`
+                    : dd = dd + `                                            <TextEn Title="${titleCase(d)}" Id="${d}" Change={e => set${FirstCap(d)}(e.target.value)} Value={${d}} Chr={50} />\n`;
         }
-    }
     }
     );
 
@@ -38,11 +36,9 @@ const Add = (tbl, datas) => {
     let stateVar = "";
     data.map((d, i) => {
         if (i < data.length - 1) {
-            if (i > 0) {
-                i === (data.length - 1)
-                    ? stateVar = stateVar + `    const [${d}, set${FirstCap(d)}] = useState('');`
-                    : stateVar = stateVar + `    const [${d}, set${FirstCap(d)}] = useState('');\n`
-            }
+            i === (data.length - 1)
+                ? stateVar = stateVar + `    const [${d}, set${FirstCap(d)}] = useState('');`
+                : stateVar = stateVar + `    const [${d}, set${FirstCap(d)}] = useState('');\n`
         }
     }
     );
@@ -52,11 +48,9 @@ const Add = (tbl, datas) => {
     let stateClear = "";
     data.map((d, i) => {
         if (i < data.length - 1) {
-            if (i > 0) {
-                i === (data.length - 2)
-                    ? stateClear = stateClear + `          set${FirstCap(d)}('');`
-                    : stateClear = stateClear + `          set${FirstCap(d)}('');\n`
-            }
+            i === (data.length - 2)
+                ? stateClear = stateClear + `          set${FirstCap(d)}('');`
+                : stateClear = stateClear + `          set${FirstCap(d)}('');\n`
         }
     }
     );
@@ -73,11 +67,9 @@ const Add = (tbl, datas) => {
     let getValue = "";
     data.map((d, i) => {
         if (i < data.length - 1) {
-            if (i > 0) {
-                i === (data.length - 2)
-                    ? getValue = getValue + `              ${d}: ${d}`
-                    : getValue = getValue + `              ${d}: ${d},\n`
-            }
+            i === (data.length - 2)
+                ? getValue = getValue + `              ${d}: ${d},`
+                : getValue = getValue + `              ${d}: ${d},\n`
         }
     }
     );
@@ -110,7 +102,7 @@ const Add = (tbl, datas) => {
 
     const str = `import React, { useState } from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
-import { postDataToAPI } from "@/lib/utils";
+import { addDataToFirebase } from "@/lib/utils";
 
 
 const Add = ({ message }) => {
@@ -137,6 +129,7 @@ ${stateClear}
     const createObject = () => {
         return {
 ${getValue}
+              createdAt: new Date().toISOString()
         }
     }
 
@@ -146,7 +139,7 @@ ${getValue}
         try {
             setPointerEvent(false);
             const newObject = createObject();
-            const msg = await postDataToAPI("${tbl}", newObject);
+            const msg = await addDataToFirebase("${tbl}", newObject);
             message(msg);
         } catch (error) {
             console.error("Error saving ${tbl} data:", error);

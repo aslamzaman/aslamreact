@@ -17,9 +17,7 @@ const Page = (tbl, datas) => {
     let thead_string = "";
     data.map((d, i) => {
         if (i < data.length - 1) {
-            if (i > 0) {
                 thead_string = thead_string + `                                <th className="text-center border-b border-gray-200 px-4 py-1">${titleCase(d)}</th>\n`
-            }
         }
     }
     );
@@ -28,9 +26,7 @@ const Page = (tbl, datas) => {
     let td_string = "";
     data.map((d, i) => {
         if (i < data.length - 1) {
-            if (i > 0) {
                 td_string = td_string + `                                        <td className="text-center py-1 px-4">{${tbl}.${d}}</td>\n`
-            }
         }
     });
 
@@ -58,7 +54,7 @@ import Add from "@/components/${tbl}/Add";
 import Edit from "@/components/${tbl}/Edit";
 import Delete from "@/components/${tbl}/Delete";
 // import Print from "@/components/${tbl}/Print";
-import { fetchDataFromAPI } from "@/lib/utils";
+import { getDataFromFirebase, sortArray } from "@/lib/utils";
 
 
 const ${titleCase(tbl)} = () => {
@@ -71,8 +67,10 @@ const ${titleCase(tbl)} = () => {
         const getData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const data = await fetchDataFromAPI("${tbl}");
-                set${titleCase(tbl)}s(data);
+                const data = await getDataFromFirebase("${tbl}");
+                const sortedData = data.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
+                console.log(sortedData);
+                set${titleCase(tbl)}s(sortedData);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -110,18 +108,18 @@ ${thead_string}                                <th className="w-[95px] border-b 
                         <tbody>
                             {${tbl}s.length ? (
                                 ${tbl}s.map(${tbl} => (
-                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={${tbl}._id}>    
+                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={${tbl}.id}>    
 ${td_string}                                        <td className="text-center py-2">
                                             <div className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
-                                                <Edit message={messageHandler} id={${tbl}._id} data={${tbl}} />
-                                                <Delete message={messageHandler} id={${tbl}._id} data={${tbl}} />
+                                                <Edit message={messageHandler} id={${tbl}.id} data={${tbl}} />
+                                                <Delete message={messageHandler} id={${tbl}.id} data={${tbl}} />
                                             </div>
                                         </td>
                                     </tr>
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan={${data.length-1}} className="text-center py-10 px-4">
+                                    <td colSpan={${data.length}} className="text-center py-10 px-4">
                                         Data not available.
                                     </td>
                                 </tr>

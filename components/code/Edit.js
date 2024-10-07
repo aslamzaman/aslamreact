@@ -26,11 +26,9 @@ const Edit = (tbl, datas) => {
     let dd = "";
     data.map((d, i) => {
         if (i < data.length - 1) {
-            if (i > 0) {
-                i === (data.length - 2)
-                    ? dd = dd + `                                   <TextEn Title="${titleCase(d)}" Id="${d}" Change={e => set${FirstCap(d)}(e.target.value)} Value={${d}} Chr={50} />`
-                    : dd = dd + `                                   <TextEn Title="${titleCase(d)}" Id="${d}" Change={e => set${FirstCap(d)}(e.target.value)} Value={${d}} Chr={50} />\n`;
-            }
+            i === (data.length - 2)
+                ? dd = dd + `                                   <TextEn Title="${titleCase(d)}" Id="${d}" Change={e => set${FirstCap(d)}(e.target.value)} Value={${d}} Chr={50} />`
+                : dd = dd + `                                   <TextEn Title="${titleCase(d)}" Id="${d}" Change={e => set${FirstCap(d)}(e.target.value)} Value={${d}} Chr={50} />\n`;
         }
     }
     );
@@ -38,13 +36,10 @@ const Edit = (tbl, datas) => {
 
     let stateVar = "";
     data.map((d, i) => {
-        if (i < data.length - 1) {
-            if (i > 0) {
-                i === (data.length - 2)
-                    ? stateVar = stateVar + `    const [${d}, set${FirstCap(d)}] = useState('');`
-                    : stateVar = stateVar + `    const [${d}, set${FirstCap(d)}] = useState('');\n`
-            }
-        }
+
+        i === (data.length - 1)
+            ? stateVar = stateVar + `    const [${d}, set${FirstCap(d)}] = useState('');`
+            : stateVar = stateVar + `    const [${d}, set${FirstCap(d)}] = useState('');\n`
     }
     );
 
@@ -52,67 +47,39 @@ const Edit = (tbl, datas) => {
 
     let stateClear = "";
     data.map((d, i) => {
-        if (i > 0) {
-            i === (data.length - 1)
-                ? stateClear = stateClear + `                    set${FirstCap(d)}('');`
-                : stateClear = stateClear + `                    set${FirstCap(d)}('');\n`
-        }
+
+        i === (data.length - 1)
+            ? stateClear = stateClear + `                    set${FirstCap(d)}('');`
+            : stateClear = stateClear + `                    set${FirstCap(d)}('');\n`
     }
     );
 
     let getData = "";
     data.map((d, i) => {
-        if (i > 0) {
-            i === (data.length - 1)
-                ? getData = getData + `                    set${titleCase(d)}(response.data.${d});`
-                : getData = getData + `                    set${titleCase(d)}(response.data.${d});\n`
-        }
+        i === (data.length - 1)
+            ? getData = getData + `                    set${titleCase(d)}(response.data.${d});`
+            : getData = getData + `                    set${titleCase(d)}(response.data.${d});\n`
     }
     );
 
 
     let getValue = "";
     data.map((d, i) => {
-        if (i < data.length - 1) {
-            if (i > 0) {
-                i === (data.length - 2)
-                    ? getValue = getValue + `              ${d}: ${d}`
-                    : getValue = getValue + `              ${d}: ${d},\n`
-            }
-        }
+
+        i === (data.length - 1)
+            ? getValue = getValue + `              ${d}: ${d}`
+            : getValue = getValue + `              ${d}: ${d},\n`
+
     }
     );
 
     //------------------------------------------------------------------------------
-    let sowFormMongoData = '';
-    let sowFormMongo = "";
-    data.map((d, i) => {
-        if (i < data.length - 1) {
-            if (i > 0) {
-                i === (data.length - 2)
-                    ? sowFormMongo += `${d}`
-                    : sowFormMongo += `${d}, `
-            }
-        }
-    }
-    );
+    let sowFormMongo = data.join(', ');
 
-    let sowFormMongop = "";
-    data.map((d, i) => {
-        if (i < data.length - 1) {
-            if (i > 0) {
-                i === (data.length - 2)
-                    ? sowFormMongop += `${d}: ''`
-                    : sowFormMongop += `${d}: '', `
-            }
-        }
-    }
-    );
 
-    sowFormMongoData = '             const { ' + sowFormMongo + ' } = data;' + '\n'
-    const sliceData = data.slice(1, data.length-1);
-    const ret1 = sliceData.map(s=>`            set${titleCamelCase(s)}(${s});`).join('\n') ;
-const res1 = sowFormMongoData + ret1;
+    let sowFormMongoData = '             const { ' + sowFormMongo + ' } = data;' + '\n'
+    const ret1 = data.map(s => `            set${titleCamelCase(s)}(${s});`).join('\n');
+    const res1 = sowFormMongoData + ret1;
 
     //------------------------------------------------------------------------------
 
@@ -145,21 +112,18 @@ const res1 = sowFormMongoData + ret1;
 
     const str = `import React, { useState } from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
-import { putDataToAPI } from "@/lib/utils";
+import { updateDataToFirebase } from "@/lib/utils";
 
 
 const Edit = ({ message, id, data }) => {
 ${stateVar}
+
     const [show, setShow] = useState(false);
     const [pointerEvent, setPointerEvent] = useState(true);
 
     const showEditForm = () => {
-        setShow(true);
-        try {
+           setShow(true);
 ${res1}
-        } catch (err) {
-            console.log(err);
-        }
     };
 
 
@@ -180,7 +144,7 @@ ${getValue}
         try {
             setPointerEvent(false);
             const newObject = createObject();
-            const msg = await putDataToAPI("${tbl}",id, newObject);
+            const msg = await updateDataToFirebase("${tbl}",id, newObject);
             message(msg);
         } catch (error) {
             console.error("Error saving ${tbl} data:", error);
