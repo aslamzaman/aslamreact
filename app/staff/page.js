@@ -7,7 +7,7 @@ const date_format = dt => new Date(dt).toISOString().split('T')[0];
 import Image from "next/image";
 import { Tiro_Bangla } from 'next/font/google';
 const tiro = Tiro_Bangla({ subsets: ['bengali'], weight: "400" });
-import { getDataFromFirebase } from "@/lib/utils";
+import { getDataFromFirebase, sortArray } from "@/lib/utils";
 
 
 
@@ -44,7 +44,7 @@ const Staff = () => {
                 })
                 console.log(joinCollection);
 
-                const sortedStaffs = joinCollection.sort((a, b) => parseInt(a.empId) - parseInt(b.empId));
+                const sortedStaffs = joinCollection.sort((a, b) => sortArray(parseInt(a.empId), parseInt(b.empId)));
                 setStaffs(sortedStaffs);
                 setWaitMsg('');
             } catch (error) {
