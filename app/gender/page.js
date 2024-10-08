@@ -4,8 +4,8 @@ import Add from "@/components/gender/Add";
 import Edit from "@/components/gender/Edit";
 import Delete from "@/components/gender/Delete";
 // import Print from "@/components/gender/Print";
-import { getDataFromFirebase, sortArray } from "@/lib/utils";
-
+import { getDataFromFirebase, sortArray, customIdForFirebase, addDataToFirebaseWithCustomId } from "@/lib/utils";
+import { staffs, projects, posts, gendersData, places, units, allStaff } from "@/lib/mongodata";
 
 const Gender = () => {
   const [genders, setGenders] = useState([]);
@@ -35,6 +35,35 @@ const Gender = () => {
   }
 
 
+  const dd = () => {
+
+
+    let i = 0;
+    const myTimer = setInterval(async () => {
+      let id = units[i].id;
+
+      let data = {
+        nmEn: units[i].nmEn,
+        nmBn: units[i].nmBn,
+        nmUn: units[i].nmUn,
+        createdAt: units[i].createdAt
+      }
+
+      const msg = await addDataToFirebaseWithCustomId('unit', id, data);
+      console.log(msg)
+      i = i + 1;
+      if (i >= units.length) {
+        clearInterval(myTimer);
+        console.log("End");
+      }
+    }, 1000)
+
+
+  }
+
+
+
+
   return (
     <>
       <div className="w-full mb-3 mt-8">
@@ -42,6 +71,7 @@ const Gender = () => {
         <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
         <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
       </div>
+      <button onClick={dd}>Click Me</button>
       <div className="px-4 lg:px-6">
         <div className="p-4 overflow-auto">
           <table className="w-full border border-gray-200">
