@@ -8,7 +8,7 @@ import Delete from "@/components/bayprostab/Delete";
 import Download from '@/components/bayprostab/Download';
 import Upload from '@/components/bayprostab/Upload';
 
-import { getDataFromFirebase, formatedDate, formatedDateDot, sessionStorageGetItem } from '@/lib/utils';
+import { getDataFromFirebase, formatedDate, formatedDateDot } from '@/lib/utils';
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 import { BayprostabPreparation } from '@/lib/BayprostabPreparation';

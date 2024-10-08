@@ -53,8 +53,6 @@ const Staff = () => {
         };
         getData();
 
-        // 20-15 =5
-        // hgf
     }, [msg]);
 
 

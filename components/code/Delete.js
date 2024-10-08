@@ -2,142 +2,11 @@ import { titleCamelCase } from "@/lib/utils";
 
 const Delete = (tbl, datas) => {
 
-    const titleCase = (str) => {
-        return str
-            .split(' ')
-            .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
-            .join(' ');
-    }
-
-    const FirstCap = (str) => {
-        const firstLetter = str.substr(0, 1);
-        const restLetter = str.substr(1, str.length - 1);
-        const firstLetterCap = firstLetter.toUpperCase();
-        const joinToOne = firstLetterCap + restLetter;
-        return joinToOne
-    }
-
-
-
-
-
     const replaceQutation = datas.replaceAll('`', '');
     const splitData = replaceQutation.split(",");
     const data = splitData.map(s => s.trim());
 
-
-    let dd = "";
-    data.map((d, i) => {
-        if (i > 0) {
-            i === (data.length - 1)
-                ? dd = dd + `                                      <TextEn Title="${titleCase(d)}" Id="${d}" Change={(e) => set${titleCase(d)}(e.target.value)} Value={${d}} Chr="50" />`
-                : dd = dd + `                                      <TextEn Title="${titleCase(d)}" Id="${d}" Change={(e) => set${titleCase(d)}(e.target.value)} Value={${d}} Chr="50" />\n`;
-        }
-    }
-    );
-
-
-    let stateVar = "";
-    data.map((d, i) => {
-        if (i > 0) {
-            i === (data.length - 1)
-                ? stateVar = stateVar + `      const [${d}, set${titleCase(d)}] = useState('');`
-                : stateVar = stateVar + `      const [${d}, set${titleCase(d)}] = useState('');\n`
-        }
-    }
-    );
-
-
-
-    let stateClear = "";
-    data.map((d, i) => {
-        if (i > 0) {
-            i === (data.length - 1)
-                ? stateClear = stateClear + `          set${titleCase(d)}('');`
-                : stateClear = stateClear + `          set${titleCase(d)}('');\n`
-        }
-    }
-    );
-
-    let getData = "";
-    data.map((d, i) => {
-        i === (data.length - 1)
-            ? getData = getData + `set${titleCase(d)}(${d});`
-            : getData = getData + `set${titleCase(d)}(${d});\n`
-    }
-    );
-
-
-    let getValue = "";
-    data.map((d, i) => {
-        let x = d === 'isDeleted' ? 'true' : 'false';
-
-        if (i > 0) {
-            i === (data.length - 1)
-                ? getValue = getValue + `              ${d}: ${d}`
-                : getValue = getValue + `              ${d}: ${d},\n`
-        }
-    }
-    );
-    let gethardDelete = '';
-    for (let n = 0; n < data.length; n++) {
-        if (n > 0) {
-            let x = data[n] === 'isDeleted' ? true : false;
-            gethardDelete = gethardDelete + `                ${data[n]} : ${!x ? data[n] : x}` + `${n===data.length-1?'':',\n'}`
-        }
-    }
-  
-
-    //------------------------------------------------------------------------
-
-    let sowFormMongoData = '';
-    sowFormMongoData = '            const { ' + data[1] + ' } = data;' + '\n'
-
-    sowFormMongoData += `            set${FirstCap(data[1])}(${data[1]});`;
     //--------------------------
-    let sowFormLocalData = '';
-    sowFormLocalData += '               const response = getOne("' + tbl + '", id);' + '\n';
-    sowFormLocalData += '               set' + titleCase(data[1]) + '(response.data.' + data[1] + ');' + '\n';
-
-    //------------------------------------------------------------------------------
-    let saveStr = '';
-    saveStr += '                const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/' + tbl + '/${id}`;' + '\n';
-    saveStr += '                const requestOptions = { method: "DELETE" };' + '\n';
-    saveStr += '                const response = await fetch(apiUrl, requestOptions);' + '\n';
-    saveStr += '                if (response.ok) {' + '\n';
-    saveStr += '                    message(`Deleted successfully completed. id: ${id}`);' + '\n';
-    saveStr += '                } else {' + '\n';
-    saveStr += '                    throw new Error("Failed to delete ' + tbl + '");' + '\n';
-    saveStr += '                }';
-
-
-    let localSave = '';
-    localSave += '              const response = deleteItem("' + tbl + '", id);' + '\n';
-    localSave += '              message(response.message);';
-
-
-
-    //------------------------------------------------------------------------------
-
-    let softStr = '';
-    softStr += 'const newObject = createObject();' + '\n';
-    softStr += '                const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/' + tbl + '/${id}`;' + '\n';
-    softStr += '                const requestOptions = {' + '\n';
-    softStr += '                    method: "PUT",' + '\n';
-    softStr += '                    headers: { "Content-Type": "application/json" },' + '\n';
-    softStr += '                    body: JSON.stringify(newObject)' + '\n';
-    softStr += '                };' + '\n';
-
-    softStr += '                const response = await fetch(apiUrl, requestOptions);' + '\n';
-    softStr += '                if (response.ok) {' + '\n';
-    softStr += '                    message(`Deleted successfully completed. id: ${id}`);' + '\n';
-    softStr += '                } else {' + '\n';
-    softStr += '                    throw new Error("Failed to create ' + tbl + '");' + '\n';
-    softStr += '                }';
-    //------------------------------------------
-
-    let urlll = '`${process.env.NEXT_PUBLIC_BASE_URL}/api/'+ tbl + '/${id}`';
-    let mss = '`Deleted successfully completed. id: ${id}`';
 
 
 
@@ -168,7 +37,7 @@ const Delete = ({ message, id, data }) => {
     const deleteClick = async () => {
         try {
             setPointerEvent(false);
-            const msg = await deleteDataFromFirebase('${tbl}',id);
+            const msg = await deleteDataFromFirebase('${tbl}', id);
             message(msg);
         } catch (error) {
             console.log(error);

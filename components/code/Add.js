@@ -1,4 +1,4 @@
-
+import { addPageStateVariables, addPageResetVariables, addPageCreateObject, addPageInputText } from "./Fnc";
 
 const Add = (tbl, datas) => {
 
@@ -9,93 +9,10 @@ const Add = (tbl, datas) => {
             .join(' ');
     }
 
-    const FirstCap = (str) => {
-        const firstLetter = str.substr(0, 1);
-        const restLetter = str.substr(1, str.length - 1);
-        const firstLetterCap = firstLetter.toUpperCase();
-        const joinToOne = firstLetterCap + restLetter;
-        return joinToOne
-    }
-
     const replaceQutation = datas.replaceAll('`', '');
     const splitData = replaceQutation.split(",");
     const data = splitData.map(s => s.trim());
 
-
-    let dd = "";
-    data.map((d, i) => {
-        if (i < data.length - 1) {
-                i === (data.length - 2)
-                    ? dd = dd + `                                            <TextEn Title="${titleCase(d)}" Id="${d}" Change={e => set${FirstCap(d)}(e.target.value)} Value={${d}} Chr={50} />`
-                    : dd = dd + `                                            <TextEn Title="${titleCase(d)}" Id="${d}" Change={e => set${FirstCap(d)}(e.target.value)} Value={${d}} Chr={50} />\n`;
-        }
-    }
-    );
-
-
-    let stateVar = "";
-    data.map((d, i) => {
-        if (i < data.length - 1) {
-            i === (data.length - 1)
-                ? stateVar = stateVar + `    const [${d}, set${FirstCap(d)}] = useState('');`
-                : stateVar = stateVar + `    const [${d}, set${FirstCap(d)}] = useState('');\n`
-        }
-    }
-    );
-
-
-
-    let stateClear = "";
-    data.map((d, i) => {
-        if (i < data.length - 1) {
-            i === (data.length - 2)
-                ? stateClear = stateClear + `          set${FirstCap(d)}('');`
-                : stateClear = stateClear + `          set${FirstCap(d)}('');\n`
-        }
-    }
-    );
-
-    let getData = "";
-    data.map((d, i) => {
-        i === (data.length - 1)
-            ? getData = getData + `set${titleCase(d)}(${d});`
-            : getData = getData + `set${titleCase(d)}(${d});\n`
-    }
-    );
-
-
-    let getValue = "";
-    data.map((d, i) => {
-        if (i < data.length - 1) {
-            i === (data.length - 2)
-                ? getValue = getValue + `              ${d}: ${d},`
-                : getValue = getValue + `              ${d}: ${d},\n`
-        }
-    }
-    );
-
-    //----------------------------------------------------------------
-    let saveStr = '';
-    saveStr += '              const newObject = createObject();' + '\n';
-    saveStr += '              const apiUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/' + tbl + '`;\n';
-    saveStr += '              const requestOptions = {' + '\n';
-    saveStr += '                method: "POST",' + '\n';
-    saveStr += '                headers: { "Content-Type": "application/json" },' + '\n';
-    saveStr += '                body: JSON.stringify(newObject)' + '\n';
-    saveStr += '              };' + '\n';
-
-    saveStr += '              const response = await fetch(apiUrl, requestOptions);' + '\n';
-    saveStr += '              if (response.ok) {' + '\n';
-    saveStr += '                message(`' + titleCase(tbl) + ' is created at ${new Date().toISOString()}`);' + '\n';
-    saveStr += '              } else {' + '\n';
-    saveStr += '                throw new Error("Failed to create ' + tbl + '");' + '\n';
-    saveStr += '              }';
-
-
-    let localSave = '';
-    localSave += '              const newObject = createObject();' + '\n';
-    localSave += '              const response = addItem("' + tbl + '", newObject);' + '\n';
-    localSave += '              message(response.message);';
 
     //----------------------------------------------------------------
 
@@ -106,7 +23,8 @@ import { addDataToFirebase } from "@/lib/utils";
 
 
 const Add = ({ message }) => {
-${stateVar}
+${addPageStateVariables(data)}    
+
     const [show, setShow] = useState(false);
     const [pointerEvent, setPointerEvent] = useState(true);
 
@@ -122,13 +40,13 @@ ${stateVar}
 
 
     const resetVariables = () => {
-${stateClear}
+${addPageResetVariables(data)}
     }
 
 
     const createObject = () => {
         return {
-${getValue}
+${addPageCreateObject(data)}
               createdAt: new Date().toISOString()
         }
     }
@@ -169,7 +87,7 @@ ${getValue}
                                 <div className="p-4">
                                     <form onSubmit={saveHandler}>
                                         <div className="grid grid-cols-1 gap-4">
-${dd}                                    
+${addPageInputText(data)}                                    
                                         </div>
                                         <div className={\`w-full mt-4 flex justify-start \${pointerEvent ? 'pointer-events-auto' : 'pointer-events-none'}\`}>
                                             <input type="button" onClick={closeAddForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />

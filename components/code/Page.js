@@ -1,4 +1,4 @@
-
+import { importToPageHeader, pageStateVariables, th, td } from "./Fnc";
 const Page = (tbl, datas) => {
 
     const titleCase = (str) => {
@@ -13,54 +13,12 @@ const Page = (tbl, datas) => {
     const data = splitData.map(s => s.trim());
 
 
+    const str = `${importToPageHeader(tbl)}
 
-    let thead_string = "";
-    data.map((d, i) => {
-        if (i < data.length - 1) {
-                thead_string = thead_string + `                                <th className="text-center border-b border-gray-200 px-4 py-1">${titleCase(d)}</th>\n`
-        }
-    }
-    );
-
-
-    let td_string = "";
-    data.map((d, i) => {
-        if (i < data.length - 1) {
-                td_string = td_string + `                                        <td className="text-center py-1 px-4">{${tbl}.${d}}</td>\n`
-        }
-    });
-
-
-    //-------------------------------
-    let loadMongo = "";
-    loadMongo += '                    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/' + tbl + '`, {' + '\n';
-    loadMongo += '                        method: "GET",' + '\n';
-    loadMongo += '                        headers: { "Content-Type": "application/json" }' + '\n';
-    loadMongo += '                    });' + '\n';
-    loadMongo += '                    if (!response.ok) {' + '\n';
-    loadMongo += '                        throw new Error("Failed to fetch data");' + '\n';
-    loadMongo += '                    }' + '\n';
-    loadMongo += '                    const data = await response.json();' + '\n';
-    loadMongo += '                    // console.log(data);\n';
-    loadMongo += '                    set' + titleCase(tbl) + 's(data);';
-    //-------------
-
-
-
-
-const str = `"use client";
-import React, { useState, useEffect } from "react";
-import Add from "@/components/${tbl}/Add";
-import Edit from "@/components/${tbl}/Edit";
-import Delete from "@/components/${tbl}/Delete";
-// import Print from "@/components/${tbl}/Print";
-import { getDataFromFirebase, sortArray } from "@/lib/utils";
 
 
 const ${titleCase(tbl)} = () => {
-    const [${tbl}s, set${titleCase(tbl)}s] = useState([]);
-    const [waitMsg, setWaitMsg] = useState("");
-    const [msg, setMsg] = useState("Data ready");
+${pageStateVariables(tbl)}
 
 
     useEffect(() => {
@@ -97,7 +55,8 @@ const ${titleCase(tbl)} = () => {
                     <table className="w-full border border-gray-200">
                         <thead>
                             <tr className="w-full bg-gray-200">
-${thead_string}                                <th className="w-[95px] border-b border-gray-200 px-4 py-2">
+${th(data)}  
+                                <th className="w-[95px] border-b border-gray-200 px-4 py-2">
                                     <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1 font-normal">
                                         {/* <Print data={${tbl}s} /> */}
                                         <Add message={messageHandler} />
@@ -108,8 +67,9 @@ ${thead_string}                                <th className="w-[95px] border-b 
                         <tbody>
                             {${tbl}s.length ? (
                                 ${tbl}s.map(${tbl} => (
-                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={${tbl}.id}>    
-${td_string}                                        <td className="text-center py-2">
+                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={${tbl}.id}>  
+${td(tbl, data)}                                      
+                                        <td className="text-center py-2">
                                             <div className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
                                                 <Edit message={messageHandler} id={${tbl}.id} data={${tbl}} />
                                                 <Delete message={messageHandler} id={${tbl}.id} data={${tbl}} />
@@ -136,6 +96,6 @@ ${td_string}                                        <td className="text-center p
 export default ${titleCase(tbl)};
 
 `;
-return str;
+    return str;
 }
 export default Page;

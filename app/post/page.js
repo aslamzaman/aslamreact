@@ -25,6 +25,7 @@ const Post = () => {
             try {
                 const data = await getDataFromFirebase("post");
                 const sort = data.sort((a, b)=> new Date(a.createdAt) < new Date(b.createdAt)? 1: -1);
+                console.log(sort)
                 setPosts(sort);
                 setWaitMsg('');
             } catch (error) {

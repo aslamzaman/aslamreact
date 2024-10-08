@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Add from "@/components/ta/Add";
 import Edit from "@/components/ta/Edit";
 import Delete from "@/components/ta/Delete";
-import { getDataFromFirebase } from "@/lib/utils";
+import { getDataFromFirebase, sortArray } from "@/lib/utils";
 
 
 const Ta = () => {
@@ -20,6 +20,7 @@ const Ta = () => {
                     getDataFromFirebase("ta"),
                     getDataFromFirebase("unit")
                 ]);
+
                 const joinCollection = tas.map(ta => {
                     return {
                         ...ta,
@@ -27,10 +28,10 @@ const Ta = () => {
                     }
                 });
 
-                const sortedTas = joinCollection.sort((a, b) => a.unit.nmEn.localeCompare(b.unit.nmEn));
-                console.log(sortedTas);
-                setTas(sortedTas);
-                setWaitMsg('');
+                const sortedData = joinCollection.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
+                console.log(sortedData)
+                setTas(sortedData);
+                setWaitMsg('');;
             } catch (error) {
                 console.error("Error fetching data:", error);
                 setWaitMsg('Failed to fetch data. Please try again.');

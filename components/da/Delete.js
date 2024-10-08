@@ -4,18 +4,16 @@ import { deleteDataFromFirebase } from "@/lib/utils";
 
 
 const Delete = ({ message, id, data }) => {
-    const [tk, setTk] = useState("");
+    const [postId, setPostId] = useState("");
+
     const [show, setShow] = useState(false);
+    const [pointerEvent, setPointerEvent] = useState(true);
+
 
     const showDeleteForm = () => {
         setShow(true);
-        try {
-            const { tk } = data;
-            setTk(tk);
-        }
-        catch (err) {
-            console.log(err);
-        }
+        const {post} = data;
+        setPostId(post.nmEn);
     }
 
 
@@ -24,16 +22,20 @@ const Delete = ({ message, id, data }) => {
     }
 
 
-    const deleteYesClick = async () => {
+    const deleteClick = async () => {
         try {
-            const msg = deleteDataFromFirebase('da', id);
+            setPointerEvent(false);
+            const msg = await deleteDataFromFirebase('da', id);
             message(msg);
         } catch (error) {
             console.log(error);
             message("Data deleting error");
+        } finally {
+            setPointerEvent(true);
+            setShow(false);
         }
-        setShow(false);
     }
+
 
 
     return (
@@ -60,11 +62,11 @@ const Delete = ({ message, id, data }) => {
 
                                 <h1 className="text-sm text-center text-gray-600 mt-4">
                                     Are you sure to proceed with the deletion?</h1>
-                                <h1 className="text-center text-gray-600 font-bold">{tk}</h1>
+                                <h1 className="text-center text-gray-600 font-bold">{postId}</h1>
                             </div>
-                            <div className="w-full flex justify-start">
+                            <div className={`w-full mt-4 flex justify-start ${pointerEvent ? 'pointer-events-auto' : 'pointer-events-none'}`}>
                                 <BtnEn Title="Close" Click={closeDeleteForm} Class="bg-pink-700 hover:bg-pink-900 text-white mr-1" />
-                                <BtnEn Title="Yes Delete" Click={deleteYesClick} Class="bg-blue-600 hover:bg-blue-800 text-white" />
+                                <BtnEn Title="Yes Delete" Click={deleteClick} Class="bg-blue-600 hover:bg-blue-800 text-white" />
                             </div>
                         </div>
                     </div>
@@ -79,5 +81,6 @@ const Delete = ({ message, id, data }) => {
     )
 }
 export default Delete;
+    
 
-
+    

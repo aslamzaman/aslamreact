@@ -1,6 +1,6 @@
 import React, { useState, id, data } from "react";
 import { BtnEn } from "@/components/Form";
-import { sessionStorageDeleteItem } from "@/lib/utils";
+import { deleteDataFromFirebase } from "@/lib/utils";
 
 const Delete = ({ message, id, data }) => {
     const [item, setItem] = useState("");
@@ -27,7 +27,7 @@ const Delete = ({ message, id, data }) => {
 
     const deleteYesClick = async () => {
         try {
-            const msg = sessionStorageDeleteItem('bayprostab', id);
+            const msg = deleteDataFromFirebase('bayprostab', id);
             message(msg);
         } catch (error) {
             console.log(error);

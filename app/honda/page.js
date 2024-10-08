@@ -4,11 +4,9 @@ import Add from "@/components/honda/Add";
 import Edit from "@/components/honda/Edit";
 import Delete from "@/components/honda/Delete";
 import History from "@/components/honda/history";
-import { getDataFromFirebase, formatedDateDot, sessionStorageSetItem } from "@/lib/utils";
+import { getDataFromFirebase, formatedDateDot, sessionStorageSetItem, addDataToFirebase } from "@/lib/utils";
 import { jsPDF } from "jspdf";
 import { useRouter } from "next/navigation";
-
-
 
 
 const Honda = () => {
@@ -24,19 +22,26 @@ const Honda = () => {
         const fetchData = async () => {
             setWaitMsg('Please Wait...');
             try {
-
-                const [data, hondahistory] = await Promise.all([
+                const [ hondas, hondahistorys ] = await Promise.all([
                     getDataFromFirebase("honda"),
                     getDataFromFirebase("hondahistory")
                 ]);
-                const sortData = data.sort((a, b) => (a.unitId.nmEn).toUpperCase() < (b.unitId.nmEn).toUpperCase() ? -1 : 1)
-                console.log(sortData, hondahistory);
-                setHondas(sortData);
-                setHondahistoris(hondahistory);
+    
+    console.log(hondas, hondahistorys )
+                const joinCollection = hondas.map(honda=>{
+                    return {
+                       ...honda,
+                       hondahistory : hondahistorys.find(hondahistory => hondahistory.hondaId ===honda.hondaId) || {}
+                    }
+                });
+    
+                const sortedData = joinCollection.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
+                console.log("sorted", sortedData);
+                setHondas(sortedData);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error fetching data:", error);
-                setMsg("Failed to fetch data");
+                setWaitMsg('Failed to fetch data. Please try again.');
             }
         };
         fetchData();
@@ -109,6 +114,7 @@ const Honda = () => {
 
 
 
+
     return (
         <>
             <div className="w-full mb-3 mt-8">
@@ -118,7 +124,6 @@ const Honda = () => {
 
             <div className="px-4 lg:px-6">
                 <p className="w-full text-sm text-red-700">{msg}</p>
-                <button onClick={printHandler}>Print</button>
                 <div className="p-2 overflow-auto">
                     <table className="w-full border border-gray-200">
                         <thead>
