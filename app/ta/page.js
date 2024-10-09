@@ -22,14 +22,15 @@ const Ta = () => {
                 ]);
 
                 const joinCollection = tas.map(ta => {
+                    console.log(ta.unitId)
                     return {
                         ...ta,
                         unit: units.find(unit => unit.id === ta.unitId) || {}
                     }
                 });
-
+                
                 const sortedData = joinCollection.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
-                console.log(sortedData)
+                console.log("join Data ", joinCollection)
                 setTas(sortedData);
                 setWaitMsg('');;
             } catch (error) {

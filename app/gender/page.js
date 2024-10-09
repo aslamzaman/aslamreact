@@ -3,10 +3,7 @@ import React, { useState, useEffect } from "react";
 import Add from "@/components/gender/Add";
 import Edit from "@/components/gender/Edit";
 import Delete from "@/components/gender/Delete";
-// import Print from "@/components/gender/Print";
-import { getDataFromFirebase, sortArray, customIdForFirebase, addDataToFirebaseWithCustomId } from "@/lib/utils";
-import { staffs, projects, posts, gendersData, places, units, hondas, hondahistories } from "@/lib/mongodata";
-
+import  * as util from "@/lib/utils";
 const Gender = () => {
   const [genders, setGenders] = useState([]);
   const [waitMsg, setWaitMsg] = useState("");
@@ -17,8 +14,8 @@ const Gender = () => {
     const getData = async () => {
       setWaitMsg('Please Wait...');
       try {
-        const data = await getDataFromFirebase("gender");
-        const sortedData = data.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
+        const data = await util.getDataFromFirebase1("gender");
+        const sortedData = data.sort((a, b) => util.sortArray(new Date(b.createdAt), new Date(a.createdAt)));
         console.log(sortedData);
         setGenders(sortedData);
         setWaitMsg('');
@@ -35,66 +32,41 @@ const Gender = () => {
   }
 
 
-  const dd = () => {
-/*
-
-    let i = 0;
-    const myTimer = setInterval(async () => {
-      let id = hondas[i].id;
-
-      let data = {
-          regNo: hondas[i].regNo,
-          regDt: hondas[i].regDt,
-          chassisNo:hondas[i].chassisNo,
-          engineNo: hondas[i].engineNo,
-          condition: hondas[i].condition,
-          projectId: hondas[i].projectId,
-          unitId: hondas[i].unitId,
-          remarks: hondas[i].remarks,
-          createdAt: hondas[i].createdAt
-      }
-
-      const msg = await addDataToFirebaseWithCustomId('honda', id, data);
-      console.log(msg)
-      i = i + 1;
-      if (i >= hondas.length) {
-        clearInterval(myTimer);
-        console.log("End");
-      }
-    }, 1000)
-
-
-*/
-
+  const addHdle = () => {
+    console.log(util.customIdForFirebase());
     /*
-        let x = [];
+    let x = [];
+    for (let i = 0; i < das.length; i++) {
+      const p = posts.find(post => post._id === das[i].postId);
+      x.push({ id: customIdForFirebase(), ...das[i], postId: p.id })
+    }
+    console.log(x);
+    */
+  }
+
+
+  const uploadHanderl = () => {
+    /*
         let i = 0;
         const myTimer = setInterval(async () => {
+          let id = das[i].id;
     
-          x.push({ id: customIdForFirebase(), ...hondahistories[i] });
     
-          console.log("honda", i)
+          let data = {
+            postId: das[i].postId,
+            tk: das[i].tk,
+            createdAt: das[i].createdAt
+          }
+    
+          const msg = await addDataToFirebaseWithCustomId('da', id, data);
+          console.log(msg)
           i = i + 1;
-          if (i >= hondahistories.length) {
+          if (i >= das.length) {
             clearInterval(myTimer);
             console.log("End");
-            console.log(x);
           }
-        }, 500)
-    
-        console.log(x);
-        */
-
-
-    /*
-      let x = [];
-      for(let i =0; i < hondas.length; i++){
-        const u = units.find(unit=>unit._id === hondas[i].unitId);
-        const p = projects.find(project=>project._id === hondas[i].projectId);
-        x.push({...hondas[i],unitId: u.id, projectId: p.id})
-      }
-    console.log(x);
-  */
+        }, 1000)
+    */
 
   }
 
@@ -108,7 +80,8 @@ const Gender = () => {
         <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
         <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
       </div>
-      <button onClick={dd}>Click Me</button>
+      <button onClick={addHdle}>Add Id</button><br /><br />
+      <button onClick={uploadHanderl}>Upload</button>
       <div className="px-4 lg:px-6">
         <div className="p-4 overflow-auto">
           <table className="w-full border border-gray-200">

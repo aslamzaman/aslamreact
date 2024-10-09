@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BtnEn } from "../Form";
 import { Close } from "../Icons";
-import { getDataFromFirebase } from "@/lib/utils";
+import { getDataFromFirebase, localStorageSetItem } from "@/lib/utils";
 
 
 const Upload = ({ message }) => {
@@ -17,11 +17,12 @@ const Upload = ({ message }) => {
 
 
 	const uploadHandler = (e) => {
+
 		if (file) {
 			const reader = new FileReader();
 			reader.onload = (() => {
 				let jsonData = JSON.parse(reader.result);
-				getDataFromFirebase("bayprostab");
+				localStorageSetItem("bayprostab", jsonData);
 				message("Data loaded successfully");
 				setShow(false);
 			})

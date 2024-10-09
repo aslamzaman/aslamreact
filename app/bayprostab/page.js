@@ -8,7 +8,7 @@ import Delete from "@/components/bayprostab/Delete";
 import Download from '@/components/bayprostab/Download';
 import Upload from '@/components/bayprostab/Upload';
 
-import { getDataFromFirebase, formatedDate, formatedDateDot } from '@/lib/utils';
+import { getDataFromFirebase, formatedDate, formatedDateDot, localStorageGetItem } from '@/lib/utils';
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 import { BayprostabPreparation } from '@/lib/BayprostabPreparation';
@@ -52,7 +52,8 @@ const Bayprostab = () => {
           getDataFromFirebase('staff'),
           getDataFromFirebase('project')
         ]);
-        const scStaff = staffs.filter(staff => staff.placeId._id === "660ae2d4825d0610471e272d");
+        const scStaff = staffs.filter(staff => staff.placeId === "6BtqRhIrKQ776jyywIC8");
+        console.log(scStaff);
         setStaffData(scStaff);
         setProjectData(projects);
         setPayType('');
@@ -63,7 +64,7 @@ const Bayprostab = () => {
     }
     getData();
 
-    const locaData = sessionStorageGetItem("bayprostab");
+    const locaData = localStorageGetItem("bayprostab");
     setBayprostabs(locaData);
     const totalTaka = locaData.reduce((t, c) => t + (parseFloat(eval(c.taka)) * parseFloat(c.nos)), 0);
     const totalRound = Math.round(totalTaka);
@@ -116,7 +117,7 @@ const Bayprostab = () => {
       payType: payType,
       cheque: cheque
     }
-    const db = sessionStorageGetItem("bayprostab");
+    const db = localStorageGetItem("bayprostab");
 
     setTimeout(() => {
       BayprostabPreparation.central({ doc, data });
@@ -166,11 +167,11 @@ const Bayprostab = () => {
 
                 <div className="w-full col-span-3">
                   <DropdownEn Title="Staff Name" Id="staff" Change={(e) => { setStaff(e.target.value) }} Value={staff}>
-                    {staffData.map(staff => <option value={staff.nmBn} key={staff._id}>{staff.nmEn}</option>)}
+                    {staffData.map(staff => <option value={staff.nmBn} key={staff.id}>{staff.nmEn}</option>)}
                   </DropdownEn>
                 </div>
                 <DropdownEn Title="Project" Id="project" Change={(e) => { setProject(e.target.value) }} Value={project}>
-                  {projectData.map(project => <option value={project.name} key={project._id}>{project.name}</option>)}
+                  {projectData.map(project => <option value={project.name} key={project.id}>{project.name}</option>)}
                 </DropdownEn>
 
                 <div className="w-full col-span-2">

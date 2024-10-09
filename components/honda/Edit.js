@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextEn, BtnSubmit, DropdownEn, TextDt } from "@/components/Form";
-import { updateDataToFirebase } from "@/lib/utils";
+import { getDataFromFirebase, updateDataToFirebase } from "@/lib/utils";
 
 
 const Edit = ({ message, id, data }) => {
@@ -25,8 +25,8 @@ const Edit = ({ message, id, data }) => {
         setShow(true);
         try {
             const [responseProject, responseUnit] = await Promise.all([
-                fetchDataFromAPI("project"),
-                fetchDataFromAPI("unit")
+                getDataFromFirebase("project"),
+                getDataFromFirebase("unit")
             ]);
             setProjects(responseProject);
             setUnits(responseUnit);

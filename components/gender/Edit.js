@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
-import { updateDataToFirebase } from "@/lib/utils";
+import { updateDataToFirebase, updateDataToFirebase2 } from "@/lib/utils";
 
 
 const Edit = ({ message, id, data }) => {
@@ -39,7 +39,7 @@ const Edit = ({ message, id, data }) => {
         e.preventDefault();
         try {
             const newObject = createObject();
-            const msg = await updateDataToFirebase("gender", id, newObject);
+            const msg = await updateDataToFirebase2("gender", id, newObject);
             message(msg);
         } catch (error) {
             console.error("Error saving gender data:", error);

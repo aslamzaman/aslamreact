@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BtnSubmit, TextBn, TextEn, TextNum } from "@/components/Form";
-import { addDataToFirebase } from "@/lib/utils";
+import { localStorageAddItem } from "@/lib/utils";
 
 const Add = ({ message }) => {
     const [item, setItem] = useState('');
@@ -41,7 +41,7 @@ const Add = ({ message }) => {
         e.preventDefault();
         try {
             const newObject = createObject();
-            const msg = addDataToFirebase('bayprostab', newObject);
+            const msg = localStorageAddItem('bayprostab', newObject);
             message(msg);
         } catch (error) {
             console.error("Error saving bayprostab data:", error);

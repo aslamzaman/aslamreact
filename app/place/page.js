@@ -4,7 +4,7 @@ import Add from "@/components/place/Add";
 import Edit from "@/components/place/Edit";
 import Delete from "@/components/place/Delete";
 // import Print from "@/components/place/Print";
-import { getDataFromFirebase } from "@/lib/utils";
+import { getDataFromFirebase, sortArray } from "@/lib/utils";
 
 
 
@@ -19,15 +19,15 @@ const Place = () => {
             setWaitMsg('Please Wait...');
             try {
                 const data = await getDataFromFirebase("place");
-                console.log(data);
-                setPlaces(data);
+                const sortedData = data.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
+                console.log(sortedData);
+                setPlaces(sortedData);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
         getData();
-
     }, [msg]);
 
 
@@ -48,9 +48,9 @@ const Place = () => {
                     <table className="w-full border border-gray-200">
                         <thead>
                             <tr className="w-full bg-gray-200">
-                                <th className="text-center border-b border-gray-200 px-4 py-1">Name</th>
+                                <th className="text-center border-b border-gray-200 px-4 py-1">Name</th>  
                                 <th className="w-[95px] border-b border-gray-200 px-4 py-2">
-                                    <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1">
+                                    <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1 font-normal">
                                         {/* <Print data={places} /> */}
                                         <Add message={messageHandler} />
                                     </div>
@@ -60,12 +60,12 @@ const Place = () => {
                         <tbody>
                             {places.length ? (
                                 places.map(place => (
-                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={place._id}>
-                                        <td className="text-center py-1 px-4">{place.name}</td>
+                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={place.id}>  
+                                        <td className="text-center py-1 px-4">{place.name}</td>                                      
                                         <td className="text-center py-2">
                                             <div className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
-                                                <Edit message={messageHandler} id={place._id} data={place} />
-                                                <Delete message={messageHandler} id={place._id} data={place} />
+                                                <Edit message={messageHandler} id={place.id} data={place} />
+                                                <Delete message={messageHandler} id={place.id} data={place} />
                                             </div>
                                         </td>
                                     </tr>

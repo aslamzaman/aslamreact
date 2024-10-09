@@ -4,7 +4,7 @@ import Add from "@/components/honda/Add";
 import Edit from "@/components/honda/Edit";
 import Delete from "@/components/honda/Delete";
 import History from "@/components/honda/history";
-import { getDataFromFirebase, formatedDateDot, sessionStorageSetItem, addDataToFirebase } from "@/lib/utils";
+import { getDataFromFirebase, formatedDateDot, sessionStorageSetItem, sortArray } from "@/lib/utils";
 import { jsPDF } from "jspdf";
 import { useRouter } from "next/navigation";
 
@@ -22,16 +22,20 @@ const Honda = () => {
         const fetchData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const [ hondas, hondahistorys ] = await Promise.all([
+                const [ hondas, hondahistorys, units, projects ] = await Promise.all([
                     getDataFromFirebase("honda"),
-                    getDataFromFirebase("hondahistory")
+                    getDataFromFirebase("hondahistory"),
+                    getDataFromFirebase("unit"),
+                    getDataFromFirebase("project")
                 ]);
     
     console.log(hondas, hondahistorys )
                 const joinCollection = hondas.map(honda=>{
                     return {
                        ...honda,
-                       hondahistory : hondahistorys.find(hondahistory => hondahistory.hondaId ===honda.hondaId) || {}
+                       hondahistory : hondahistorys.filter(hondahistory => hondahistory.hondaId ===honda.id) || [],
+                       unit : units.find(units => units.id ===honda.unitId) || {},
+                       project : projects.find(project => project.id ===honda.projectId) || {}
                     }
                 });
     
@@ -148,21 +152,21 @@ const Honda = () => {
                         <tbody>
                             {hondas.length ? (
                                 hondas.map((honda, i) => (
-                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={honda._id}>
+                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={honda.id}>
                                         <td className="text-center py-2 px-4">{i + 1}</td>
-                                        <td className="text-center py-2 px-4">{honda.unitId.nmEn}</td>
+                                        <td className="text-center py-2 px-4">{honda.unit.nmEn}</td>
                                         <td className="text-center py-2 px-4">{honda.regNo}</td>
                                         <td className="text-center py-2 px-4">{honda.regDt}</td>
                                         <td className="text-center py-2 px-4">{honda.chassisNo}</td>
                                         <td className="text-center py-2 px-4">{honda.engineNo}</td>
                                         <td className="text-center py-2 px-4">{honda.condition}</td>
-                                        <td className="text-center py-2 px-4">{honda.projectId.name}</td>
+                                        <td className="text-center py-2 px-4">{honda.project.name}</td>
                                         <td className="text-center py-2 px-4">{honda.remarks}</td>
                                         <td className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
                                             <button onClick={() => goToHistoryPage(honda._id)}>GO TO</button>
-                                            <Edit message={messageHandler} id={honda._id} data={honda} />
-                                            <Delete message={messageHandler} id={honda._id} data={honda} />
-                                            <History message={messageHandler} id={honda._id} />
+                                            <Edit message={messageHandler} id={honda.id} data={honda} />
+                                            <Delete message={messageHandler} id={honda.id} data={honda} />
+                                            <History message={messageHandler} id={honda.id} data={honda} />
                                         </td>
                                     </tr>
                                 ))

@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
-import { addDataToFirebase } from "@/lib/utils";
+import { addDataToFirebase, addDataToFirebase1 } from "@/lib/utils";
 
 
 const Add = ({ message }) => {
@@ -40,7 +40,7 @@ const Add = ({ message }) => {
         try {
             setPointerEvent(false);
             const newObject = createObject();
-            const msg = await addDataToFirebase("gender", newObject);
+            const msg = await addDataToFirebase1("gender", newObject);
             message(msg);
         } catch (error) {
             console.error("Error saving gender data:", error);

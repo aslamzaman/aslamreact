@@ -1,18 +1,23 @@
 "use client";
 import React, { useState } from "react";
 import { TextEn, BtnEn } from "@/components/Form";
+import { customIdForFirebase } from "@/lib/utils";
 
 
 
 const Unique = () => {
     const [uniq, setUniq] = useState("");
     const [uniq2, setUniq2] = useState("");
+    const [uniq3, setUniq3] = useState("");
 
 
     const uniqHandler = () => {
         setUniq(Date.now());
         setUniq2(new Date().toISOString());
+        setUniq3(customIdForFirebase());
     }
+
+
 
 
     return (
@@ -27,6 +32,7 @@ const Unique = () => {
                         <div className="grid grid-cols-1 gap-y-4">
                             <TextEn Title="Result" Id="uniq" Change={e => setUniq(e.target.value)} Value={uniq} Chr="100" />
                             <TextEn Title="Result2" Id="uniq2" Change={e => setUniq2(e.target.value)} Value={uniq2} Chr="100" />
+                            <TextEn Title="Result3" Id="uniq3" Change={e => setUniq3(e.target.value)} Value={uniq3} Chr="100" />
                             <BtnEn Title="Unique static" Click={uniqHandler} Class="w-36 bg-gray-600 hover:bg-gray-800 text-white" />
                         </div>
                     </div>

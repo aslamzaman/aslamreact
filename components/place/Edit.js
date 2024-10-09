@@ -5,17 +5,16 @@ import { updateDataToFirebase } from "@/lib/utils";
 
 const Edit = ({ message, id, data }) => {
     const [name, setName] = useState('');
-    const [show, setShow] = useState(false);
+    const [createdAt, setCreatedAt] = useState('');
 
+    const [show, setShow] = useState(false);
+    const [pointerEvent, setPointerEvent] = useState(true);
 
     const showEditForm = () => {
-        setShow(true);
-        try {
-             const { name } = data;
+           setShow(true);
+            const {name, createdAt} = data;
             setName(name);
-        } catch (err) {
-            console.log(err);
-        }
+            setCreatedAt(createdAt);
     };
 
 
@@ -26,7 +25,8 @@ const Edit = ({ message, id, data }) => {
 
     const createObject = () => {
         return {
-              name: name
+              name: name,
+              createdAt: createdAt
         }
     }
 
@@ -34,6 +34,7 @@ const Edit = ({ message, id, data }) => {
     const saveHandler = async (e) => {
         e.preventDefault();
         try {
+            setPointerEvent(false);
             const newObject = createObject();
             const msg = await updateDataToFirebase("place",id, newObject);
             message(msg);
@@ -41,6 +42,7 @@ const Edit = ({ message, id, data }) => {
             console.error("Error saving place data:", error);
             message("Error saving place data.");
         } finally {
+            setPointerEvent(true);
             setShow(false);
         }
     }
@@ -63,9 +65,9 @@ const Edit = ({ message, id, data }) => {
                         <div className="px-6 pb-6 text-black">
                             <form onSubmit={saveHandler} >
                                 <div className="grid grid-cols-1 gap-4 my-4">
-                                   <TextEn Title="Name" Id="name" Change={e => setName(e.target.value)} Value={name} Chr={50} />                                    
+                                    <TextEn Title="Name" Id="name" Change={e => setName(e.target.value)} Value={name} Chr={50} />                                    
                                 </div>
-                                <div className="w-full flex justify-start">
+                                <div className={`w-full mt-4 flex justify-start ${pointerEvent ? 'pointer-events-auto' : 'pointer-events-none'}`}>
                                     <input type="button" onClick={closeEditForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />
                                     <BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />
                                 </div>

@@ -24,7 +24,7 @@ export const th = (fld) => {
 }
 
 export const td = (tbl, fld) => {
-    const result = fld.map(f => `                                        <td className="text-center py-1 px-4">${tbl}.${f}</td>`);
+    const result = fld.map(f => `                                        <td className="text-center py-1 px-4">{${tbl}.${f}}</td>`);
     const sliceLast = result.slice(0, result.length - 1);
     return sliceLast.join("\n");
 }

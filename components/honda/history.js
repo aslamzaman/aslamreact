@@ -1,13 +1,13 @@
 import React, { useState, useRef } from "react";
-import { dateDifferenceInDays, getDataFromFirebase, formatedDateDot } from "@/lib/utils";
+import { dateDifferenceInDays, getDataFromFirebase, formatedDateDot, sortArray } from "@/lib/utils";
 import { jsPDF } from "jspdf";
 import html2canvas from 'html2canvas';
 
 
 
 
-const History = ({ message, id }) => {
-    const [data, setData] = useState({});
+const History = ({ message, id, data }) => {
+    const [histories, setHistories] = useState({});
     const [age, setAge] = useState(0);
 
     const [waitMsg, setWaitMsg] = useState("");
@@ -19,21 +19,15 @@ const History = ({ message, id }) => {
     const showHistoryForm = async () => {
         setShow(true);
         try {
-            const responseHistory = await getDataFromFirebase("hondahistory");
-            const result = responseHistory.find(honda => honda.hondaId._id === id)
-            const normalize = {
-                ...result,
-                regNo: result.hondaId.regNo,
-                regDt: result.hondaId.regDt,
-                chassisNo: result.hondaId.chassisNo,
-                engineNo: result.hondaId.engineNo
-            }
-            console.log(normalize);
-            setData(normalize);
-            const day = dateDifferenceInDays(result.hondaId.regDt, new Date(), true);
+            const {hondahistory} = data;
+
+            const sortData = hondahistory.sort((a, b)=>sortArray(new Date(b.createdAt), new Date(a.createdAt)));
+            const lastPersonUses = sortData[0];
+            console.log(lastPersonUses)
+            setHistories(lastPersonUses);
+            const day = dateDifferenceInDays(data.regDt, new Date(), true);
             const year = (day / 365).toFixed(2);
             setAge(year);
-
         } catch (err) {
             console.log(err);
         }
@@ -107,29 +101,29 @@ const History = ({ message, id }) => {
 
                                 <p className="text-center my-8">
                                     <span className="text-gray-800">-:Received By:-</span><br />
-                                    <span className="font-bold"> {data.name}</span><br />
-                                    Designation: {data.post}<br />
-                                    Unit: {data.unit}<br />
-                                    Project: {data.project}<br />
-                                    Mobile: {data.mobile}<br />
-                                    Date: {formatedDateDot(data.dt, true)}
+                                    <span className="font-bold"> {histories.name}</span><br />
+                                    Designation: {histories.post}<br />
+                                    Unit: {histories.unit}<br />
+                                    Project: {histories.project}<br />
+                                    Mobile: {histories.mobile}<br />
+                                    Date: {formatedDateDot(histories.dt, true)}
                                 </p>
 
                                 <hr />
 
                                 <p className="text-center my-8">
                                     <span className="text-gray-800">-:Documents and Others:-</span><br />
-                                    Registration Certificate: {data.regCertificate}<br />
-                                    Tax Certificate: {data.taxCertificate}<br />
-                                    Insurance: {data.insurance}<br />
-                                    Helmet: {data.helmet}
+                                    Registration Certificate: {histories.regCertificate}<br />
+                                    Tax Certificate: {histories.taxCertificate}<br />
+                                    Insurance: {histories.insurance}<br />
+                                    Helmet: {histories.helmet}
                                 </p>
 
                                 <hr />
 
                                 <p className="text-center my-8">
                                     <span className="text-gray-800">-:Remarks:-</span><br />
-                                    {data.remarks}<br />
+                                    {histories.remarks}<br />
                                 </p>
                             </div>
 
