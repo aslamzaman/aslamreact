@@ -5,7 +5,7 @@ import Edit from "@/components/gender/Edit";
 import Delete from "@/components/gender/Delete";
 // import Print from "@/components/gender/Print";
 import { getDataFromFirebase, sortArray, customIdForFirebase, addDataToFirebaseWithCustomId } from "@/lib/utils";
-import { staffs, projects, posts, gendersData, places, units, allStaff } from "@/lib/mongodata";
+import { staffs, projects, posts, gendersData, places, units, hondas, hondahistories } from "@/lib/mongodata";
 
 const Gender = () => {
   const [genders, setGenders] = useState([]);
@@ -36,28 +36,65 @@ const Gender = () => {
 
 
   const dd = () => {
-
+/*
 
     let i = 0;
     const myTimer = setInterval(async () => {
-      let id = units[i].id;
+      let id = hondas[i].id;
 
       let data = {
-        nmEn: units[i].nmEn,
-        nmBn: units[i].nmBn,
-        nmUn: units[i].nmUn,
-        createdAt: units[i].createdAt
+          regNo: hondas[i].regNo,
+          regDt: hondas[i].regDt,
+          chassisNo:hondas[i].chassisNo,
+          engineNo: hondas[i].engineNo,
+          condition: hondas[i].condition,
+          projectId: hondas[i].projectId,
+          unitId: hondas[i].unitId,
+          remarks: hondas[i].remarks,
+          createdAt: hondas[i].createdAt
       }
 
-      const msg = await addDataToFirebaseWithCustomId('unit', id, data);
+      const msg = await addDataToFirebaseWithCustomId('honda', id, data);
       console.log(msg)
       i = i + 1;
-      if (i >= units.length) {
+      if (i >= hondas.length) {
         clearInterval(myTimer);
         console.log("End");
       }
     }, 1000)
 
+
+*/
+
+    /*
+        let x = [];
+        let i = 0;
+        const myTimer = setInterval(async () => {
+    
+          x.push({ id: customIdForFirebase(), ...hondahistories[i] });
+    
+          console.log("honda", i)
+          i = i + 1;
+          if (i >= hondahistories.length) {
+            clearInterval(myTimer);
+            console.log("End");
+            console.log(x);
+          }
+        }, 500)
+    
+        console.log(x);
+        */
+
+
+    /*
+      let x = [];
+      for(let i =0; i < hondas.length; i++){
+        const u = units.find(unit=>unit._id === hondas[i].unitId);
+        const p = projects.find(project=>project._id === hondas[i].projectId);
+        x.push({...hondas[i],unitId: u.id, projectId: p.id})
+      }
+    console.log(x);
+  */
 
   }
 
