@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
 import { TextEn, BtnSubmit, DropdownEn, TextDt, TextareaEn } from "../../components/Form";
 import { getDataFromFirebase } from "@/lib/firebaseFunction";
-import { formatedDate } from "@/lib/utils";
+import { formatedDate, sortArray } from "@/lib/utils";
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 
@@ -26,19 +26,42 @@ const Experiencecertificate = () => {
   const [singleAutor, setSingleAutor] = useState({});
 
 
-  const [txt, setTxt] = useState("");
 
 
   useEffect(() => {
 
     const getData = async () => {
       try {
-        const staffs = await getDataFromFirebase("staff");
-        const authors = await getDataFromFirebase("author");
-        console.log(staffs, authors)
+        const [staffs, posts, genders, authors] = await Promise.all([
+          getDataFromFirebase("staff"),
+          getDataFromFirebase("post"),
+          getDataFromFirebase("gender"),
+          getDataFromFirebase("author")
+        ]);
 
-        setStaffs(staffs);
-        setAuthors(authors);
+
+        const joinCollection = staffs.map(staff => {
+          return {
+            ...staff,
+            post: posts.find(post => post.id === staff.postId) || {},
+            gender: genders.find(gender => gender.id === staff.genderId) || {}
+          }
+        });
+
+        const sortedData = joinCollection.sort((a, b) => sortArray(a.empId, b.empId));
+
+        const joinAuthor = authors.map(author=>{
+          return {
+             ...author,
+             post : posts.find(post => post.id ===author.postId) || {}
+          }
+      });
+
+
+
+        console.log("author", authors)
+        setStaffs(sortedData);
+        setAuthors(joinAuthor);
       } catch (err) {
         console.log(err);
       }
@@ -65,8 +88,7 @@ const Experiencecertificate = () => {
       fnm: fnm,
       address: address,
       singleStaff, singleStaff,
-      singleAutor, singleAutor,
-      txt: txt
+      singleAutor, singleAutor
     }
 
     const doc = new jsPDF({
@@ -78,11 +100,11 @@ const Experiencecertificate = () => {
     });
 
 
-    const txt1 = `This is to certify that ${singleStaff.nmEn}, ${singleStaff.genderId._id === "660ae455825d0610471e2735" ? 'son' : 'daughter'} of ${fnm}, residing at ${address}, has been an invaluable member of our organization, serving as the ${singleStaff.postId.nmEn} since ${formatedDate(dt1)}, and continuing to excel in her role to date.`;
+    const txt1 = `This is to certify that ${singleStaff.nmEn}, ${singleStaff.gender.id === "6plsNNKixui6qJW7tIpK" ? 'son' : 'daughter'} of ${fnm}, residing at ${address}, has been an invaluable member of our organization, serving as the ${singleStaff.post.nmEn} since ${formatedDate(dt1)}, and continuing to excel in her role to date.`;
 
-    const txt2 = `This is to certify that ${singleStaff.nmEn}, ${singleStaff.genderId._id === "660ae455825d0610471e2735" ? 'son' : 'daughter'} of ${fnm}, residing at ${address}, served as the ${singleStaff.postId.nmEn} in our organization from ${formatedDate(dt1)}, to ${formatedDate(dt2)}.`
+    const txt2 = `This is to certify that ${singleStaff.nmEn}, ${singleStaff.gender.id === "6plsNNKixui6qJW7tIpK" ? 'son' : 'daughter'} of ${fnm}, residing at ${address}, served as the ${singleStaff.post.nmEn} in our organization from ${formatedDate(dt1)}, to ${formatedDate(dt2)}.`
 
-    const lastPara = `We acknowledge ${singleStaff.genderId._id === "660ae455825d0610471e2735" ? 'his' : 'her'} valuable contributions to our organization and wish ${singleStaff.genderId._id === "660ae455825d0610471e2735" ? 'his' : 'her'} continued success in ${singleStaff.genderId._id === "660ae455825d0610471e2735" ? 'his' : 'her'} professional endeavors.`;
+    const lastPara = `We acknowledge ${singleStaff.gender.id === "6plsNNKixui6qJW7tIpK" ? 'his' : 'her'} valuable contributions to our organization and wish ${singleStaff.gender.id === "6plsNNKixui6qJW7tIpK" ? 'his' : 'her'} continued success in ${singleStaff.gender.id === "6plsNNKixui6qJW7tIpK" ? 'his' : 'her'} professional endeavors.`;
     const fontStyleNormal = "font-size: 5px; font-weight: normal; font-family: 'Times New Roman', Times, serif;  line-height: 1.25;";
 
 
@@ -95,7 +117,7 @@ const Experiencecertificate = () => {
       <div style="width:225px; padding:88px 40px 10px 25px;">
                 <p style="${fontStyleNormal} text-align: justify;">${present === '1' ? txt1 : txt2}<br /><br />${lastPara}</p>
     <br />
-    <p style="${fontStyleNormal} text-align: left;">${singleAutor.name}<br \>${singleAutor.postId.nmEn}</p>     
+    <p style="${fontStyleNormal} text-align: left;">${singleAutor.name}<br \>${singleAutor.post.nmEn}</p>     
     </div>
     `;
 
@@ -121,7 +143,7 @@ const Experiencecertificate = () => {
   const staffChangeHandler = (e) => {
     const event = e.target.value;
     setNm(event);
-    const findStaff = staffs.find(staff => staff._id === event);
+    const findStaff = staffs.find(staff => staff.id === event);
     console.log(findStaff);
     setSingleStaff(findStaff);
   }
@@ -130,7 +152,7 @@ const Experiencecertificate = () => {
   const authorChangeHandler = (e) => {
     const event = e.target.value;
     setCertify(event);
-    const findAuthor = authors.find(author => author._id === event);
+    const findAuthor = authors.find(author => author.id === event);
     console.log(findAuthor);
     setSingleAutor(findAuthor);
   }
@@ -150,7 +172,7 @@ const Experiencecertificate = () => {
               <TextDt Title="End Date" Id="dt2" Change={e => setDt2(e.target.value)} Value={dt2} />
 
               <DropdownEn Title="Name" Id="nm" Change={staffChangeHandler} Value={nm}>
-                {staffs.length ? staffs.map(staff => <option value={staff.id} key={staff.id}>{staff.nmEn}</option>) : null}
+                {staffs.length ? staffs.map(staff => <option value={staff.id} key={staff.id}>{staff.nmEn}-{staff.empId}</option>) : null}
               </DropdownEn>
               <TextEn Title="Father's Name" Id="fnm" Change={(e) => setFnm(e.target.value)} Value={fnm} Chr="50" />
               <DropdownEn Title="Status" Id="present" Change={e => setPresent(e.target.value)} Value={present}>

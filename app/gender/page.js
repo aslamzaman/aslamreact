@@ -41,13 +41,8 @@ const Gender = () => {
 
 
   const testHandler = async () => {
-    let x = {};
-    if (x.name) {
-      console.log("yes");
-    } else {
-      console.log(x.name);
-    }
-
+    const honda = await getDataFromFirebase('hondahistory');
+    console.log(honda)
 
   }
 

@@ -112,8 +112,8 @@ const Increment = () => {
                                             <td className="text-center py-2 px-4">{increment.name}</td>
                                             <td className="text-center py-2 px-4">{increment.salary}</td>
                                             <td className="flex justify-end items-center mt-1">
-                                                <Edit message={messageHandler} id={increment.id} data={increments} />
-                                                <Delete message={messageHandler} id={increment.id} data={increments} />
+                                                <Edit message={messageHandler} id={increment.id} data={increment} />
+                                                <Delete message={messageHandler} id={increment.id} data={increment} />
                                             </td>
                                         </tr>
                                     )

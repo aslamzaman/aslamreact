@@ -15,12 +15,12 @@ const Edit = ({ message, id, data }) => {
         setShow(true);
         message("Ready to edit");
         try {
-            const response = await getDataFromFirebase(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`);
+            const response = await getDataFromFirebase("staff");
             const result = response.filter(staff => staff.placeId === "6BtqRhIrKQ776jyywIC8");
             console.log("Aslam", result)
             setStaffs(result);
 
-            const { refNo, name, salary } = data.find(increment => parseInt(increment.id) === parseInt(id)) || { refNo: '', name: '', salary: '' };
+            const { refNo, name, salary } = data;
             setRefNo(refNo);
             setName(name);
             setSalary(salary);
@@ -81,7 +81,7 @@ const Edit = ({ message, id, data }) => {
                                 <div className="grid grid-cols-1 gap-4 my-4">
                                     <TextEn Title="RefNo" Id="refNo" Change={e => setRefNo(e.target.value)} Value={refNo} Chr={150} />
                                     <DropdownEn Title="Name" Id="name" Change={e => setName(e.target.value)} Value={name}>
-                                        {staffs.length ? staffs.map(staff => <option value={`${staff.nmUn};${staff.postId.nmUn}`} key={staff._id}>{staff.nmUn}</option>) : null}
+                                        {staffs.length ? staffs.map(staff => <option value={`${staff.nmUn};${staff.postId.nmUn}`} key={staff.id}>{staff.nmUn}</option>) : null}
                                     </DropdownEn>
                                     <TextEn Title="Salary" Id="salary" Change={e => setSalary(e.target.value)} Value={salary} Chr={150} />
                                 </div>

@@ -6,8 +6,8 @@ import { BtnSubmit, DropdownEn, TextDt, TextBn, TextareaBn } from "@/components/
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 
-import {  getDataFromFirebase } from "@/lib/firebaseFunction";
-import { dateDifferenceInDays, formatedDate,  formatedDateDot, inwordBangla } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { dateDifferenceInDays, formatedDate, formatedDateDot, inwordBangla, sortArray } from "@/lib/utils";
 
 
 
@@ -27,8 +27,24 @@ const LeavePage = () => {
     const getData = async () => {
       setWaitMsg("Please wait...");
       try {
-        const staffs = await getDataFromFirebase("staff");
-        setStaffData(staffs);
+        const [staffs, posts, projects] = await Promise.all([
+          getDataFromFirebase("staff"),
+          getDataFromFirebase("post"),
+          getDataFromFirebase("project")
+        ]);
+
+
+        const joinCollection = staffs.map(staff => {
+          return {
+            ...staff,
+            post: posts.find(post => post.id === staff.postId) || {},
+            project: projects.find(project => project.id === staff.projectId) || {}
+          }
+        });
+
+        const sortedData = joinCollection.sort((a, b) => sortArray(a.empId, b.empId));
+console.log("data", sortedData);
+        setStaffData(sortedData);
         setWaitMsg("");
       } catch (err) {
         console.log(err);
@@ -67,7 +83,7 @@ const LeavePage = () => {
       doc.setFont("SutonnyMJ", "normal");
       doc.setFontSize(14);
       //----------------------------------------------------
-      doc.text(`${formatedDateDot(new Date(),true)}`, 169, 40 - 1, null, null, "left"); // date
+      doc.text(`${formatedDateDot(new Date(), true)}`, 169, 40 - 1, null, null, "left"); // date
       doc.text(`${s[0]}`, 59, 50 - 1, null, null, "center"); // name
       doc.text(`${s[1]}`, 130, 50 - 1, null, null, "center");  // post
       doc.setFont("times", "normal");
@@ -76,8 +92,8 @@ const LeavePage = () => {
       doc.setFont("SutonnyMJ", "normal");
       doc.setFontSize(14);
       doc.text(`${cause}`, 55, 60 - 1, null, null, "left");
-      doc.text(`${formatedDateDot(dt1,true)}`, 70.5, 70 - 1, null, null, "center");
-      doc.text(`${formatedDateDot(dt2,true)}`, 120.5, 70 - 1, null, null, "center");
+      doc.text(`${formatedDateDot(dt1, true)}`, 70.5, 70 - 1, null, null, "center");
+      doc.text(`${formatedDateDot(dt2, true)}`, 120.5, 70 - 1, null, null, "center");
       doc.text(`${diff}`, 162.5, 70 - 1, null, null, "center");
 
       doc.text(`${description}`, 20, 121.5, { maxWidth: 178, align: 'justify' });
@@ -95,7 +111,7 @@ const LeavePage = () => {
     const diff = dateDifferenceInDays(dt1, dt2, true);
     let st = "";
     if (l1 === 0 && l2 === 0) {
-      st = `AvR ${formatedDateDot(dt1,true)} ZvwiL  1(GK) ) w\`b Awd‡m Dcw¯’Z _vK‡Z cviwQ bv |`;
+      st = `AvR ${formatedDateDot(dt1, true)} ZvwiL  1(GK) ) w\`b Awd‡m Dcw¯’Z _vK‡Z cviwQ bv |`;
     } else if (l1 < 0 && l2 < 0) {
       st = `MZ ${formatedDateDot(dt1, true)} ZvwiL n‡Z ${formatedDateDot(dt2, true)} ZvwiL ch©šÍ †gvU ${diff}(${inwordBangla(diff)}) w\`b Awd‡m Dcw¯’Z n‡Z cvwi bvB|`;
     } else if (l1 < 0 && l2 > 0) {
@@ -160,7 +176,7 @@ AZGe, Dc‡iv³ welqwU we‡ePbv K‡i Avgv‡K ${diff}(${inwordBangla(diff)}) w
             <form onSubmit={createHandler}>
               <div className="grid grid-cols-1 gap-2 my-2">
                 <DropdownEn Title="Staff Name" Id="nm" Change={staffChangeHandler} Value={nm}>
-                  {staffData.length ? staffData.map(staff => <option value={`${staff.nmBn},${staff.postId.nmBn},${staff.projectId.name}`} key={staff._id}>{staff.nmEn}</option>) : null}
+                  {staffData.length ? staffData.map(staff => <option value={`${staff.nmBn},${staff.post.nmBn},${staff.project.name}`} key={staff.id}>{staff.nmEn}-{staff.empId}</option>) : null}
                 </DropdownEn>
                 <div className="grid grid-cols-2 gap-4">
                   <TextDt Title="Start Date" Id={dt1} Change={dt1ChangeHandler} Value={dt1} />

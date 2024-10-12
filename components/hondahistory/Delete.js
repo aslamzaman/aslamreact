@@ -1,40 +1,41 @@
-import React, { useState, id, data } from "react";
+import React, { useState } from "react";
 import { BtnEn } from "@/components/Form";
-import { localStorageDeleteItem } from "@/lib/utils";
+import { deleteDataFromFirebase } from "@/lib/firebaseFunction";
+
 
 const Delete = ({ message, id, data }) => {
-    const [refNo, setRefNo] = useState("");
+    const [dt, setDt] = useState("");
+
     const [show, setShow] = useState(false);
+    const [pointerEvent, setPointerEvent] = useState(true);
+
 
     const showDeleteForm = () => {
         setShow(true);
-        try {
-            const { refNo } = data;
-            setRefNo(refNo);
-            message("Ready to delete");
-        }
-        catch (err) {
-            console.log(err);
-        }
+        const {dt} = data;
+        setDt(dt);
     }
 
 
     const closeDeleteForm = () => {
         setShow(false);
-        message("Data ready");
     }
 
 
-    const deleteYesClick = async () => {
+    const deleteClick = async () => {
         try {
-            const msg = localStorageDeleteItem('increment', id);
+            setPointerEvent(false);
+            const msg = await deleteDataFromFirebase('hondahistory', id);
             message(msg);
         } catch (error) {
             console.log(error);
             message("Data deleting error");
+        } finally {
+            setPointerEvent(true);
+            setShow(false);
         }
-        setShow(false);
     }
+
 
 
     return (
@@ -61,11 +62,11 @@ const Delete = ({ message, id, data }) => {
 
                                 <h1 className="text-sm text-center text-gray-600 mt-4">
                                     Are you sure to proceed with the deletion?</h1>
-                                <h1 className="text-center text-gray-600 font-bold">{refNo}</h1>
+                                <h1 className="text-center text-gray-600 font-bold">{dt}</h1>
                             </div>
-                            <div className="w-full flex justify-start">
+                            <div className={`w-full mt-4 flex justify-start ${pointerEvent ? 'pointer-events-auto' : 'pointer-events-none'}`}>
                                 <BtnEn Title="Close" Click={closeDeleteForm} Class="bg-pink-700 hover:bg-pink-900 text-white mr-1" />
-                                <BtnEn Title="Yes Delete" Click={deleteYesClick} Class="bg-blue-600 hover:bg-blue-800 text-white" />
+                                <BtnEn Title="Yes Delete" Click={deleteClick} Class="bg-blue-600 hover:bg-blue-800 text-white" />
                             </div>
                         </div>
                     </div>
@@ -80,4 +81,6 @@ const Delete = ({ message, id, data }) => {
     )
 }
 export default Delete;
-  
+    
+
+    

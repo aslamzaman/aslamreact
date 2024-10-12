@@ -84,7 +84,7 @@ const Add = ({ message }) => {
                                 <div className="grid grid-cols-1 gap-4 my-4">
                                     <TextEn Title="RefNo" Id="refNo" Change={e => setRefNo(e.target.value)} Value={refNo} Chr={150} />
                                     <DropdownEn Title="Name" Id="name" Change={e => setName(e.target.value)} Value={name}>
-                                        {staffs.length ? staffs.map(staff => <option value={`${staff.nmUn};${staff.postId.nmUn}`} key={staff._id}>{staff.nmUn}</option>) : null}
+                                        {staffs.length ? staffs.map(staff => <option value={`${staff.nmUn};${staff.postId.nmUn}`} key={staff.id}>{staff.nmUn}</option>) : null}
                                     </DropdownEn>
                                     <TextEn Title="Salary" Id="salary" Change={e => setSalary(e.target.value)} Value={salary} Chr={150} />
                                 </div>
