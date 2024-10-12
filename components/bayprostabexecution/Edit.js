@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BtnSubmit, TextBn, TextEn, TextNum } from "@/components/Form";
-import { updateDataToFirebase } from "@/lib/utils";
+import { localStorageUpdateItem } from "@/lib/utils";
 
 const Edit = ({ message, id, data }) => {
     const [item, setItem] = useState('');
@@ -44,7 +44,7 @@ const Edit = ({ message, id, data }) => {
         e.preventDefault();
         try {
             const newObject = createObject();
-            const msg = updateDataToFirebase('bayprostabexecution', id, newObject);
+            const msg = localStorageUpdateItem('bayprostabexecution', id, newObject);
             message(msg);
         } catch (error) {
             console.error("Error updating bayprostabexecution data:", error);

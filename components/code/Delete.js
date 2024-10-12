@@ -12,7 +12,7 @@ const Delete = (tbl, datas) => {
 
     const str = `import React, { useState } from "react";
 import { BtnEn } from "@/components/Form";
-import { deleteDataFromFirebase } from "@/lib/utils";
+import { deleteDataFromFirebase } from "@/lib/firebaseFunction";
 
 
 const Delete = ({ message, id, data }) => {

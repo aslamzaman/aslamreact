@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BtnSubmit, DropdownEn, TextNum } from "@/components/Form";
-import { getDataFromFirebase, updateDataToFirebase } from "@/lib/utils";
+import { getDataFromFirebase, updateDataToFirebase } from "@/lib/firebaseFunction";
 
 
 const Edit = ({ message, id, data }) => {
@@ -10,7 +10,7 @@ const Edit = ({ message, id, data }) => {
     const [show, setShow] = useState(false);
 
     const [units, setUnits] = useState([]);
-    const [unitIdChange, setUnitIdChange] = useState('');
+
 
     const showEditForm = async () => {
         setShow(true);
@@ -19,13 +19,10 @@ const Edit = ({ message, id, data }) => {
             setUnits(responseUnit);
             //-----------------------------------------------
             const { unit, tk, createdAt } = data;
-            console.log(unit, tk, createdAt)
+           // console.log(unit, tk, createdAt)
             setUnitId(unit.id);
             setTk(tk);
             setCreatedAt(createdAt);
-            //------------------------------------------------
-            setUnitIdChange(unitId._id);
-
         } catch (err) {
             console.log(err);
         }

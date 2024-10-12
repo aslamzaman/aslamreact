@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BtnSubmit, DropdownEn, TextEn } from "@/components/Form";
-import { localStorageAddItem, getDataFromFirebase } from "@/lib/utils";
+import {  getDataFromFirebase } from "@/lib/firebaseFunction";
+import { localStorageAddItem } from "@/lib/utils";
 
 const Add = ({ message }) => {
     const [staffs, setStaffs] = useState([]);
@@ -22,8 +23,8 @@ const Add = ({ message }) => {
         setShow(true);
         resetVariables();
         try {
-            const data = await getDataFromFirebase(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`);
-            const result = data.filter(staff => staff.placeId._id === "660ae2d4825d0610471e272d");
+            const data = await getDataFromFirebase("staff");
+            const result = data.filter(staff => staff.placeId === "6BtqRhIrKQ776jyywIC8");
             console.log("Aslam", result)
             setStaffs(result);
             // message('');

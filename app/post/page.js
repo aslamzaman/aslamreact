@@ -1,15 +1,11 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import Add from "@/components/post/Add";
 import Edit from "@/components/post/Edit";
 import Delete from "@/components/post/Delete";
-import Print from "@/components/post/Print";
-import { getDataFromFirebase } from "@/lib/utils";
-import { Tiro_Bangla } from 'next/font/google';
-const tiro = Tiro_Bangla({ subsets: ['bengali'], weight: "400" });
-
-
+// import Print from "@/components/post/Print";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { sortArray } from "@/lib/utils";
 
 
 
@@ -24,9 +20,9 @@ const Post = () => {
             setWaitMsg('Please Wait...');
             try {
                 const data = await getDataFromFirebase("post");
-                const sort = data.sort((a, b)=> new Date(a.createdAt) < new Date(b.createdAt)? 1: -1);
-                console.log(sort)
-                setPosts(sort);
+                const sortedData = data.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
+                console.log(sortedData);
+                setPosts(sortedData);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -48,18 +44,17 @@ const Post = () => {
                 <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
                 <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
             </div>
-            <div className="w-full lg:w-3/4 p-4 mx-auto border-2 shadow-md rounded-md">
-                <div className="overflow-auto">
+            <div className="px-4 lg:px-6">
+                <div className="p-4 overflow-auto">
                     <table className="w-full border border-gray-200">
                         <thead>
                             <tr className="w-full bg-gray-200">
-                                <th className="text-center border-b border-gray-200 px-4 py-2">SL</th>
-                                <th className="pl-4 text-start border-b border-gray-200 px-4 py-2">Nmen</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-2">Nmbn</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-2">Nmun</th>
-                                <th className="w-[95px] font-normal">
-                                    <div className="w-[90px] h-[45px] font-normal flex justify-end space-x-2 p-1">
-                                        <Print data={posts} />
+                                <th className="text-center border-b border-gray-200 px-4 py-1">NmEn</th>
+                                <th className="text-center border-b border-gray-200 px-4 py-1">NmBn</th>
+                                <th className="text-center border-b border-gray-200 px-4 py-1">NmUn</th>  
+                                <th className="w-[95px] border-b border-gray-200 px-4 py-2">
+                                    <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1 font-normal">
+                                        {/* <Print data={posts} /> */}
                                         <Add message={messageHandler} />
                                     </div>
                                 </th>
@@ -67,15 +62,16 @@ const Post = () => {
                         </thead>
                         <tbody>
                             {posts.length ? (
-                                posts.map((post,i) => (
-                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={post.id}>    
-                                        <td className="text-center">{i+1}</td>
-                                        <td className="pl-4 text-start">{post.nmEn}</td>
-                                        <td className="text-center font-sutonnyN">{post.nmBn}</td>
-                                        <td className={`text-center ${tiro.className}`}>{post.nmUn}</td>
-                                        <td className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
-                                            <Edit message={messageHandler} id={post.id} data={post} />
-                                            <Delete message={messageHandler} id={post.id} data={post} />
+                                posts.map(post => (
+                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={post.id}>  
+                                        <td className="text-center py-1 px-4">{post.nmEn}</td>
+                                        <td className="text-center py-1 px-4 font-sutonnyN">{post.nmBn}</td>
+                                        <td className="text-center py-1 px-4 font-tiroN">{post.nmUn}</td>                                      
+                                        <td className="text-center py-2">
+                                            <div className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
+                                                <Edit message={messageHandler} id={post.id} data={post} />
+                                                <Delete message={messageHandler} id={post.id} data={post} />
+                                            </div>
                                         </td>
                                     </tr>
                                 ))

@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { BtnSubmit, TextEn, DropdownEn, TextBn } from "@/components/Form";
-import { numberWithComma, getDataFromFirebase } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { numberWithComma } from "@/lib/utils";
 
 
 const Brickflatsolling = () => {
@@ -26,11 +27,11 @@ const Brickflatsolling = () => {
             setWaitMsg('Please Wait...');
             try {
                 const response = await getDataFromFirebase('price');
-                console.log(response);
-                const brickPrice = response.find(brick => brick._id === '660d0383b8a2f9f9b8bb9bb9');
-                const sandPrice = response.find(sand => sand._id === '660d0398b8a2f9f9b8bb9bc1');
-                setBrickPrice(brickPrice.tk);
-                setSandPrice(sandPrice.tk);
+                console.log("price ", response);
+                const brickPrice = response.find(brick => brick.id === 'AXc2dF5VYHRVc0KtW5i7');
+                const sandPrice = response.find(sand => sand.id === 'SFlvASnMa3RjbPgzz0Tw');
+                setBrickPrice(brickPrice.taka);
+                setSandPrice(sandPrice.taka);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error loading prices:", error);

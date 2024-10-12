@@ -4,7 +4,8 @@ import Add from "@/components/honda/Add";
 import Edit from "@/components/honda/Edit";
 import Delete from "@/components/honda/Delete";
 import History from "@/components/honda/history";
-import { getDataFromFirebase, formatedDateDot, sessionStorageSetItem, sortArray } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { formatedDateDot, sortArray } from "@/lib/utils";
 import { jsPDF } from "jspdf";
 import { useRouter } from "next/navigation";
 
@@ -22,25 +23,29 @@ const Honda = () => {
         const fetchData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const [ hondas, hondahistorys, units, projects ] = await Promise.all([
+                const [hondas, hondahistorys, units, projects] = await Promise.all([
                     getDataFromFirebase("honda"),
                     getDataFromFirebase("hondahistory"),
                     getDataFromFirebase("unit"),
                     getDataFromFirebase("project")
                 ]);
-    
-    console.log(hondas, hondahistorys )
-                const joinCollection = hondas.map(honda=>{
+
+                const joinCollection = hondas.map(honda => {
+                    const matchUnit = units.find(units => units.id === honda.unitId);
                     return {
-                       ...honda,
-                       hondahistory : hondahistorys.filter(hondahistory => hondahistory.hondaId ===honda.id) || [],
-                       unit : units.find(units => units.id ===honda.unitId) || {},
-                       project : projects.find(project => project.id ===honda.projectId) || {}
+                        ...honda,
+                        hondahistory: hondahistorys.filter(hondahistory => hondahistory.hondaId === honda.id) || [],
+                        unit: matchUnit || {},
+                        unitName: matchUnit?matchUnit.nmEn:"",
+                        project: projects.find(project => project.id === honda.projectId) || {}
                     }
                 });
-    
-                const sortedData = joinCollection.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
-                console.log("sorted", sortedData);
+                
+               // console.log("jpom", joinCollection)
+
+
+                const sortedData = joinCollection.sort((a, b) => sortArray(a.unitName, b.unitName));
+              //  console.log("sorted", sortedData);
                 setHondas(sortedData);
                 setWaitMsg('');
             } catch (error) {
@@ -100,7 +105,7 @@ const Honda = () => {
             y += lineNumber * 5 * lineHeight;
 
         }
-        doc.line(20,36, 111, 36);
+        doc.line(20, 36, 111, 36);
         doc.line(115, 36, 203, 36);
 
         doc.line(113.5, 37, 113.5, 219);
@@ -108,12 +113,6 @@ const Honda = () => {
 
         console.log(joinHonda);
 
-    }
-
-
-    const goToHistoryPage = (id) => {
-        sessionStorageSetItem('hondaId', id);
-        router.push('/hondahistory');
     }
 
 
@@ -154,7 +153,7 @@ const Honda = () => {
                                 hondas.map((honda, i) => (
                                     <tr className="border-b border-gray-200 hover:bg-gray-100" key={honda.id}>
                                         <td className="text-center py-2 px-4">{i + 1}</td>
-                                        <td className="text-center py-2 px-4">{honda.unit.nmEn}</td>
+                                        <td className="text-center py-2 px-4">{honda.unitName}</td>
                                         <td className="text-center py-2 px-4">{honda.regNo}</td>
                                         <td className="text-center py-2 px-4">{honda.regDt}</td>
                                         <td className="text-center py-2 px-4">{honda.chassisNo}</td>
@@ -163,7 +162,6 @@ const Honda = () => {
                                         <td className="text-center py-2 px-4">{honda.project.name}</td>
                                         <td className="text-center py-2 px-4">{honda.remarks}</td>
                                         <td className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
-                                            <button onClick={() => goToHistoryPage(honda._id)}>GO TO</button>
                                             <Edit message={messageHandler} id={honda.id} data={honda} />
                                             <Delete message={messageHandler} id={honda.id} data={honda} />
                                             <History message={messageHandler} id={honda.id} data={honda} />

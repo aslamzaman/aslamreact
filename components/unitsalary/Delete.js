@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 import { BtnEn } from "@/components/Form";
-import { deleteDataFromFirebase } from "@/lib/utils";
+import { deleteDataFromFirebase } from "@/lib/firebaseFunction";
 
 
 const Delete = ({ message, id, data }) => {
 	const [staffId, setStaffId] = useState("");
+
 	const [show, setShow] = useState(false);
+	const [pointerEvent, setPointerEvent] = useState(true);
+
 
 	const showDeleteForm = () => {
 		setShow(true);
-		try {
-			const { staffId } = data;
-			setStaffId(staffId.nmEn);
-		}
-		catch (err) {
-			console.log(err);
-		}
+		const { staff } = data;
+		setStaffId(staff);
 	}
 
 
@@ -26,12 +24,14 @@ const Delete = ({ message, id, data }) => {
 
 	const deleteYesClick = async () => {
 		try {
-			const msg = await deleteDataFromFirebase("unitsalary",id);
+			setPointerEvent(false);
+			const msg = await deleteDataFromFirebase('unitsalary', id);
 			message(msg);
 		} catch (error) {
 			console.log(error);
 			message("Data deleting error");
 		} finally {
+			setPointerEvent(true);
 			setShow(false);
 		}
 	}
@@ -61,7 +61,7 @@ const Delete = ({ message, id, data }) => {
 
 								<h1 className="text-sm text-center text-gray-600 mt-4">
 									Are you sure to proceed with the deletion?</h1>
-								<h1 className="text-center text-gray-600 font-bold">{staffId}</h1>
+								<h1 className="text-center text-gray-600 font-bold">{staffId.nmEn}</h1>
 							</div>
 							<div className="w-full flex justify-start">
 								<BtnEn Title="Close" Click={closeDeleteForm} Class="bg-pink-700 hover:bg-pink-900 text-white mr-1" />

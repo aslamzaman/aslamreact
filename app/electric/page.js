@@ -5,7 +5,8 @@ import Edit from "@/components/electric/Edit";
 import Delete from "@/components/electric/Delete";
 import { TextDt, TextNum, DropdownEn, BtnSubmit } from "@/components/Form";
 import { jsPDF } from "jspdf";
-import { getDataFromFirebase, formatedDate, inwordEnglish } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { formatedDate, inwordEnglish, sortArray } from "@/lib/utils";
 
 
 
@@ -23,9 +24,8 @@ const Electric = () => {
     const [projectName, setProjectName] = useState('');
 
     const [staffs, setStaffs] = useState([]);
-    const [staffNameChange, setStaffNameChange] = useState('');
     const [projects, setProjects] = useState([]);
-    const [projectNameChange, setProjectNameChange] = useState('');
+
 
 
 
@@ -34,17 +34,29 @@ const Electric = () => {
         const loadData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const [responseStaff, responseProject, response] = await Promise.all([
+                const [responseStaff, responseProject, responsePost, response] = await Promise.all([
                     getDataFromFirebase("staff"),
                     getDataFromFirebase("project"),
+                    getDataFromFirebase("post"),
                     getDataFromFirebase("electric")
                 ]);
 
                 //  console.log(responseStaff, responseProject, response);
-                const scStaff = responseStaff.filter(staff => staff.placeId._id === "660ae2d4825d0610471e272d");
-                setStaffs(scStaff);
+                const scStaff = responseStaff.filter(staff => staff.placeId === "6BtqRhIrKQ776jyywIC8");
+                const joinWithPost = scStaff.map(staff => {
+                    const matchPost = responsePost.find(post => post.id === staff.postId) || {}
+                    return {
+                        ...staff,
+                        post: matchPost ? matchPost.nmEn: ""
+                    }
+                })
+                console.log(joinWithPost)
+                setStaffs(joinWithPost);
                 setProjects(responseProject);
-                setElectrics(response);
+
+                const electricSort = response.sort((a, b)=>sortArray(new Date(a.createdAt),new Date(b.createdAt)))
+
+                setElectrics(electricSort);
                 setWaitMsg('');
 
             } catch (error) {
@@ -121,11 +133,11 @@ const Electric = () => {
                     <div className="p-3 border-2 border-gray-400 shadow-lg rounded-lg">
                         <form onSubmit={pdfCreateHandler}>
                             <TextDt Title="Date" Id="dt" Change={e => setDt(e.target.value)} Value={dt} />
-                            <DropdownEn Title="Staff" Id="staffName" Change={e=>setStaffName(e.target.value)} Value={staffName}>
-                                {staffs.length ? staffs.map(staff => <option value={`${staff.nmEn},${staff.postId.nmEn}`} key={staff._id}>{staff.nmEn}</option>) : null}
+                            <DropdownEn Title="Staff" Id="staffName" Change={e => setStaffName(e.target.value)} Value={staffName}>
+                                {staffs.length ? staffs.map(staff => <option value={`${staff.nmEn},${staff.post}`} key={staff.id}>{staff.nmEn}</option>) : null}
                             </DropdownEn>
-                            <DropdownEn Title="Project" Id="projectName" Change={e=>setProjectName(e.target.value)} Value={projectName}>
-                                {projects.length ? projects.map(project => <option value={project.name} key={project._id}>{project.name}</option>) : null}
+                            <DropdownEn Title="Project" Id="projectName" Change={e => setProjectName(e.target.value)} Value={projectName}>
+                                {projects.length ? projects.map(project => <option value={project.name} key={project.id}>{project.name}</option>) : null}
                             </DropdownEn>
 
                             <DropdownEn Title="Month" Id="months" Change={e => setMonths(e.target.value)} Value={months}>
@@ -183,11 +195,11 @@ const Electric = () => {
                                 <tbody>
                                     {electrics.length ? (
                                         electrics.map(electric => (
-                                            <tr className="border-b border-gray-200 hover:bg-gray-100" key={electric._id}>
+                                            <tr className="border-b border-gray-200 hover:bg-gray-100" key={electric.id}>
                                                 <td className="text-start py-2 px-4">{electric.description}</td>
                                                 <td className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
-                                                    <Edit message={messageHandler} id={electric._id} data={electric} />
-                                                    <Delete message={messageHandler} id={electric._id} data={electric} />
+                                                    <Edit message={messageHandler} id={electric.id} data={electric} />
+                                                    <Delete message={messageHandler} id={electric.id} data={electric} />
                                                 </td>
                                             </tr>
                                         ))

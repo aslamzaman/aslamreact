@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { BtnSubmit, TextNum, DropdownEn } from "@/components/Form";
-import { numberWithComma, getDataFromFirebase } from "@/lib/utils";
+import {  getDataFromFirebase } from "@/lib/firebaseFunction";
+import { numberWithComma } from "@/lib/utils";
 
 
 const Rccwork = () => {
@@ -37,14 +38,15 @@ const Rccwork = () => {
             try {
                 const response = await getDataFromFirebase('price');
                 console.log(response);
-                const cementPrice = response.find(cement => cement._id === '660d038fb8a2f9f9b8bb9bbd');
-                const sandPrice = response.find(sand => sand._id === '660d0398b8a2f9f9b8bb9bc1');
-                const khoaPrice = response.find(khoa => khoa._id === '660d03a4b8a2f9f9b8bb9bc5');
-                const rodPrice = response.find(rod => rod._id === '660d03b3b8a2f9f9b8bb9bc9');
-                setCementPrice(cementPrice.tk);
-                setSandPrice(sandPrice.tk);
-                setKhoaPrice(khoaPrice.tk);
-                setRodPrice(rodPrice.tk);
+                const cementPrice = response.find(cement => cement.id === 'aj4THFRGdOZjs0QNPlrF');
+                const sandPrice = response.find(sand => sand.id === 'SFlvASnMa3RjbPgzz0Tw');
+                const khoaPrice = response.find(khoa => khoa.id === 'PoYjiI0qdpXEPpHSvbmx');
+                const rodPrice = response.find(rod => rod.id === '2ihLY7ZNyJgYKT3fO03v');
+
+                setCementPrice(cementPrice.taka);
+                setSandPrice(sandPrice.taka);
+                setKhoaPrice(khoaPrice.taka);
+                setRodPrice(rodPrice.taka);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error loading prices:", error);

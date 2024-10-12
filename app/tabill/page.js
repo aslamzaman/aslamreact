@@ -6,11 +6,10 @@ import Add from "@/components/tabill/Add";
 import Edit from "@/components/tabill/Edit";
 import Delete from "@/components/tabill/Delete";
 
-
-
 import { DropdownEn, TextDt, BtnSubmit } from "@/components/Form";
 
-import { getDataFromFirebase, formatedDateDot, inwordBangla, numberWithComma, dateDifferenceInDays,localStorageGetItem } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { formatedDateDot, inwordBangla, numberWithComma, dateDifferenceInDays, localStorageGetItem, sortArray } from "@/lib/utils";
 
 const date_format = dt => new Date(dt).toISOString().split('T')[0];
 require("@/app/fonts/SUTOM_MJ-normal");
@@ -46,35 +45,35 @@ const Tabill = () => {
         const getData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const [staffs, projects, places, units, tas, das] = await Promise.all([
+                const [staffs, projects, posts, units, tas, das] = await Promise.all([
                     getDataFromFirebase("staff"),
                     getDataFromFirebase("project"),
-                    getDataFromFirebase("place"),
+                    getDataFromFirebase("post"),
                     getDataFromFirebase("unit"),
                     getDataFromFirebase("ta"),
                     getDataFromFirebase("da")
                 ]);
 
-                const scStaff = staffs.filter(staff => staff.placeId._id === "660ae2d4825d0610471e272d");
-                const staffResult = scStaff.map(staff => {
-                    const matcheDa = das.find(da => da.postId._id === staff.postId._id);
+                const joinCollection = staffs.map(staff => {
                     return {
                         ...staff,
-                        da: matcheDa ? matcheDa.tk : 0
+                        post: posts.find(post => post.id === staff.postId) || {},
+                        da: das.find(da => da.postId === staff.postId) || {}
                     }
-                })
-
-              //  console.log(scStaff, projects, places, units, tas, das);
+                });
+                const scStaff = joinCollection.filter(staff => staff.placeId === '6BtqRhIrKQ776jyywIC8');
+                const sortedData = scStaff.sort((a, b) => sortArray(a.nmEn, b.nmEn));
+                //---------------------------------------
 
                 const unitResult = units.map(unit => {
-                    const matchTa = tas.find(ta => ta.unitId._id === unit._id);
+                    const matchTa = tas.find(ta => ta.unitId === unit.id);
                     return {
                         ...unit,
                         ta: matchTa ? matchTa.tk : 0
                     }
                 })
 
-                setStaffData(staffResult);
+                setStaffData(sortedData);
                 setProjectData(projects);
                 setUnitData(unitResult);
                 setTaData(tas);
@@ -127,7 +126,7 @@ const Tabill = () => {
             dt1: dt1
         }
         setWaitMsg('Please Wait...');
-       // console.log(data);
+        // console.log(data);
         setTimeout(() => {
             //------------------------------------------------------
             doc.addImage("/images/formats/tabill.png", "PNG", 0, 0, 210, 297);
@@ -239,15 +238,15 @@ const Tabill = () => {
                         <form onSubmit={handleCreate}>
                             <div className="grid grid-cols-1 gap-2 my-2">
                                 <DropdownEn Title="Staff Name" Id="staff" Change={(e) => { setStaff(e.target.value) }} Value={staff}>
-                                    {staffData.length ? staffData.map(staff => <option value={`${staff.nmBn},${staff.postId.nmBn},${staff.da}`} key={staff._id}>{staff.nmEn}</option>) : null}
+                                    {staffData.length ? staffData.map(staff => <option value={`${staff.nmBn},${staff.post.nmBn},${staff.da.tk}`} key={staff.id}>{staff.nmEn}</option>) : null}
                                 </DropdownEn>
                                 <DropdownEn Title="Project" Id="project" Change={(e) => { setProject(e.target.value) }} Value={project}>
                                     {
-                                        projectData.length ? projectData.map(project => <option value={project.name} key={project._id}>{project.name}</option>) : null}
+                                        projectData.length ? projectData.map(project => <option value={project.name} key={project.id}>{project.name}</option>) : null}
                                 </DropdownEn>
                                 <TextDt Title="Date" Id="dt" Change={(e) => { setDt1(e.target.value) }} Value={dt1} />
                                 <DropdownEn Title="Unit" Id="unit" Change={(e) => { setUnit(e.target.value) }} Value={unit}>
-                                    {unitData.length ? unitData.map(unit => <option value={`${unit.nmBn},${unit.ta}`} key={unit._id}>{unit.nmEn}</option>) : null}
+                                    {unitData.length ? unitData.map(unit => <option value={`${unit.nmBn},${unit.ta}`} key={unit.id}>{unit.nmEn}</option>) : null}
                                 </DropdownEn>
                             </div>
                             <div className="w-full flex justify-start">

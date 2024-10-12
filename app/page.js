@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { db } from "@/lib/firebaseConfig";
+import { collection,  getDocs } from 'firebase/firestore';
 import { BtnSubmit, TextEn, TextPw } from "@/components/Form";
 import { useRouter } from "next/navigation";
-import { getDataFromFirebase } from "@/lib/utils";
 
 
 
@@ -21,9 +22,15 @@ export default function Home() {
     const loadUser = async () => {
       setMsg("Please wait....");
       try {
-        const data = await getDataFromFirebase('log');
-        setUserData(data);
+        const querySnapshot = await getDocs(collection(db, 'log'));
+        const data = querySnapshot.docs.map(doc => {
+            return {
+                id: doc.id,
+                ...doc.data()
+            }
+        })
         console.log(data)
+        setUserData(data);
         setMsg("");
       } catch (error) {
         console.error("Error fetching data:", error);

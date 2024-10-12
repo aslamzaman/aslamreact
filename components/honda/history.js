@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { dateDifferenceInDays, getDataFromFirebase, formatedDateDot, sortArray } from "@/lib/utils";
+import { dateDifferenceInDays, formatedDateDot, sortArray } from "@/lib/utils";
 import { jsPDF } from "jspdf";
 import html2canvas from 'html2canvas';
 
@@ -23,7 +23,7 @@ const History = ({ message, id, data }) => {
 
             const sortData = hondahistory.sort((a, b)=>sortArray(new Date(b.createdAt), new Date(a.createdAt)));
             const lastPersonUses = sortData[0];
-            console.log(lastPersonUses)
+           // console.log(lastPersonUses)
             setHistories(lastPersonUses);
             const day = dateDifferenceInDays(data.regDt, new Date(), true);
             const year = (day / 365).toFixed(2);
@@ -63,7 +63,6 @@ const History = ({ message, id, data }) => {
         } catch (err) {
             console.log(err);
         }
-        //   doc.addImage(`/images/certificate/Col_EWG_2023_2024_Yr_${quart}.png`, "PNG", 0, 0, 297, 210);
     }
 
 

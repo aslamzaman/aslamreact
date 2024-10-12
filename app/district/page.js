@@ -1,10 +1,12 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import Add from "@/components/district/Add";
 import Edit from "@/components/district/Edit";
 import Delete from "@/components/district/Delete";
-import { getDataFromFirebase } from "@/lib/utils";
+// import Print from "@/components/district/Print";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { sortArray } from "@/lib/utils";
+
 
 
 const District = () => {
@@ -18,7 +20,9 @@ const District = () => {
             setWaitMsg('Please Wait...');
             try {
                 const data = await getDataFromFirebase("district");
-                setDistricts(data);
+                const sortedData = data.sort((a, b) => sortArray(a.nmEn, b.nmEn));
+                console.log(sortedData);
+                setDistricts(sortedData);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -45,10 +49,12 @@ const District = () => {
                     <table className="w-full border border-gray-200">
                         <thead>
                             <tr className="w-full bg-gray-200">
-                                <th className="text-start border-b border-gray-200 px-4 py-1">Nmen</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-1">Nmbn</th>
-                                <th className="w-[95px] border-b border-gray-200 px-4 py-1">
-                                    <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1">
+                                <th className="text-center border-b border-gray-200 px-4 py-1">SL</th>
+                                <th className="text-center border-b border-gray-200 px-4 py-1">Name (English)</th>
+                                <th className="text-center border-b border-gray-200 px-4 py-1">Name (Unicode)</th>  
+                                <th className="w-[95px] border-b border-gray-200 px-4 py-2">
+                                    <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1 font-normal">
+                                        {/* <Print data={districts} /> */}
                                         <Add message={messageHandler} />
                                     </div>
                                 </th>
@@ -56,11 +62,12 @@ const District = () => {
                         </thead>
                         <tbody>
                             {districts.length ? (
-                                districts.map(district => (
-                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={district.id}>    
-                                        <td className="text-start py-1 px-4">{district.nmEn}</td>
-                                        <td className="text-center py-1 px-4 font-tiroN">{district.nmBn}</td>
-                                        <td className="text-center py-1">
+                                districts.map((district,i) => (
+                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={district.id}>  
+                                        <td className="text-center py-1 px-4">{i+1}</td>
+                                        <td className="text-center py-1 px-4">{district.nmEn}</td>
+                                        <td className="text-center py-1 px-4 font-tiroN">{district.nmUn}</td>                                      
+                                        <td className="text-center py-2">
                                             <div className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
                                                 <Edit message={messageHandler} id={district.id} data={district} />
                                                 <Delete message={messageHandler} id={district.id} data={district} />

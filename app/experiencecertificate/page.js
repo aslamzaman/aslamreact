@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
 import { TextEn, BtnSubmit, DropdownEn, TextDt, TextareaEn } from "../../components/Form";
-import { getDataFromFirebase, formatedDate } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { formatedDate } from "@/lib/utils";
 const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 
@@ -149,7 +150,7 @@ const Experiencecertificate = () => {
               <TextDt Title="End Date" Id="dt2" Change={e => setDt2(e.target.value)} Value={dt2} />
 
               <DropdownEn Title="Name" Id="nm" Change={staffChangeHandler} Value={nm}>
-                {staffs.length ? staffs.map(staff => <option value={staff._id} key={staff._id}>{staff.nmEn}</option>) : null}
+                {staffs.length ? staffs.map(staff => <option value={staff.id} key={staff.id}>{staff.nmEn}</option>) : null}
               </DropdownEn>
               <TextEn Title="Father's Name" Id="fnm" Change={(e) => setFnm(e.target.value)} Value={fnm} Chr="50" />
               <DropdownEn Title="Status" Id="present" Change={e => setPresent(e.target.value)} Value={present}>
@@ -163,7 +164,7 @@ const Experiencecertificate = () => {
 
               <div className="col-span-3">
                 <DropdownEn Title="Certifying Person" Id="certify" Change={authorChangeHandler} Value={certify}>
-                  {authors.map(author => <option value={author._id} key={author._id}>{author.name}</option>)}
+                  {authors.map(author => <option value={author.id} key={author.id}>{author.name}</option>)}
                 </DropdownEn>
 
               </div>

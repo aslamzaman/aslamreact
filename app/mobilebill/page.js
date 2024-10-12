@@ -5,7 +5,8 @@ import Add from "@/components/mobilebill/Add";
 import Edit from "@/components/mobilebill/Edit";
 import Delete from "@/components/mobilebill/Delete";
 import { jsPDF } from "jspdf";
-import { getDataFromFirebase, formatedDate, formatedDateDot, inwordEnglish, localStorageGetItem } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { formatedDate, formatedDateDot, inwordEnglish, localStorageGetItem } from "@/lib/utils";
 
 
 
@@ -18,11 +19,10 @@ const Mobilebill = () => {
     const [total, setTotal] = useState(0);
 
     const [staffs, setStaffs] = useState([]);
-    const [staffNameChange, setStaffNameChange] = useState('');
+
     const [staffName, setStaffName] = useState('');
 
     const [projects, setProjects] = useState([]);
-    const [projectNameChange, setProjectNameChange] = useState('');
     const [projectName, setProjectName] = useState('');
 
     useEffect(() => {
@@ -34,12 +34,23 @@ const Mobilebill = () => {
                 const totaTaka = data.reduce((t, c) => t + parseInt(c.taka), 0);
                 setMobilebills(result);
                 setTotal(totaTaka);
+                //------------------------------------------
+                const [responseStaff, responseProject, responsePost] = await Promise.all([
+                    getDataFromFirebase("staff"),
+                    getDataFromFirebase("project"),
+                    getDataFromFirebase("post")
+                ])
 
-                const responseStaff = await getDataFromFirebase("staff");
-                const scStaff = responseStaff.filter(staff => staff.placeId._id === '660ae2d4825d0610471e272d');
-                setStaffs(scStaff);
-
-                const responseProject = await getDataFromFirebase("project");
+                const scStaff = responseStaff.filter(staff => staff.placeId === '6BtqRhIrKQ776jyywIC8');
+                const joinWithPost = scStaff.map(staff=>{
+                    const matchPost = responsePost.find(post=>post.id === staff.postId);
+                    return{
+                        ...staff,
+                        post:matchPost?matchPost.nmEn:""
+                    }
+                })
+                console.log(joinWithPost)
+                setStaffs(joinWithPost);
                 setProjects(responseProject);
                 setWaitMsg('');
             } catch (error) {
@@ -83,7 +94,7 @@ const Mobilebill = () => {
                 doc.text(`${projectName}`, 103, 52.5, null, null, "left");
                 doc.setFont("times", "normal");
                 doc.setFontSize(12);
-                doc.text(` ${formatedDateDot(dt,true)}`, 103, 58.25, null, null, "left");
+                doc.text(` ${formatedDateDot(dt, true)}`, 103, 58.25, null, null, "left");
 
                 let y = 70;
 
@@ -163,12 +174,12 @@ const Mobilebill = () => {
                         <form onSubmit={handleCreate}>
                             <div className="grid grid-cols-1 gap-2 my-2">
                                 <TextDt Title="Date" Id="dt" Change={(e) => setDt(e.target.value)} Value={dt} />
-                                <DropdownEn Title="Staff" Id="staffName" Change={e=>setStaffName(e.target.value)} Value={staffName}>
-                                    {staffs.length ? staffs.map(staff => <option value={`${staff.nmEn},${staff.postId.nmEn}`} key={staff._id}>{staff.nmEn}</option>) : null}
+                                <DropdownEn Title="Staff" Id="staffName" Change={e => setStaffName(e.target.value)} Value={staffName}>
+                                    {staffs.length ? staffs.map(staff => <option value={`${staff.nmEn},${staff.post}`} key={staff.id}>{staff.nmEn}</option>) : null}
                                 </DropdownEn>
                             </div>
-                            <DropdownEn Title="Project" Id="projectName" Change={e=>setProjectName(e.target.value)} Value={projectName}>
-                                {projects.length ? projects.map(project => <option value={project.name} key={project._id}>{project.name}</option>) : null}
+                            <DropdownEn Title="Project" Id="projectName" Change={e => setProjectName(e.target.value)} Value={projectName}>
+                                {projects.length ? projects.map(project => <option value={project.name} key={project.id}>{project.name}</option>) : null}
                             </DropdownEn>
 
                             <div className="w-full flex justify-start">

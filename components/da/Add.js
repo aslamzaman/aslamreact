@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BtnSubmit, DropdownEn, TextNum } from "@/components/Form";
-import {getDataFromFirebase,  addDataToFirebase } from "@/lib/utils";
+import {getDataFromFirebase,  addDataToFirebase } from "@/lib/firebaseFunction";
 
 
 const Add = ({ message }) => {

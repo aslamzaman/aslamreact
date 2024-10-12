@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BtnSubmit, DropdownEn, TextNum } from "@/components/Form";
-import { getDataFromFirebase, localStorageUpdateItem } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { localStorageUpdateItem } from "@/lib/utils";
 
 
 
@@ -67,11 +68,11 @@ const Edit = ({ message, id, data }) => {
     const nameChangeHandler = (e) => {
         const nameValue = e.target.value;
         setNameChange(nameValue);
-        const findMobile = mobiles.find(mobile => mobile._id === nameValue);
+        const findMobile = mobiles.find(mobile => mobile.id === nameValue);
         console.log(findMobile)
         setName(findMobile.presentUser);
         setNum(findMobile.mobileNo);
-        setMobileId(findMobile._id);
+        setMobileId(findMobile.id);
     }
 
 
@@ -94,7 +95,7 @@ const Edit = ({ message, id, data }) => {
                             <form onSubmit={saveHandler} >
                                 <div className="grid grid-cols-1 gap-4 my-4">
                                     <DropdownEn Title="Mobile" Id="nameChange" Change={nameChangeHandler} Value={nameChange}>
-                                        {mobiles.length ? mobiles.map(mobile => <option value={mobile._id} key={mobile._id}>{mobile.presentUser}</option>) : null}
+                                        {mobiles.length ? mobiles.map(mobile => <option value={mobile.id} key={mobile.id}>{mobile.presentUser}</option>) : null}
                                     </DropdownEn>
                                     <TextNum Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} />
                                 </div>

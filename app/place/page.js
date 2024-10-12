@@ -4,7 +4,8 @@ import Add from "@/components/place/Add";
 import Edit from "@/components/place/Edit";
 import Delete from "@/components/place/Delete";
 // import Print from "@/components/place/Print";
-import { getDataFromFirebase, sortArray } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { sortArray } from "@/lib/utils";
 
 
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
-import { updateDataToFirebase } from "@/lib/utils";
+import { updateDataToFirebase } from "@/lib/firebaseFunction";
        
 
 const Edit = ({ message, id, data }) => {        

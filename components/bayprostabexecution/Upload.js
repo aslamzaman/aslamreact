@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BtnEn } from "../Form";
 import { Close } from "../Icons";
-import { sessionStorageSetItem } from "@/lib/utils";
+import {  localStorageSetItem } from "@/lib/utils";
 
 
 const Upload = ({ message }) => {
@@ -21,7 +21,7 @@ const Upload = ({ message }) => {
 			const reader = new FileReader();
 			reader.onload = (() => {
 				let jsonData = JSON.parse(reader.result);
-				sessionStorageSetItem("bayprostabexecution", jsonData);
+				localStorageSetItem("bayprostabexecution", jsonData);
 				message("Data loaded successfully");
 				setShow(false);
 			})

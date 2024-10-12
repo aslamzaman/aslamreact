@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { BtnEn } from "@/components/Form";
-import { deleteDataFromFirebase,deleteDataFromFirebase1 } from "@/lib/utils";
+import { deleteDataFromFirebase } from "@/lib/firebaseFunction";
 
 
 const Delete = ({ message, id, data }) => {
@@ -29,7 +29,7 @@ const Delete = ({ message, id, data }) => {
 
     const hardDeleteClick = async () => {
         try {
-            const msg = await deleteDataFromFirebase1('gender', id);
+            const msg = await deleteDataFromFirebase('gender', id);
             message(msg);
         } catch (error) {
             console.log(error);

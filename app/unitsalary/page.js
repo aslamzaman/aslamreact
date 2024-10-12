@@ -4,7 +4,8 @@ import Add from "@/components/unitsalary/Add";
 import Edit from "@/components/unitsalary/Edit";
 import Delete from "@/components/unitsalary/Delete";
 import Print from "@/components/unitsalary/Print";
-import { numberWithComma, getDataFromFirebase } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { numberWithComma, sortArray } from "@/lib/utils";
 
 
 const Unitsalary = () => {
@@ -19,25 +20,33 @@ const Unitsalary = () => {
         const loadData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const [unitsalaryResponse, unitResponse, postResponse] = await Promise.all([
+                const [unitsalaryResponse, staffResponse, unitResponse, postResponse] = await Promise.all([
                     getDataFromFirebase("unitsalary"),
+                    getDataFromFirebase("staff"),
                     getDataFromFirebase("unit"),
                     getDataFromFirebase("post")
                 ]);
-                console.log(unitsalaryResponse, unitResponse, postResponse);
 
-                const data = unitsalaryResponse.map(salary => {
-                    const matchUnit = unitResponse.find(unit => unit._id === salary.staffId.unitId);
-                    const matchPost = postResponse.find(post => post._id === salary.staffId.postId);
+                const staffs = staffResponse.map(staff => {
+                    const getUnit = unitResponse.find(unit => unit.id === staff.unitId);
+                    const getPost = postResponse.find(post => post.id === staff.postId);
                     return {
-                        ...salary,
-                        unit: matchUnit ? matchUnit : 'Error',
-                        post: matchPost ? matchPost : 'Error'
+                        ...staff,
+                        post: getPost,
+                        unit: getUnit
                     }
                 })
 
-                console.log(data);
-                setUnitsalarys(data);
+                const data = unitsalaryResponse.map(salary => {
+                    const staff = staffs.find(staff => staff.id === salary.staffId);
+                    return {
+                        ...salary,
+                        staff
+                    }
+                })
+                const sortData = data.sort((a, b)=>sortArray( new Date(a.createdAt),  new Date(b.createdAt)));
+                console.log(sortData);
+                setUnitsalarys(sortData);
                 const totalSalary = data.reduce((t, c) => t + (parseFloat(eval(c.arear)) + parseFloat(c.sal1) + parseFloat(c.sal2)), 0);
                 setTotal(totalSalary);
 
@@ -88,8 +97,8 @@ const Unitsalary = () => {
                                 unitsalarys.map((unitsalary, i) => (
                                     <tr className="border-b border-gray-200 hover:bg-gray-100" key={unitsalary.id}>
                                         <td className="text-center py-2 px-4">{i + 1}</td>
-                                        <td className="text-start py-2 px-4"><span className="font-bold">Employee Id: {unitsalary.staffId.empId}</span><br />{unitsalary.staffId.nmEn} ({unitsalary.post.nmEn})</td>
-                                        <td className="text-center py-2 px-4">{unitsalary.unit.nmEn}</td>
+                                        <td className="text-start py-2 px-4"><span className="font-bold">Employee Id: {unitsalary.staff.empId}</span><br />{unitsalary.staff.nmEn} ({unitsalary.staff.post.nmEn})</td>
+                                        <td className="text-center py-2 px-4">{unitsalary.staff.unit.nmEn}</td>
                                         <td className="text-center py-2 px-4">{unitsalary.arear}</td>
                                         <td className="text-center py-2 px-4">{unitsalary.sal1}</td>
                                         <td className="text-center py-2 px-4">{unitsalary.sal2}</td>

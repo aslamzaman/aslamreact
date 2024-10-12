@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import Add from "@/components/price/Add";
 import Edit from "@/components/price/Edit";    
 import Delete from "@/components/price/Delete";
-import { getDataFromFirebase } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
 
 
 const Price = () => {
@@ -57,12 +57,12 @@ const Price = () => {
                         <tbody>
                             {prices.length ?(
                                 prices.map(price => (
-                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={price._id}>                                           
+                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={price.id}>                                           
                                           <td className="text-center py-2 px-4">{price.name}</td>
                                           <td className="text-center py-2 px-4">{price.tk}</td>                                            
                                         <td className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
-                                            <Edit message={messageHandler} id={price._id} data={price} />
-                                            <Delete message={messageHandler} id={price._id} data={price} />
+                                            <Edit message={messageHandler} id={price.id} data={price} />
+                                            <Delete message={messageHandler} id={price.id} data={price} />
                                         </td>
                                     </tr>
                                 ))

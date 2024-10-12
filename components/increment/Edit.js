@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BtnSubmit, DropdownEn, TextEn } from "@/components/Form";
-import { localStorageUpdateItem, getDataFromFirebase } from "@/lib/utils";
+import {  getDataFromFirebase } from "@/lib/firebaseFunction";
+import { localStorageUpdateItem } from "@/lib/utils";
 
 const Edit = ({ message, id, data }) => {
     const [staffs, setStaffs] = useState([]);
@@ -15,7 +16,7 @@ const Edit = ({ message, id, data }) => {
         message("Ready to edit");
         try {
             const response = await getDataFromFirebase(`${process.env.NEXT_PUBLIC_BASE_URL}/api/staff`);
-            const result = response.filter(staff => staff.placeId._id === "660ae2d4825d0610471e272d");
+            const result = response.filter(staff => staff.placeId === "6BtqRhIrKQ776jyywIC8");
             console.log("Aslam", result)
             setStaffs(result);
 

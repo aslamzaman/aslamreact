@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { BtnSubmit, DropdownEn, TextNum, TextBn } from "@/components/Form";
-import { getDataFromFirebase, addDataToFirebase } from "@/lib/utils";
+import { getDataFromFirebase, addDataToFirebase } from "@/lib/firebaseFunction";
+import { sortArray } from "@/lib/utils";
+
 
 
 const Add = ({ message }) => {
@@ -11,6 +13,8 @@ const Add = ({ message }) => {
     const [remarks, setRemarks] = useState('');
 
     const [show, setShow] = useState(false);
+    const [pointerEvent, setPointerEvent] = useState(true);
+
     const [staffs, setStaffs] = useState([]);
 
     const resetVariables = () => {
@@ -26,10 +30,13 @@ const Add = ({ message }) => {
         setShow(true);
         resetVariables();
         try {
-            const responseStaff = await getDataFromFirebase("staff");
-            const sortStaff = responseStaff.sort((a,b)=>parseInt(a.empId) < parseInt(b.empId)?-1:1);
-            console.log(responseStaff)
-            setStaffs(sortStaff);
+            try {
+                const responseStaff = await getDataFromFirebase("staff");
+                const sortData = responseStaff.sort((a, b) => sortArray(a.empId, b.empId));
+                setStaffs(sortData);
+            } catch (error) {
+                console.error('Failed to fetch delivery data:', error);
+            }
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -47,7 +54,8 @@ const Add = ({ message }) => {
             arear: arear,
             sal1: sal1,
             sal2: sal2,
-            remarks: remarks
+            remarks: remarks,
+            createdAt: new Date().toISOString()
         }
     }
 
@@ -55,6 +63,7 @@ const Add = ({ message }) => {
     const saveHandler = async (e) => {
         e.preventDefault();
         try {
+            setPointerEvent(false);
             const newObject = createObject();
             const msg = await addDataToFirebase("unitsalary", newObject);
             message(msg);
@@ -62,6 +71,7 @@ const Add = ({ message }) => {
             console.error("Error saving unitsalary data:", error);
             message("Error saving unitsalary data.");
         } finally {
+            setPointerEvent(true);
             setShow(false);
         }
     }
@@ -84,14 +94,14 @@ const Add = ({ message }) => {
                             <form onSubmit={saveHandler}>
                                 <div className="grid grid-cols-1 gap-4 my-4">
                                     <DropdownEn Title="Staff" Id="staffId" Change={e => setStaffId(e.target.value)} Value={staffId}>
-                                        {staffs.length ? staffs.map(staff => <option value={staff._id} key={staff._id}>{staff.nmEn}-{staff.empId}</option>) : null}
+                                        {staffs.length ? staffs.map(staff => <option value={staff.id} key={staff.id}>{staff.nmEn}-{staff.empId}</option>) : null}
                                     </DropdownEn>
                                     <TextBn Title="Arear" Id="arear" Change={e => setArear(e.target.value)} Value={arear} Chr={150} />
                                     <TextNum Title="Sal1" Id="sal1" Change={e => setSal1(e.target.value)} Value={sal1} />
                                     <TextNum Title="Sal2" Id="sal2" Change={e => setSal2(e.target.value)} Value={sal2} />
                                     <TextBn Title="Remarks" Id="remarks" Change={e => setRemarks(e.target.value)} Value={remarks} Chr={150} />
                                 </div>
-                                <div className="w-full flex justify-start">
+                                <div className={`w-full mt-4 flex justify-start ${pointerEvent ? 'pointer-events-auto' : 'pointer-events-none'}`}>
                                     <input type="button" onClick={closeAddForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />
                                     <BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />
                                 </div>

@@ -7,7 +7,8 @@ import Delete from "@/components/localta/Delete";
 
 import { DropdownEn, TextDt, TextBn, BtnSubmit, TextNum } from "@/components/Form";
 
-import { getDataFromFirebase, formatedDate, inwordBangla, localStorageGetItem } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { formatedDate, inwordBangla, localStorageGetItem, sortArray } from "@/lib/utils";
 
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
@@ -87,7 +88,7 @@ const Localta = () => {
     const [msg, setMsg] = useState("Data ready");
     const [waitMsg, setWaitMsg] = useState("");
 
-    const [staffData, setStaffData] = useState([]);
+    const [staffs, setStaffs] = useState([]);
     const [projectData, setProjectData] = useState([]);
 
     const [staff, setStaff] = useState("");
@@ -107,12 +108,24 @@ const Localta = () => {
         const getData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const [staffs, projects] = await Promise.all([
+                const [ staffs, posts, projects ] = await Promise.all([
                     getDataFromFirebase("staff"),
+                    getDataFromFirebase("post"),
                     getDataFromFirebase("project")
                 ]);
-                const result = staffs.filter(staff => staff.placeId._id === "660ae2d4825d0610471e272d");
-                setStaffData(result);
+    
+    
+                const joinCollection = staffs.map(staff=>{
+                    return {
+                       ...staff,
+                       post : posts.find(post => post.id === staff.postId) || {},
+                       project : projects.find(project => project.id ===staff.projectId) || {}
+                    }
+                });
+    
+                const scStaff = joinCollection.filter(staff=> staff.placeId === '6BtqRhIrKQ776jyywIC8');
+                const sortedData = scStaff.sort((a, b) => sortArray(a.nmEn, b.nmEn));
+                setStaffs(sortedData);
                 setProjectData(projects);
                 setWaitMsg('');
             } catch (err) {
@@ -193,10 +206,10 @@ const Localta = () => {
                         <form onSubmit={handleCreate}>
                             <div className="grid grid-cols-1 gap-2 my-2">
                                 <DropdownEn Title="Staff Name" Id="staff" Change={e => setStaff(e.target.value)} Value={staff}>
-                                    {staffData.length ? staffData.map(staff => <option value={`${staff.nmBn}, ${staff.postId.nmBn}`} key={staff._id}>{staff.nmEn}</option>) : null}
+                                    {staffs.length ? staffs.map(staff => <option value={`${staff.nmBn}, ${staff.post.nmBn}`} key={staff.id}>{staff.nmEn}</option>) : null}
                                 </DropdownEn>
                                 <DropdownEn Title="Project" Id="project" Change={(e) => { setProject(e.target.value) }} Value={project}>
-                                    {projectData.length ? projectData.map(project => <option value={project.name} key={project._id}>{project.name}</option>) : null}
+                                    {projectData.length ? projectData.map(project => <option value={project.name} key={project.id}>{project.name}</option>) : null}
                                 </DropdownEn>
                                 <TextDt Title="Date" Id="dt" Change={(e) => { setDt(e.target.value) }} Value={dt} />
                                 <TextBn Title="Subject" Id="subject" Change={(e) => { setSubject(e.target.value) }} Value={subject} Chr="50" />

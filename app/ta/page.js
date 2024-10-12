@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import Add from "@/components/ta/Add";
 import Edit from "@/components/ta/Edit";
 import Delete from "@/components/ta/Delete";
-import { getDataFromFirebase, sortArray } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { sortArray } from "@/lib/utils";
 
 
 const Ta = () => {
@@ -22,15 +23,13 @@ const Ta = () => {
                 ]);
 
                 const joinCollection = tas.map(ta => {
-                    console.log(ta.unitId)
                     return {
                         ...ta,
                         unit: units.find(unit => unit.id === ta.unitId) || {}
                     }
                 });
-                
-                const sortedData = joinCollection.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
-                console.log("join Data ", joinCollection)
+
+                const sortedData = joinCollection.sort((a, b) => sortArray(b.tk, a.tk));
                 setTas(sortedData);
                 setWaitMsg('');;
             } catch (error) {

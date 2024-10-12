@@ -111,9 +111,9 @@ const Print = ({ data, message }) => {
 
             let total_taka = parseFloat(Math.round(eval(staffs[i].arear))) + parseFloat(staffs[i].sal1) + parseFloat(staffs[i].sal2);
             doc.text(`${sl1}`, 17.5, y, null, null, "center");
-            doc.text(`${staffs[i].staffId.nmBn}`, 23, y, null, null, "left"); 
-            doc.text(`${staffs[i].post.nmBn}`, 76, y, null, null, "center"); // correction
-            doc.text(`${staffs[i].unit.nmBn}`, 101, y, null, null, "center");
+            doc.text(`${staffs[i].staff.nmBn}`, 23, y, null, null, "left"); 
+            doc.text(`${staffs[i].staff.post.nmBn}`, 76, y, null, null, "center"); // correction
+            doc.text(`${staffs[i].staff.unit.nmBn}`, 101, y, null, null, "center");
             doc.text(`${shortDt(staffs[i].staffId.joinDt)}`, 125, y, null, null, "center");
             doc.text(`${numberWithComma(Math.round(eval(staffs[i].arear)))}`, 154, y, null, null, "right");
             doc.text(`${numberWithComma(staffs[i].sal1)}`, 176, y, null, null, "right");

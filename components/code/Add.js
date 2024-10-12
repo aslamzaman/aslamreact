@@ -19,7 +19,7 @@ const Add = (tbl, datas) => {
 
     const str = `import React, { useState } from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
-import { addDataToFirebase } from "@/lib/utils";
+import { addDataToFirebase } from "@/lib/firebaseFunction";
 
 
 const Add = ({ message }) => {

@@ -6,7 +6,8 @@ import { BtnSubmit, DropdownEn, TextDt, TextBn, TextareaBn } from "@/components/
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 
-import { dateDifferenceInDays, getDataFromFirebase, formatedDate,  formatedDateDot, inwordBangla } from "@/lib/utils";
+import {  getDataFromFirebase } from "@/lib/firebaseFunction";
+import { dateDifferenceInDays, formatedDate,  formatedDateDot, inwordBangla } from "@/lib/utils";
 
 
 

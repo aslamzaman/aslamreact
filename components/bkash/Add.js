@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BtnSubmit, DropdownEn, TextNum } from "@/components/Form";
-import { getDataFromFirebase, localStorageAddItem } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { localStorageAddItem } from "@/lib/utils";
 
 
 const Add = ({ message }) => {
@@ -78,7 +79,7 @@ const Add = ({ message }) => {
                             <form onSubmit={saveHandler}>
                                 <div className="grid grid-cols-1 gap-4 my-4">
                                     <DropdownEn Title="Unit" Id="nmUnit" Change={e=>setNmUnit(e.target.value)} Value={nmUnit}>
-                                        {units.length ? units.map(unit => <option value={unit.nmBn} key={unit._id}>{unit.nmEn}</option>) : null}
+                                        {units.length ? units.map(unit => <option value={unit.nmBn} key={unit.id}>{unit.nmEn}</option>) : null}
                                     </DropdownEn>
                                     <TextNum Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} />
                                 </div>

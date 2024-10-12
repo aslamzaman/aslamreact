@@ -1,18 +1,15 @@
-
 import React, { useState } from "react";
-import { TextEn, BtnSubmit } from "@/components/Form";
-import { addDataToFirebase } from "@/lib/utils";
+import { TextEn, BtnSubmit, TextUn, TextBn } from "@/components/Form";
+import { addDataToFirebase } from "@/lib/firebaseFunction";
 
 
 const Add = ({ message }) => {
     const [nmEn, setNmEn] = useState('');
     const [nmBn, setNmBn] = useState('');
-    const [nmUn, setNmUn] = useState('');
-
+    const [nmUn, setNmUn] = useState('');    
 
     const [show, setShow] = useState(false);
-
-
+    const [pointerEvent, setPointerEvent] = useState(true);
 
     const showAddForm = () => {
         setShow(true);
@@ -26,18 +23,18 @@ const Add = ({ message }) => {
 
 
     const resetVariables = () => {
-        setNmEn('');
-        setNmBn('');
-        setNmUn('');
+       setNmEn('');
+       setNmBn('');
+       setNmUn('');
     }
 
 
     const createObject = () => {
         return {
-            nmEn: nmEn,
-            nmBn: nmBn,
-            nmUn: nmUn,
-            createdAt: new Date().toISOString()
+              nmEn: nmEn,
+              nmBn: nmBn,
+              nmUn: nmUn,
+              createdAt: new Date().toISOString()
         }
     }
 
@@ -45,6 +42,7 @@ const Add = ({ message }) => {
     const saveHandler = async (e) => {
         e.preventDefault();
         try {
+            setPointerEvent(false);
             const newObject = createObject();
             const msg = await addDataToFirebase("post", newObject);
             message(msg);
@@ -52,6 +50,7 @@ const Add = ({ message }) => {
             console.error("Error saving post data:", error);
             message("Error saving post data.");
         } finally {
+            setPointerEvent(true);
             setShow(false);
         }
     }
@@ -75,11 +74,11 @@ const Add = ({ message }) => {
                                 <div className="p-4">
                                     <form onSubmit={saveHandler}>
                                         <div className="grid grid-cols-1 gap-4">
-                                            <TextEn Title="Nmen" Id="nmEn" Change={e => setNmEn(e.target.value)} Value={nmEn} Chr={50} />
-                                            <TextEn Title="Nmbn" Id="nmBn" Change={e => setNmBn(e.target.value)} Value={nmBn} Chr={50} />
-                                            <TextEn Title="Nmun" Id="nmUn" Change={e => setNmUn(e.target.value)} Value={nmUn} Chr={50} />
+                                            <TextEn Title="NmEn" Id="nmEn" Change={e => setNmEn(e.target.value)} Value={nmEn} Chr={50} />
+                                            <TextBn Title="NmBn (SutonnyMj)" Id="nmBn" Change={e => setNmBn(e.target.value)} Value={nmBn} Chr={50} />
+                                            <TextUn Title="NmUn (Unicode)" Id="nmUn" Change={e => setNmUn(e.target.value)} Value={nmUn} Chr={50} />
                                         </div>
-                                        <div className="w-full mt-4 flex justify-start">
+                                        <div className={`w-full mt-4 flex justify-start ${pointerEvent ? 'pointer-events-auto' : 'pointer-events-none'}`}>
                                             <input type="button" onClick={closeAddForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />
                                             <BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />
                                         </div>
@@ -99,4 +98,4 @@ const Add = ({ message }) => {
     )
 }
 export default Add;
-
+  

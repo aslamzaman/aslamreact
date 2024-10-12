@@ -5,7 +5,8 @@ import Add from "@/components/bkash/Add";
 import Edit from "@/components/bkash/Edit";
 import Delete from "@/components/bkash/Delete";
 import { jsPDF } from "jspdf";
-import { formatedDate, formatedDateDot, localStorageGetItem, getDataFromFirebase, inwordBangla } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { formatedDate, formatedDateDot, localStorageGetItem, inwordBangla, sortArray } from "@/lib/utils";
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 
@@ -26,12 +27,24 @@ const Bkash = () => {
         const load = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const responseStaff = await getDataFromFirebase('staff');
-                const filterScStaff = responseStaff.filter(staff => staff.placeId._id === "660ae2d4825d0610471e272d"); // filter only sc staff
-                setStaffs(filterScStaff);
+                const [ staffs, posts ] = await Promise.all([
+                    getDataFromFirebase("staff"),
+                    getDataFromFirebase("post")
+                ]);
+    
+    
+                const joinCollection = staffs.map(staff=>{
+                    return {
+                       ...staff,
+                       post : posts.find(post => post.id ===staff.postId) || {}
+                    }
+                });
+                const scStaff = joinCollection.filter(staff=> staff.placeId === '6BtqRhIrKQ776jyywIC8');
+                const sortedData = scStaff.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
+                setStaffs(sortedData);
                 //--------------------------------------------------------------------
                 const data = localStorageGetItem("bkash");
-                const result = data.sort((a, b) => parseInt(b.id) > parseInt(a.id) ? 1 : -1);
+                const result = data.sort((a, b) => sortArray(b.id, a.id));
                 setBkashs(result);
                 //-----------------------------------------------------------------------
                 const grandTotal = data.reduce((t, c) => t + parseInt(c.taka), 0);
@@ -130,7 +143,7 @@ const Bkash = () => {
 
 
 
-    
+
 
     return (
         <>
@@ -147,7 +160,7 @@ const Bkash = () => {
                             <div className="grid grid-cols-1 gap-2 my-2">
                                 <TextDt Title="Date" Id="dt" Change={e => setDt(e.target.value)} Value={dt} />
                                 <DropdownEn Title="Staff" Id="staff" Change={e => setStaff(e.target.value)} Value={staff}>
-                                    {staffs.length ? staffs.map(staff => <option value={`${staff.nmBn},${staff.postId.nmBn}`} key={staff._id}>{staff.nmEn}</option>) : null}
+                                    {staffs.length ? staffs.map(staff => <option value={`${staff.nmBn},${staff.post.nmBn}`} key={staff.id}>{staff.nmEn}</option>) : null}
                                 </DropdownEn>
                             </div>
                             <div className="w-full flex justify-start">

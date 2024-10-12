@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
-import { addDataToFirebase } from "@/lib/utils";
+import { addDataToFirebase } from "@/lib/firebaseFunction";
 
 
 const Add = ({ message }) => {
@@ -26,7 +26,8 @@ const Add = ({ message }) => {
 
     const createObject = () => {
         return {
-            description: description 
+            description: description,
+            createdAt: new Date().toISOString() 
         }
     }
 

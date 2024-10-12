@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextEn, BtnSubmit, DropdownEn, TextDt } from "@/components/Form";
-import { getDataFromFirebase, updateDataToFirebase } from "@/lib/utils";
+import { getDataFromFirebase, updateDataToFirebase } from "@/lib/firebaseFunction";
 
 
 const Edit = ({ message, id, data }) => {
@@ -12,6 +12,7 @@ const Edit = ({ message, id, data }) => {
     const [projectId, setProjectId] = useState('');
     const [unitId, setUnitId] = useState('');
     const [remarks, setRemarks] = useState('');
+    const [createdAt, setCreatedAt] = useState('');
     const [show, setShow] = useState(false);
 
 
@@ -32,8 +33,8 @@ const Edit = ({ message, id, data }) => {
             setUnits(responseUnit);
 
             //-----------------------------------------------------------------
-            console.log("data", data)
-            const { regNo, regDt, chassisNo, engineNo, condition, projectId, unitId, remarks } = data;
+           // console.log("data", data)
+            const { regNo, regDt, chassisNo, engineNo, condition, projectId, unitId, remarks, createdAt } = data;
             console.log("aslam",regNo, projectId, unitId)
             setRegNo(regNo);
             setRegDt(regDt);
@@ -43,6 +44,8 @@ const Edit = ({ message, id, data }) => {
             setProjectId(projectId);
             setUnitId(unitId);
             setRemarks(remarks);
+            setCreatedAt(createdAt);
+
         } catch (err) {
             console.log(err);
         }
@@ -63,7 +66,8 @@ const Edit = ({ message, id, data }) => {
             condition: condition,
             projectId: projectId,
             unitId: unitId,
-            remarks: remarks
+            remarks: remarks,
+            createdAt:createdAt
         }
     }
 
@@ -109,10 +113,10 @@ const Edit = ({ message, id, data }) => {
                                     <TextEn Title="Engineno" Id="engineNo" Change={e => setEngineNo(e.target.value)} Value={engineNo} Chr={50} />
                                     <TextEn Title="Condition" Id="condition" Change={e => setCondition(e.target.value)} Value={condition} Chr={50} />
                                     <DropdownEn Title="Project" Id="projectId" Change={e=>setProjectId(e.target.value)} Value={projectId}>
-                                        {projects.length ? projects.map(project => <option value={project._id} key={project._id}>{project.name}</option>) : null}
+                                        {projects.length ? projects.map(project => <option value={project.id} key={project.id}>{project.name}</option>) : null}
                                     </DropdownEn>
                                     <DropdownEn Title="Unit" Id="unitId" Change={e=>setUnitId(e.target.value)} Value={unitId}>
-                                        {units.length ? units.map(unit => <option value={unit._id} key={unit._id}>{unit.nmEn}</option>) : null}
+                                        {units.length ? units.map(unit => <option value={unit.id} key={unit.id}>{unit.nmEn}</option>) : null}
                                     </DropdownEn>
                                     <TextEn Title="Remarks" Id="remarks" Change={e => setRemarks(e.target.value)} Value={remarks} Chr={250} />
                                 </div>

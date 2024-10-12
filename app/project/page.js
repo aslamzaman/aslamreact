@@ -1,30 +1,34 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Add from "@/components/project/Add";
-import Edit from "@/components/project/Edit";    
+import Edit from "@/components/project/Edit";
 import Delete from "@/components/project/Delete";
-import { getDataFromFirebase } from "@/lib/utils";
+// import Print from "@/components/project/Print";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { sortArray } from "@/lib/utils";
+
 
 
 const Project = () => {
     const [projects, setProjects] = useState([]);
-    const [msg, setMsg] = useState("Data ready");
     const [waitMsg, setWaitMsg] = useState("");
+    const [msg, setMsg] = useState("Data ready");
 
 
     useEffect(() => {
-        const fetchData = async () => {
+        const getData = async () => {
             setWaitMsg('Please Wait...');
             try {
                 const data = await getDataFromFirebase("project");
-                setProjects(data);
+                const sortedData = data.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
+                console.log(sortedData);
+                setProjects(sortedData);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error fetching data:", error);
-                setMsg("Failed to fetch data");
             }
         };
-        fetchData();
+        getData();
     }, [msg]);
 
 
@@ -38,33 +42,36 @@ const Project = () => {
             <div className="w-full mb-3 mt-8">
                 <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Project</h1>
                 <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
-            </div>    
+                <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
+            </div>
             <div className="px-4 lg:px-6">
-                <p className="w-full text-sm text-red-700">{msg}</p>  
-                <div className="p-2 overflow-auto">  
+                <div className="p-4 overflow-auto">
                     <table className="w-full border border-gray-200">
                         <thead>
-                            <tr className="w-full bg-gray-200">                           
-                                  <th className="text-center border-b border-gray-200 px-4 py-2">Name</th>                                
-                                <th className="w-[100px] font-normal">
-                                    <div className="w-full flex justify-end py-0.5 pr-4">
+                            <tr className="w-full bg-gray-200">
+                                <th className="text-center border-b border-gray-200 px-4 py-1">Name</th>  
+                                <th className="w-[95px] border-b border-gray-200 px-4 py-2">
+                                    <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1 font-normal">
+                                        {/* <Print data={projects} /> */}
                                         <Add message={messageHandler} />
                                     </div>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {projects.length ?(
+                            {projects.length ? (
                                 projects.map(project => (
-                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={project.id}>                                           
-                                          <td className="text-center py-2 px-4">{project.name}</td>                                            
-                                        <td className="flex justify-end items-center space-x-1 mt-1 mr-2">
-                                            <Edit message={messageHandler} id={project.id} data={project} />
-                                            <Delete message={messageHandler} id={project.id} data={project} />
+                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={project.id}>  
+                                        <td className="text-center py-1 px-4">{project.name}</td>                                      
+                                        <td className="text-center py-2">
+                                            <div className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
+                                                <Edit message={messageHandler} id={project.id} data={project} />
+                                                <Delete message={messageHandler} id={project.id} data={project} />
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
-                            ): (
+                            ) : (
                                 <tr>
                                     <td colSpan={2} className="text-center py-10 px-4">
                                         Data not available.
@@ -81,5 +88,4 @@ const Project = () => {
 };
 
 export default Project;
-
 

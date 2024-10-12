@@ -3,7 +3,16 @@ import React, { useState, useEffect } from "react";
 import Add from "@/components/gender/Add";
 import Edit from "@/components/gender/Edit";
 import Delete from "@/components/gender/Delete";
-import  * as util from "@/lib/utils";
+import { addDataToFirebaseWithCustomId, getDataFromFirebase } from "@/lib/firebaseFunction";
+import { sortArray, customIdForFirebase } from "@/lib/utils";
+
+import { unitsalaries, staffs, posts, projects, places, units, gendersData, lands, electrics } from "@/lib/mongodata";
+import { db } from "@/lib/firebaseConfig";
+import { collection, addDoc, deleteDoc, doc, getDocs, setDoc, collectionGroup } from 'firebase/firestore';
+
+
+
+
 const Gender = () => {
   const [genders, setGenders] = useState([]);
   const [waitMsg, setWaitMsg] = useState("");
@@ -14,9 +23,8 @@ const Gender = () => {
     const getData = async () => {
       setWaitMsg('Please Wait...');
       try {
-        const data = await util.getDataFromFirebase1("gender");
-        const sortedData = data.sort((a, b) => util.sortArray(new Date(b.createdAt), new Date(a.createdAt)));
-        console.log(sortedData);
+        const data = await getDataFromFirebase("gender");
+        const sortedData = data.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
         setGenders(sortedData);
         setWaitMsg('');
       } catch (error) {
@@ -32,44 +40,54 @@ const Gender = () => {
   }
 
 
-  const addHdle = () => {
-    console.log(util.customIdForFirebase());
-    /*
-    let x = [];
-    for (let i = 0; i < das.length; i++) {
-      const p = posts.find(post => post._id === das[i].postId);
-      x.push({ id: customIdForFirebase(), ...das[i], postId: p.id })
+  const testHandler = async () => {
+    let x = {};
+    if (x.name) {
+      console.log("yes");
+    } else {
+      console.log(x.name);
     }
-    console.log(x);
-    */
+
+
   }
 
 
-  const uploadHanderl = () => {
+
+  const addHdle = () => {
+    /*
+         let x = [];
+         for (let i = 0; i < electrics.length; i++) {
+           x.push({ id: customIdForFirebase(), ...electrics[i]})
+         }
+         console.log(x);
+   */
+  }
+
+
+  const uploadHanderl = async () => {
+
     /*
         let i = 0;
         const myTimer = setInterval(async () => {
-          let id = das[i].id;
-    
-    
+          let id = electrics[i].id;
           let data = {
-            postId: das[i].postId,
-            tk: das[i].tk,
-            createdAt: das[i].createdAt
+              description: electrics[i].description,
+              createdAt: electrics[i].createdAt
           }
     
-          const msg = await addDataToFirebaseWithCustomId('da', id, data);
-          console.log(msg)
+       //   const msg = await addDataToFirebaseWithCustomId('electric', id, data);
+       //   console.log(msg)
+       console.log(i, id);
+        
           i = i + 1;
-          if (i >= das.length) {
+          if (i >= electrics.length) {
             clearInterval(myTimer);
             console.log("End");
           }
-        }, 1000)
+        }, 2000)
     */
 
   }
-
 
 
 
@@ -80,6 +98,7 @@ const Gender = () => {
         <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
         <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
       </div>
+      <button onClick={testHandler}>Test Click</button><br /><br />
       <button onClick={addHdle}>Add Id</button><br /><br />
       <button onClick={uploadHanderl}>Upload</button>
       <div className="px-4 lg:px-6">

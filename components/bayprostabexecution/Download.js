@@ -1,12 +1,12 @@
 import React from "react";
-import { sessionStorageGetItem } from "@/lib/utils";
+import { localStorageGetItem } from "@/lib/utils";
 
 
 const Download = ({ message }) => {
 
 
   const downloadHandler = () => {
-    let localData = sessionStorageGetItem("bayprostabexecution");
+    let localData = localStorageGetItem("bayprostabexecution");
     if (localData) {
       const blob = new Blob([JSON.stringify(localData)], { type: "application/json" });
       const url = URL.createObjectURL(blob);

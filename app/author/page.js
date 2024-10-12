@@ -3,31 +3,44 @@ import React, { useState, useEffect } from "react";
 import Add from "@/components/author/Add";
 import Edit from "@/components/author/Edit";
 import Delete from "@/components/author/Delete";
-import { getDataFromFirebase } from "@/lib/utils";
+// import Print from "@/components/author/Print";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { sortArray } from "@/lib/utils";
+
 
 
 const Author = () => {
     const [authors, setAuthors] = useState([]);
-    const [msg, setMsg] = useState("Data ready");
     const [waitMsg, setWaitMsg] = useState("");
-
+    const [msg, setMsg] = useState("Data ready");
 
 
     useEffect(() => {
-        const fetchData = async () => {
+        const getData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const data = await getDataFromFirebase('author');
-                console.log(data);
-                setAuthors(data);
+                const [ authors, posts ] = await Promise.all([
+                    getDataFromFirebase("author"),
+                    getDataFromFirebase("post")
+                ]);
+    
+    
+                const joinCollection = authors.map(author=>{
+                    return {
+                       ...author,
+                       post : posts.find(post => post.id ===author.postId) || {}
+                    }
+                });
+    
+                const sortedData = joinCollection.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
+                console.log(sortedData)
+                setAuthors(sortedData);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error fetching data:", error);
-                setMsg("Failed to fetch data");
             }
         };
-        fetchData();
-
+        getData();
     }, [msg]);
 
 
@@ -41,17 +54,18 @@ const Author = () => {
             <div className="w-full mb-3 mt-8">
                 <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Author</h1>
                 <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
+                <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
             </div>
             <div className="px-4 lg:px-6">
-                <p className="w-full text-sm text-red-700">{msg}</p>
-                <div className="p-2 overflow-auto">
+                <div className="p-4 overflow-auto">
                     <table className="w-full border border-gray-200">
                         <thead>
                             <tr className="w-full bg-gray-200">
-                                <th className="text-center border-b border-gray-200 px-4 py-2">Name</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-2">Post</th>
-                                <th className="w-[100px] font-normal">
-                                    <div className="w-full flex justify-end py-0.5 pr-4">
+                                <th className="text-center border-b border-gray-200 px-4 py-1">Name</th>
+                                <th className="text-center border-b border-gray-200 px-4 py-1">PostId</th>  
+                                <th className="w-[95px] border-b border-gray-200 px-4 py-2">
+                                    <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1 font-normal">
+                                        {/* <Print data={authors} /> */}
                                         <Add message={messageHandler} />
                                     </div>
                                 </th>
@@ -60,12 +74,14 @@ const Author = () => {
                         <tbody>
                             {authors.length ? (
                                 authors.map(author => (
-                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={author.id}>
-                                        <td className="text-center py-2 px-4">{author.name}</td>
-                                        <td className="text-center py-2 px-4">{author.postId.nmEn}</td>
-                                        <td className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
-                                            <Edit message={messageHandler} id={author.id} data={author} />
-                                            <Delete message={messageHandler} id={author.id} data={author} />
+                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={author.id}>  
+                                        <td className="text-center py-1 px-4">{author.name}</td>
+                                        <td className="text-center py-1 px-4">{author.post.nmEn}</td>                                      
+                                        <td className="text-center py-2">
+                                            <div className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
+                                                <Edit message={messageHandler} id={author.id} data={author} />
+                                                <Delete message={messageHandler} id={author.id} data={author} />
+                                            </div>
                                         </td>
                                     </tr>
                                 ))
@@ -86,5 +102,4 @@ const Author = () => {
 };
 
 export default Author;
-
 

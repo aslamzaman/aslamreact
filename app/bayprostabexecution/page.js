@@ -8,7 +8,8 @@ import Delete from "@/components/bayprostabexecution/Delete";
 import Download from "@/components/bayprostabexecution/Download";
 import Upload from "@/components/bayprostabexecution/Upload";
 
-import { getDataFromFirebase, numberWithComma, inwordBangla, formatedDate, formatedDateDot, sessionStorageGetItem } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { numberWithComma, inwordBangla, formatedDate, formatedDateDot, localStorageSetItem, localStorageGetItem, sortArray } from "@/lib/utils";
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 
@@ -34,10 +35,12 @@ const Bayprostabexecution = () => {
 
   useEffect(() => {
 
-    const getLocalData = sessionStorageGetItem("bayprostabexecution");
+    const getLocalData = localStorageGetItem("bayprostabexecution");
+    console.log("Aslam", getLocalData);
     setBayprostabexecutions(getLocalData);
+
     const total = getLocalData.reduce((t, c) => t + (parseFloat(eval(c.taka)) * parseFloat(c.nos)), 0);
-    setTotal(total)
+    setTotal(total);
     setDt2(formatedDate(new Date()));
 
     const getData = async () => {
@@ -47,8 +50,9 @@ const Bayprostabexecution = () => {
           getDataFromFirebase('staff'),
           getDataFromFirebase('project')
         ]);
-        const scStaff = staffs.filter(staff => staff.placeId._id === "660ae2d4825d0610471e272d");
-        setStaffData(scStaff);
+        const scStaff = staffs.filter(staff => staff.placeId === "6BtqRhIrKQ776jyywIC8");
+        const sortedStaff = scStaff.sort((a,b) => sortArray(a.nmEn, b.nmEn));
+        setStaffData(sortedStaff);
         setProjectData(projects);
         setWaitMsg("");
       } catch (err) {
@@ -76,7 +80,7 @@ const Bayprostabexecution = () => {
       floatPrecision: 16 // or "smart", default is 16
     });
 
-    const x = sessionStorageGetItem("bayprostabexecution");
+    const x = localStorageGetItem("bayprostabexecution");
     if (!x) {
       setMsg("No data!!");
       return false;
@@ -160,10 +164,10 @@ const Bayprostabexecution = () => {
             <form onSubmit={createHandler}>
               <div className="grid grid-cols-1 gap-2 my-2">
                 <DropdownEn Title="Staff Name *" Id="staff" Change={e => setStaff(e.target.value)} Value={staff}>
-                  {staffData.length ? staffData.map(staff => <option value={staff.nmBn} key={staff._id}>{staff.nmEn}</option>) : null}
+                  {staffData.length ? staffData.map(staff => <option value={staff.nmBn} key={staff.id}>{staff.nmEn}</option>) : null}
                 </DropdownEn>
                 <DropdownEn Title="Project *" Id="project" Data={projectData} Change={e => setProject(e.target.value)} Value={project}>
-                  {projectData.length ? projectData.map(project => <option value={project.name} key={project._id}>{project.name}</option>) : null}
+                  {projectData.length ? projectData.map(project => <option value={project.name} key={project.id}>{project.name}</option>) : null}
                 </DropdownEn>
 
                 <div className="w-full flex flex-col items-start">

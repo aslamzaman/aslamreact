@@ -7,8 +7,8 @@ const date_format = dt => new Date(dt).toISOString().split('T')[0];
 import Image from "next/image";
 import { Tiro_Bangla } from 'next/font/google';
 const tiro = Tiro_Bangla({ subsets: ['bengali'], weight: "400" });
-import { getDataFromFirebase, sortArray } from "@/lib/utils";
-
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { sortArray } from "@/lib/utils";
 
 
 
@@ -23,13 +23,14 @@ const Staff = () => {
         const getData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const [staffs, projects, genders, units, posts, places] = await Promise.all([
+                const [staffs, projects, genders, units, posts, places, staffresigns] = await Promise.all([
                     getDataFromFirebase("staff"),
                     getDataFromFirebase("project"),
                     getDataFromFirebase("gender"),
                     getDataFromFirebase("unit"),
                     getDataFromFirebase("post"),
-                    getDataFromFirebase("place")
+                    getDataFromFirebase("place"),
+                    getDataFromFirebase("staffresign")
                 ]);
 
                 const joinCollection = staffs.map(staff => {
@@ -42,9 +43,12 @@ const Staff = () => {
                         place: places.find(place => place.id === staff.placeId) || {}
                     }
                 })
-                console.log(joinCollection);
+              //  console.log(joinCollection);
 
-                const sortedStaffs = joinCollection.sort((a, b) => sortArray(parseInt(a.empId), parseInt(b.empId)));
+                const withoutResignStaff = joinCollection.filter(staff => !staffresigns.some(resign => resign.staffId === staff.id));
+        
+
+                const sortedStaffs = withoutResignStaff.sort((a, b) => sortArray(parseInt(a.empId), parseInt(b.empId)));
                 setStaffs(sortedStaffs);
                 setWaitMsg('');
             } catch (error) {

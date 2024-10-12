@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BtnSubmit, DropdownEn, TextNum } from "@/components/Form";
-import { getDataFromFirebase, localStorageAddItem } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { localStorageAddItem } from "@/lib/utils";
 
 
 const Add = ({ message }) => {
@@ -27,6 +28,7 @@ const Add = ({ message }) => {
         resetVariables();
         try {
             const responseMobile = await getDataFromFirebase("mobile");
+            console.log(responseMobile)
             setMobiles(responseMobile);
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -69,11 +71,11 @@ const Add = ({ message }) => {
     const nameChangeHandler = (e) => {
         const nameValue = e.target.value;
         setNameChange(nameValue);
-        const findMobile = mobiles.find(mobile => mobile._id === nameValue);
+        const findMobile = mobiles.find(mobile => mobile.id === nameValue);
         console.log(findMobile)
         setName(findMobile.presentUser);
         setNum(findMobile.mobileNo);
-        setMobileId(findMobile._id);
+        setMobileId(findMobile.id);
     }
 
 
@@ -94,7 +96,7 @@ const Add = ({ message }) => {
                             <form onSubmit={saveHandler}>
                                 <div className="grid grid-cols-1 gap-4 my-4">
                                     <DropdownEn Title="Mobile" Id="nameChange" Change={nameChangeHandler} Value={nameChange}>
-                                        {mobiles.length ? mobiles.map(mobile => <option value={mobile._id} key={mobile._id}>{mobile.presentUser}</option>) : null}
+                                        {mobiles.length ? mobiles.map(mobile => <option value={mobile.id} key={mobile.id}>{mobile.presentUser}</option>) : null}
                                     </DropdownEn>
                                     <TextNum Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} />
                                 </div>

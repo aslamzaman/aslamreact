@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { BtnSubmit, DropdownEn, TextNum } from "@/components/Form";
-import { numberWithComma, getDataFromFirebase } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { numberWithComma } from "@/lib/utils";
 
 
 const Brickwork = () => {
@@ -31,12 +32,13 @@ const Brickwork = () => {
             try {
                 const response = await getDataFromFirebase('price');
                 console.log(response);
-                const brickPrice = response.find(brick => brick._id === '660d0383b8a2f9f9b8bb9bb9');
-                const cementPrice = response.find(cement => cement._id === '660d038fb8a2f9f9b8bb9bbd');
-                const sandPrice = response.find(sand => sand._id === '660d0398b8a2f9f9b8bb9bc1');
-                setBrickPrice(brickPrice.tk);
-                setCementPrice(cementPrice.tk);
-                setSandPrice(sandPrice.tk);
+                const brickPrice = response.find(brick => brick.id === 'AXc2dF5VYHRVc0KtW5i7');
+                const cementPrice = response.find(cement => cement.id === 'aj4THFRGdOZjs0QNPlrF');
+                const sandPrice = response.find(sand => sand.id === 'SFlvASnMa3RjbPgzz0Tw');
+  
+                setBrickPrice(brickPrice.taka);
+                setCementPrice(cementPrice.taka);
+                setSandPrice(sandPrice.taka);
                 setWaitMsg('');
 
             } catch (error) {

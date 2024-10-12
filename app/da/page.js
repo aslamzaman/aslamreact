@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import Add from "@/components/da/Add";
 import Edit from "@/components/da/Edit";
 import Delete from "@/components/da/Delete";
-import { getDataFromFirebase, sortArray } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { sortArray } from "@/lib/utils";
 
 
 const Da = () => {

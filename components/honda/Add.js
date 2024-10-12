@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextEn, BtnSubmit, DropdownEn, TextDt } from "@/components/Form";
-import { getDataFromFirebase, addDataToFirebase } from "@/lib/utils";
+import { getDataFromFirebase, addDataToFirebase } from "@/lib/firebaseFunction";
 
 
 
@@ -62,7 +62,8 @@ const Add = ({ message }) => {
             condition: condition,
             projectId: projectId,
             unitId: unitId,
-            remarks: remarks
+            remarks: remarks,
+            createdAt: new Date().toISOString()
         }
     }
 
@@ -106,14 +107,14 @@ const Add = ({ message }) => {
                                     <TextEn Title="Condition" Id="condition" Change={e => setCondition(e.target.value)} Value={condition} Chr={50} />
 
                                     <DropdownEn Title="Project" Id="projectId" Change={e=>setProjectId(e.target.value)} Value={projectId}>
-                                        {projects.length ? projects.map(project => <option value={project._id} key={project._id}>{project.name}</option>) : null}
+                                        {projects.length ? projects.map(project => <option value={project.id} key={project.id}>{project.name}</option>) : null}
                                     </DropdownEn>
 
 
 
 
                                     <DropdownEn Title="Unit" Id="unitId" Change={e=>setUnitId(e.target.value)} Value={unitId}>
-                                        {units.length ? units.map(unit => <option value={unit._id} key={unit._id}>{unit.nmEn}</option>) : null}
+                                        {units.length ? units.map(unit => <option value={unit.id} key={unit.id}>{unit.nmEn}</option>) : null}
                                     </DropdownEn>
                                     <TextEn Title="Remarks" Id="remarks" Change={e => setRemarks(e.target.value)} Value={remarks} Chr={250} />
                                 </div>

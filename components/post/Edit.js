@@ -1,7 +1,6 @@
-
 import React, { useState } from "react";
-import { TextEn, BtnSubmit } from "@/components/Form";
-import { updateDataToFirebase } from "@/lib/utils";
+import { TextEn, BtnSubmit, TextUn, TextBn } from "@/components/Form";
+import { updateDataToFirebase } from "@/lib/firebaseFunction";
 
 
 const Edit = ({ message, id, data }) => {
@@ -9,21 +8,17 @@ const Edit = ({ message, id, data }) => {
     const [nmBn, setNmBn] = useState('');
     const [nmUn, setNmUn] = useState('');
     const [createdAt, setCreatedAt] = useState('');
-    const [show, setShow] = useState(false);
 
+    const [show, setShow] = useState(false);
+    const [pointerEvent, setPointerEvent] = useState(true);
 
     const showEditForm = () => {
-        setShow(true);
-        console.log(id);
-        try {
-            const { nmEn, nmBn, nmUn, createdAt } = data;
+           setShow(true);
+            const {nmEn, nmBn, nmUn, createdAt} = data;
             setNmEn(nmEn);
             setNmBn(nmBn);
             setNmUn(nmUn);
             setCreatedAt(createdAt);
-        } catch (err) {
-            console.log(err);
-        }
     };
 
 
@@ -34,10 +29,10 @@ const Edit = ({ message, id, data }) => {
 
     const createObject = () => {
         return {
-            nmEn: nmEn,
-            nmBn: nmBn,
-            nmUn: nmUn,
-            createdAt: createdAt
+              nmEn: nmEn,
+              nmBn: nmBn,
+              nmUn: nmUn,
+              createdAt: createdAt
         }
     }
 
@@ -45,13 +40,15 @@ const Edit = ({ message, id, data }) => {
     const saveHandler = async (e) => {
         e.preventDefault();
         try {
+            setPointerEvent(false);
             const newObject = createObject();
-            const msg = await updateDataToFirebase("post", id, newObject);
+            const msg = await updateDataToFirebase("post",id, newObject);
             message(msg);
         } catch (error) {
             console.error("Error saving post data:", error);
             message("Error saving post data.");
         } finally {
+            setPointerEvent(true);
             setShow(false);
         }
     }
@@ -74,11 +71,11 @@ const Edit = ({ message, id, data }) => {
                         <div className="px-6 pb-6 text-black">
                             <form onSubmit={saveHandler} >
                                 <div className="grid grid-cols-1 gap-4 my-4">
-                                    <TextEn Title="Nmen" Id="nmEn" Change={e => setNmEn(e.target.value)} Value={nmEn} Chr={50} />
-                                    <TextEn Title="Nmbn" Id="nmBn" Change={e => setNmBn(e.target.value)} Value={nmBn} Chr={50} />
-                                    <TextEn Title="Nmun" Id="nmUn" Change={e => setNmUn(e.target.value)} Value={nmUn} Chr={50} />
+                                    <TextEn Title="NmEn" Id="nmEn" Change={e => setNmEn(e.target.value)} Value={nmEn} Chr={50} />
+                                    <TextBn Title="NmBn (SutonnyMj)" Id="nmBn" Change={e => setNmBn(e.target.value)} Value={nmBn} Chr={50} />
+                                    <TextUn Title="NmUn (Unicode)" Id="nmUn" Change={e => setNmUn(e.target.value)} Value={nmUn} Chr={50} />
                                 </div>
-                                <div className="w-full flex justify-start">
+                                <div className={`w-full mt-4 flex justify-start ${pointerEvent ? 'pointer-events-auto' : 'pointer-events-none'}`}>
                                     <input type="button" onClick={closeEditForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />
                                     <BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />
                                 </div>
@@ -102,3 +99,4 @@ export default Edit;
 
 
 
+    

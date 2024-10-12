@@ -8,7 +8,8 @@ import Delete from "@/components/bayprostab/Delete";
 import Download from '@/components/bayprostab/Download';
 import Upload from '@/components/bayprostab/Upload';
 
-import { getDataFromFirebase, formatedDate, formatedDateDot, localStorageGetItem } from '@/lib/utils';
+import { getDataFromFirebase } from '@/lib/firebaseFunction';
+import { formatedDate, formatedDateDot, localStorageGetItem, sortArray } from '@/lib/utils';
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 import { BayprostabPreparation } from '@/lib/BayprostabPreparation';
@@ -53,8 +54,9 @@ const Bayprostab = () => {
           getDataFromFirebase('project')
         ]);
         const scStaff = staffs.filter(staff => staff.placeId === "6BtqRhIrKQ776jyywIC8");
-        console.log(scStaff);
-        setStaffData(scStaff);
+        const sortData = scStaff.sort((a, b)=>sortArray(a.nmEn, b.nmEn));
+        console.log(sortData);
+        setStaffData(sortData);
         setProjectData(projects);
         setPayType('');
         setWaitMsg('');
@@ -65,6 +67,8 @@ const Bayprostab = () => {
     getData();
 
     const locaData = localStorageGetItem("bayprostab");
+
+    console.log("locladata ",locaData)
     setBayprostabs(locaData);
     const totalTaka = locaData.reduce((t, c) => t + (parseFloat(eval(c.taka)) * parseFloat(c.nos)), 0);
     const totalRound = Math.round(totalTaka);

@@ -5,7 +5,7 @@ import Edit from "@/components/mobile/Edit";
 import Delete from "@/components/mobile/Delete";
 import Image from "next/image";
 import mobileImage from "@/public/images/mobile/Mobile_Sim_BTRC.jpg";
-import { getDataFromFirebase } from "@/lib/utils";
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
 
 
 const Mobile = () => {

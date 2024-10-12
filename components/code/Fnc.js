@@ -8,7 +8,8 @@ import Add from "@/components/${tbl}/Add";
 import Edit from "@/components/${tbl}/Edit";
 import Delete from "@/components/${tbl}/Delete";
 // import Print from "@/components/${tbl}/Print";
-import { getDataFromFirebase, sortArray } from "@/lib/utils";`
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { sortArray } from "@/lib/utils";`
 }
 
 export const pageStateVariables = (tbl) => {

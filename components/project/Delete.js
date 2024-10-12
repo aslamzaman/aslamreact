@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 import { BtnEn } from "@/components/Form";
-import { deleteDataFromFirebase } from "@/lib/utils";
+import { deleteDataFromFirebase } from "@/lib/firebaseFunction";
 
 
 const Delete = ({ message, id, data }) => {
-    const [name, setName] = useState("");   
+    const [name, setName] = useState("");
+
     const [show, setShow] = useState(false);
+    const [pointerEvent, setPointerEvent] = useState(true);
+
 
     const showDeleteForm = () => {
         setShow(true);
-        try {
-           const { name } = data;
-           setName(name);
-        }
-        catch (err) {
-            console.log(err);
-        }
+        const {name} = data;
+        setName(name);
     }
 
 
@@ -24,16 +22,20 @@ const Delete = ({ message, id, data }) => {
     }
 
 
-    const deleteYesClick = async () => {
+    const deleteClick = async () => {
         try {
-            const msg = deleteDataFromFirebase("project", id);
+            setPointerEvent(false);
+            const msg = await deleteDataFromFirebase('project', id);
             message(msg);
         } catch (error) {
             console.log(error);
             message("Data deleting error");
+        } finally {
+            setPointerEvent(true);
+            setShow(false);
         }
-        setShow(false);
     }
+
 
 
     return (
@@ -45,13 +47,13 @@ const Delete = ({ message, id, data }) => {
                             <h1 className="text-xl font-bold text-blue-600">Delete Existing Data</h1>
                             <button onClick={closeDeleteForm} className="w-8 h-8 p-0.5 bg-gray-50 hover:bg-gray-300 rounded-md transition duration-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-full h-full stroke-black">
-                                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
 
                         </div>
                         <div className="p-4 lg:p-6 flex flex-col space-y-4">
-                            <div className="w-full">    
+                            <div className="w-full">
                                 <svg height="60" width="60" xmlns="http://www.w3.org/2000/svg" className="bg-white-100 mx-auto">
                                     <path d="M30 3 L3 57 L57 57 Z" className="fill-none stroke-red-700 stroke-[5px]" />
                                     <path d="M30 23 L30 40" className="fill-none stroke-red-700 stroke-[5px]" />
@@ -62,9 +64,9 @@ const Delete = ({ message, id, data }) => {
                                     Are you sure to proceed with the deletion?</h1>
                                 <h1 className="text-center text-gray-600 font-bold">{name}</h1>
                             </div>
-                            <div className="w-full flex justify-start">
+                            <div className={`w-full mt-4 flex justify-start ${pointerEvent ? 'pointer-events-auto' : 'pointer-events-none'}`}>
                                 <BtnEn Title="Close" Click={closeDeleteForm} Class="bg-pink-700 hover:bg-pink-900 text-white mr-1" />
-                                <BtnEn Title="Yes Delete" Click={deleteYesClick} Class="bg-blue-600 hover:bg-blue-800 text-white" />
+                                <BtnEn Title="Yes Delete" Click={deleteClick} Class="bg-blue-600 hover:bg-blue-800 text-white" />
                             </div>
                         </div>
                     </div>
@@ -79,5 +81,6 @@ const Delete = ({ message, id, data }) => {
     )
 }
 export default Delete;
+    
 
-
+    

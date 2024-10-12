@@ -215,6 +215,13 @@ const Code = () => {
     }
 
 
+    const copyPageHandler = () => {
+        navigator.clipboard.writeText(result);
+    }
+
+
+
+
     return (
         <div className="pb-10">
             <h1 className="w-full text-center text-3xl text-gray-500 font-bold py-7">Code Generator</h1>
@@ -247,8 +254,11 @@ const Code = () => {
                     </div>
                 </div>
                 <div className="col-span-2 py-4 max-h-[800px] overflow-auto">
+                    <div className="w-full flex justify-between">
                     <p>{titleText}</p>
-                    <textarea rows={20} id="result" name="result" onChange={resultChangeHander} value={result} required maxLength={2500} className="w-full px-4 py-1.5 text-gray-600 ring-1 focus:ring-4 ring-blue-300 outline-none rounded duration-300" />
+                    <button className="px-3 py-0.5 border border-gray-300 rounded-full hover:font-bold" onClick={copyPageHandler}>Copy</button>
+                    </div>
+                    <textarea rows={20} id="result" name="result" onChange={resultChangeHander} value={result} required maxLength={2500} className="w-full px-4 my-1.5 text-gray-600 ring-1 focus:ring-4 ring-blue-300 outline-none rounded duration-300" />
 
                 </div>
             </div>
