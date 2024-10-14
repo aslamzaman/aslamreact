@@ -12,7 +12,6 @@ import { collection, addDoc, deleteDoc, doc, getDocs, setDoc, collectionGroup } 
 
 
 
-
 const Gender = () => {
   const [genders, setGenders] = useState([]);
   const [waitMsg, setWaitMsg] = useState("");
@@ -41,8 +40,7 @@ const Gender = () => {
 
 
   const testHandler = async () => {
-    const honda = await getDataFromFirebase('hondahistory');
-    console.log(honda)
+//console.log(unique)
 
   }
 
@@ -60,28 +58,32 @@ const Gender = () => {
 
 
   const uploadHanderl = async () => {
+/*
+    let i = 0;
 
-    /*
-        let i = 0;
-        const myTimer = setInterval(async () => {
-          let id = electrics[i].id;
-          let data = {
-              description: electrics[i].description,
-              createdAt: electrics[i].createdAt
-          }
-    
-       //   const msg = await addDataToFirebaseWithCustomId('electric', id, data);
-       //   console.log(msg)
-       console.log(i, id);
-        
-          i = i + 1;
-          if (i >= electrics.length) {
-            clearInterval(myTimer);
-            console.log("End");
-          }
-        }, 2000)
-    */
+    const myTimer = setInterval(async () => {
+      let id = unique[i];
+      let data = {
+        dt: dcs[i].dt,
+        unit: dcs[i].unit,
+        picurl: dcs[i].picurl,
+        cat: dcs[i].cat,
+        title: dcs[i].title,
+        createdAt: new Date().toISOString()
+      }
 
+      const msg = await addDataToFirebaseWithCustomId('doc', id, data);
+      console.log(msg)
+      console.log(i, id);
+
+      i = i + 1;
+      if (i >= dcs.length) {
+        clearInterval(myTimer);
+        console.log("End");
+      }
+    }, 1000)
+
+*/
   }
 
 

@@ -9,12 +9,22 @@ const Unique = () => {
     const [uniq, setUniq] = useState("");
     const [uniq2, setUniq2] = useState("");
     const [uniq3, setUniq3] = useState("");
+    const [msg, setMsg] = useState("");
 
 
     const uniqHandler = () => {
         setUniq(Date.now());
         setUniq2(new Date().toISOString());
         setUniq3(customIdForFirebase());
+
+        let x = [];
+        for (let i = 0; i < 5000; i++) {
+          x.push(customIdForFirebase());
+        }
+        const newSet = new Set(x);
+        const result = Array.from(newSet);
+        console.log(result);
+        setMsg("Multiple unique IDs in the console");
     }
 
 
@@ -33,7 +43,10 @@ const Unique = () => {
                             <TextEn Title="Result" Id="uniq" Change={e => setUniq(e.target.value)} Value={uniq} Chr="100" />
                             <TextEn Title="Result2" Id="uniq2" Change={e => setUniq2(e.target.value)} Value={uniq2} Chr="100" />
                             <TextEn Title="Result3" Id="uniq3" Change={e => setUniq3(e.target.value)} Value={uniq3} Chr="100" />
+                                <div className="w-full flex space-x-4 items-center">
                             <BtnEn Title="Unique static" Click={uniqHandler} Class="w-36 bg-gray-600 hover:bg-gray-800 text-white" />
+                            <p>{msg}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
