@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextEn, BtnSubmit, TextDt,DropdownEn  } from "@/components/Form";
+import { TextEn, BtnSubmit, TextDt, DropdownEn } from "@/components/Form";
 import { updateDataToFirebase, getDataFromFirebase } from "@/lib/firebaseFunction";
 import { formatedDate } from "@/lib/utils";
 
@@ -18,6 +18,7 @@ const Edit = ({ message, id, data }) => {
     const [insurance, setInsurance] = useState('');
     const [remarks, setRemarks] = useState('');
     const [createdAt, setCreatedAt] = useState('');
+    const [isEditable, setIsEditable] = useState('');
 
     const [show, setShow] = useState(false);
     const [pointerEvent, setPointerEvent] = useState(true);
@@ -25,14 +26,14 @@ const Edit = ({ message, id, data }) => {
     const [hondas, setHondas] = useState([]);
 
 
-    const showEditForm =  async() => {
+    const showEditForm = async () => {
         setShow(true);
 
         try {
             const responseHonda = await getDataFromFirebase("honda");
             setHondas(responseHonda);
             //--------------------------------------------
-            const { dt, name, mobile, post, project, unit, hondaId, regCertificate, helmet, taxCertificate, insurance, remarks, createdAt } = data;
+            const { dt, name, mobile, post, project, unit, hondaId, regCertificate, helmet, taxCertificate, insurance, remarks, createdAt, isEditable } = data;
             setDt(formatedDate(dt));
             setName(name);
             setMobile(mobile);
@@ -46,6 +47,7 @@ const Edit = ({ message, id, data }) => {
             setInsurance(insurance);
             setRemarks(remarks);
             setCreatedAt(createdAt);
+            setIsEditable(isEditable);
         } catch (error) {
             console.error('Failed to fetch delivery data:', error);
         }
@@ -72,7 +74,8 @@ const Edit = ({ message, id, data }) => {
             taxCertificate: taxCertificate,
             insurance: insurance,
             remarks: remarks,
-            createdAt: createdAt
+            createdAt: createdAt,
+            isEditable: isEditable
         }
     }
 
@@ -126,6 +129,11 @@ const Edit = ({ message, id, data }) => {
                                     <TextEn Title="TaxCertificate" Id="taxCertificate" Change={e => setTaxCertificate(e.target.value)} Value={taxCertificate} Chr={50} />
                                     <TextEn Title="Insurance" Id="insurance" Change={e => setInsurance(e.target.value)} Value={insurance} Chr={50} />
                                     <TextEn Title="Remarks" Id="remarks" Change={e => setRemarks(e.target.value)} Value={remarks} Chr={250} />
+                                    <TextEn Title="CreatedAt" Id="createdAt" Change={e => setCreatedAt(e.target.value)} Value={createdAt} Chr={50} />
+                                    <DropdownEn Title="Is Editable" Id="isEditable" Change={e => setIsEditable(e.target.value)} Value={isEditable}>
+                                        <option value='yes'>Yes</option>
+                                        <option value='no'>No</option>
+                                    </DropdownEn>
                                 </div>
                                 <div className={`w-full mt-4 flex justify-start ${pointerEvent ? 'pointer-events-auto' : 'pointer-events-none'}`}>
                                     <input type="button" onClick={closeEditForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />

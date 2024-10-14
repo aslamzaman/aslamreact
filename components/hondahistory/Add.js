@@ -73,7 +73,8 @@ const Add = ({ message }) => {
             taxCertificate: taxCertificate,
             insurance: insurance,
             remarks: remarks,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            isEditable: "no"
         }
     }
 
