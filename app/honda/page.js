@@ -150,8 +150,9 @@ const Honda = () => {
                                 hondas.map((honda, i) => (
                                     <tr className="border-b border-gray-200 hover:bg-gray-100" key={honda.id}>
                                         <td className="text-center py-2 px-4">{i + 1}</td>
-                                        <td className="text-center py-2 px-4">{honda.unitName} &#8658; ({honda.hondahistory.unit}-{honda.hondahistory.name})-<br />
-                                        {honda.project.name} &#8658; {honda.hondahistory.project}
+                                        <td className="text-center py-2 px-4"> {honda.unitName} &#8658; {honda.hondahistory.unit}<br />                                           
+                                        {honda.project.name} &#8658; {honda.hondahistory.project} <br />
+                                        {honda.hondahistory.name}-{honda.hondahistory.post}
                                         </td>
                                         <td className="text-center py-2 px-4">{honda.regNo}<br />
                                         {honda.chassisNo}<br />

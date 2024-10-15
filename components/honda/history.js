@@ -5,7 +5,6 @@ import html2canvas from 'html2canvas';
 
 
 
-
 const History = ({ message, id, data }) => {
     const [histories, setHistories] = useState({});
     const [age, setAge] = useState(0);
@@ -85,9 +84,9 @@ const History = ({ message, id, data }) => {
 
                         </div>
 
-                        <div className="px-6 pb-6 text-black overflow-auto">
+                        <div className="px-6 pt-10 pb-16 text-black overflow-auto bg-gray-200">
                         <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
-                            <div ref={pageRef} className="w-[595px] h-[842px] p-[52px] text-[12px] mx-auto border border-gray-200">
+                            <div ref={pageRef} className="w-[595px] h-[842px] p-[52px] text-[12px] mx-auto bg-white">
                                 <p className="text-center my-8">
                                     <span className="font-bold">{data.regNo}</span><br />
                                     Registration Date: {data.regDt}<br />
