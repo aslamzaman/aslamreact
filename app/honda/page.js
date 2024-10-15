@@ -32,20 +32,23 @@ const Honda = () => {
 
                 const joinCollection = hondas.map(honda => {
                     const matchUnit = units.find(units => units.id === honda.unitId);
+
+                    const matchHondaHistory = hondahistorys.filter(hondahistory => hondahistory.hondaId === honda.id) || [];
+                    const sortHistory = matchHondaHistory.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
                     return {
                         ...honda,
-                        hondahistory: hondahistorys.filter(hondahistory => hondahistory.hondaId === honda.id) || [],
+                        hondahistory: sortHistory.find(hondahistory => hondahistory.hondaId === honda.id) || {},
                         unit: matchUnit || {},
-                        unitName: matchUnit?matchUnit.nmEn:"",
+                        unitName: matchUnit ? matchUnit.nmEn : "",
                         project: projects.find(project => project.id === honda.projectId) || {}
                     }
                 });
-                
-               // console.log("jpom", joinCollection)
+
+                console.log("jpom", joinCollection)
 
 
                 const sortedData = joinCollection.sort((a, b) => sortArray(a.unitName, b.unitName));
-              //  console.log("sorted", sortedData);
+                //  console.log("sorted", sortedData);
                 setHondas(sortedData);
                 setWaitMsg('');
             } catch (error) {
@@ -133,16 +136,10 @@ const Honda = () => {
                             <tr className="w-full bg-gray-200">
                                 <th className="text-center border-b border-gray-200 px-4 py-2">SL</th>
                                 <th className="text-center border-b border-gray-200 px-4 py-2">Unit</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-2">Regno</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-2">Regdt</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-2">Chassis No</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-2">Engine No</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-2">Condition</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-2">Project</th>
+                                <th className="text-center border-b border-gray-200 px-4 py-2">Honda Info</th>  
                                 <th className="text-center border-b border-gray-200 px-4 py-2">Remarks</th>
                                 <th className="w-[100px] font-normal">
                                     <div className="w-full flex justify-end py-0.5 pr-4">
-
                                         <Add message={messageHandler} />
                                     </div>
                                 </th>
@@ -153,13 +150,14 @@ const Honda = () => {
                                 hondas.map((honda, i) => (
                                     <tr className="border-b border-gray-200 hover:bg-gray-100" key={honda.id}>
                                         <td className="text-center py-2 px-4">{i + 1}</td>
-                                        <td className="text-center py-2 px-4">{honda.unitName}</td>
-                                        <td className="text-center py-2 px-4">{honda.regNo}</td>
-                                        <td className="text-center py-2 px-4">{honda.regDt}</td>
-                                        <td className="text-center py-2 px-4">{honda.chassisNo}</td>
-                                        <td className="text-center py-2 px-4">{honda.engineNo}</td>
-                                        <td className="text-center py-2 px-4">{honda.condition}</td>
-                                        <td className="text-center py-2 px-4">{honda.project.name}</td>
+                                        <td className="text-center py-2 px-4">{honda.unitName} &#8658; ({honda.hondahistory.unit}-{honda.hondahistory.name})-<br />
+                                        {honda.project.name} &#8658; {honda.hondahistory.project}
+                                        </td>
+                                        <td className="text-center py-2 px-4">{honda.regNo}<br />
+                                        {honda.chassisNo}<br />
+                                        {honda.engineNo}<br />
+                                        {honda.regDt}
+                                        </td>
                                         <td className="text-center py-2 px-4">{honda.remarks}</td>
                                         <td className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
                                             <Edit message={messageHandler} id={honda.id} data={honda} />
