@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { jsPDF } from "jspdf";
 import { Close } from "@/components/Icons";
 import { DropdownEn, BtnSubmit } from "@/components/Form";
-import { numberWithComma, formatedDate } from "@/lib/utils";
+import { numberWithComma, formatedDate, formatedDateDot } from "@/lib/utils";
 
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
@@ -56,6 +56,7 @@ const Print = ({ data, message }) => {
         setStaffs(data);
     }
 
+console.log("Data: ", data);
 
     const printHandler = async (e) => {
         e.preventDefault();
@@ -114,7 +115,7 @@ const Print = ({ data, message }) => {
             doc.text(`${staffs[i].staff.nmBn}`, 23, y, null, null, "left"); 
             doc.text(`${staffs[i].staff.post.nmBn}`, 76, y, null, null, "center"); // correction
             doc.text(`${staffs[i].staff.unit.nmBn}`, 101, y, null, null, "center");
-            doc.text(`${shortDt(staffs[i].staffId.joinDt)}`, 125, y, null, null, "center");
+            doc.text(`${formatedDateDot(staffs[i].staff.joinDt,false)}`, 125, y, null, null, "center");
             doc.text(`${numberWithComma(Math.round(eval(staffs[i].arear)))}`, 154, y, null, null, "right");
             doc.text(`${numberWithComma(staffs[i].sal1)}`, 176, y, null, null, "right");
             doc.text(`${numberWithComma(staffs[i].sal2)}`, 198, y, null, null, "right");
