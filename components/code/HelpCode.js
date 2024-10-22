@@ -79,6 +79,9 @@ const SortResult = datas.sort((a, b) => {
 const sortPost = responsePost.sort((a, b) => (a.nmEn).toUpperCase() < (b.nmEn).toUpperCase() ? -1 : 1);
 
 
+*** Unique Array:-
+const uniqueArray = [...new Set(arrayData)];
+
 
   *** PDF Multiple Page:-
 const printMultiplePageHandler = async () => {
