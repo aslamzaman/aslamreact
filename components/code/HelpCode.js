@@ -83,6 +83,11 @@ const sortPost = responsePost.sort((a, b) => (a.nmEn).toUpperCase() < (b.nmEn).t
 const uniqueArray = [...new Set(arrayData)];
 
 
+*** Six falsey values:-
+undefined, null, NaN, 0, "", false
+
+
+
   *** PDF Multiple Page:-
 const printMultiplePageHandler = async () => {
     const doc = new jsPDF({
