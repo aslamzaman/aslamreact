@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { MenuData } from '@/lib/MenuData';
+import { getDataFromFirebase } from '@/lib/firebaseFunction';
 
 
 
@@ -32,6 +33,7 @@ const MenuItem = ({ Href, Title, Menu }) => {
 const Layout = ({ children }) => {
     const [menu, setMenu] = useState(false);
     const [useSize, setUseSize] = useState("0");
+    const [bkpMsg, setBkpMsg] = useState("");
 
     const router = useRouter();
 
@@ -70,7 +72,28 @@ const Layout = ({ children }) => {
         }
     }
 
+    const firebaseBackupHandler = async () => {
+        setBkpMsg('Wait...');
+        setTimeout(async () => {
+            const collectiions = "author,da,district,doc,electric,gender,honda,hondahistory,land,log,mobile,place,post,price,project,staff,staffresign,ta,unit,unitsalary";
+            const sp = collectiions.split(',');
+            const obj = {};
+            for (let i = 0; i < sp.length; i++) {
+                obj[sp[i]] = await getDataFromFirebase(sp[i]);
+            }
 
+            const blob = new Blob([JSON.stringify(obj)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `aslamreact_firebase_database_backup_${new Date().toISOString()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setBkpMsg('');
+        }, 0)
+
+    }
 
 
 
@@ -112,6 +135,8 @@ const Layout = ({ children }) => {
                             }
                             <MenuWraper Title="Log">
                                 <button onClick={logOutHandler} className="px-1 mb-2 hover:border-l-2 border-indigo-400 underline-offset-4 decoration-4 decoration-indigo-300 hover:text-indigo-400">Log Out</button>
+                                <button onClick={firebaseBackupHandler} className="px-1 mb-2 hover:border-l-2 border-indigo-400 underline-offset-4 decoration-4 decoration-indigo-300 hover:text-indigo-400">Database Backup{bkpMsg}</button>
+
                             </MenuWraper>
                         </div>
                     </div>
