@@ -24,14 +24,16 @@ const Da = () => {
     
     
                 const joinCollection = das.map(da=>{
+                    const matchPost =  posts.find(post => post.id ===da.postId);
                     return {
                        ...da,
-                       post : posts.find(post => post.id ===da.postId) || {}
+                       post : matchPost,
+                       postName: matchPost.nmEn
                     }
                 });
     
-                const sortedData = joinCollection.sort((a, b) => sortArray(parseInt(b.tk), parseInt(a.tk)));
-                console.log(sortedData)
+                const sortedData = joinCollection.sort((a, b) => sortArray(a.postName.toUpperCase(), b.postName.toUpperCase()));
+                console.log(joinCollection)
                 setDas(sortedData);
                 setWaitMsg('');
             } catch (error) {

@@ -23,13 +23,16 @@ const Ta = () => {
                 ]);
 
                 const joinCollection = tas.map(ta => {
+                    const matchUnit = units.find(unit => unit.id === ta.unitId);
                     return {
                         ...ta,
-                        unit: units.find(unit => unit.id === ta.unitId) || {}
+                        unit: matchUnit,
+                        unitName: matchUnit.nmEn
                     }
                 });
 
-                const sortedData = joinCollection.sort((a, b) => sortArray(b.tk, a.tk));
+                const sortedData = joinCollection.sort((a, b) => sortArray(a.unitName.toUpperCase(), b.unitName.toUpperCase()));
+                // console.log(sortedData);
                 setTas(sortedData);
                 setWaitMsg('');;
             } catch (error) {

@@ -20,7 +20,7 @@ const Project = () => {
             setWaitMsg('Please Wait...');
             try {
                 const data = await getDataFromFirebase("project");
-                const sortedData = data.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
+                const sortedData = data.sort((a, b) => sortArray(a.name.toUpperCase(), b.name.toUpperCase()));
                 console.log(sortedData);
                 setProjects(sortedData);
                 setWaitMsg('');
@@ -49,7 +49,8 @@ const Project = () => {
                     <table className="w-full border border-gray-200">
                         <thead>
                             <tr className="w-full bg-gray-200">
-                                <th className="text-center border-b border-gray-200 px-4 py-1">Name</th>  
+                                <th className="text-center border-b border-gray-200 px-4 py-1">SL</th>  
+                                <th className="text-start border-b border-gray-200 px-4 py-1">Name</th>  
                                 <th className="w-[95px] border-b border-gray-200 px-4 py-2">
                                     <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1 font-normal">
                                         {/* <Print data={projects} /> */}
@@ -60,9 +61,10 @@ const Project = () => {
                         </thead>
                         <tbody>
                             {projects.length ? (
-                                projects.map(project => (
+                                projects.map((project,i) => (
                                     <tr className="border-b border-gray-200 hover:bg-gray-100" key={project.id}>  
-                                        <td className="text-center py-1 px-4">{project.name}</td>                                      
+                                        <td className="text-center py-1 px-4">{i+1}</td>                                      
+                                        <td className="text-start py-1 px-4">{project.name}</td>                                      
                                         <td className="text-center py-2">
                                             <div className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
                                                 <Edit message={messageHandler} id={project.id} data={project} />
