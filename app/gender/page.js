@@ -3,12 +3,8 @@ import React, { useState, useEffect } from "react";
 import Add from "@/components/gender/Add";
 import Edit from "@/components/gender/Edit";
 import Delete from "@/components/gender/Delete";
-import { addDataToFirebaseWithCustomId, getDataFromFirebase } from "@/lib/firebaseFunction";
-import { sortArray, customIdForFirebase } from "@/lib/utils";
-
-import { unitsalaries, staffs, posts, projects, places, units, gendersData, lands, electrics } from "@/lib/mongodata";
-import { db } from "@/lib/firebaseConfig";
-import { collection, addDoc, deleteDoc, doc, getDocs, setDoc, collectionGroup } from 'firebase/firestore';
+import { getDataFromFirebase } from "@/lib/firebaseFunction";
+import { sortArray } from "@/lib/utils";
 
 
 
@@ -39,54 +35,6 @@ const Gender = () => {
   }
 
 
-  const testHandler = async () => {
-//console.log(unique)
-
-  }
-
-
-
-  const addHdle = () => {
-    /*
-         let x = [];
-         for (let i = 0; i < electrics.length; i++) {
-           x.push({ id: customIdForFirebase(), ...electrics[i]})
-         }
-         console.log(x);
-   */
-  }
-
-
-  const uploadHanderl = async () => {
-/*
-    let i = 0;
-
-    const myTimer = setInterval(async () => {
-      let id = unique[i];
-      let data = {
-        dt: dcs[i].dt,
-        unit: dcs[i].unit,
-        picurl: dcs[i].picurl,
-        cat: dcs[i].cat,
-        title: dcs[i].title,
-        createdAt: new Date().toISOString()
-      }
-
-      const msg = await addDataToFirebaseWithCustomId('doc', id, data);
-      console.log(msg)
-      console.log(i, id);
-
-      i = i + 1;
-      if (i >= dcs.length) {
-        clearInterval(myTimer);
-        console.log("End");
-      }
-    }, 1000)
-
-*/
-  }
-
-
 
   return (
     <>
@@ -95,9 +43,6 @@ const Gender = () => {
         <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
         <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
       </div>
-      <button onClick={testHandler}>Test Click</button><br /><br />
-      <button onClick={addHdle}>Add Id</button><br /><br />
-      <button onClick={uploadHanderl}>Upload</button>
       <div className="px-4 lg:px-6">
         <div className="p-4 overflow-auto">
           <table className="w-full border border-gray-200">

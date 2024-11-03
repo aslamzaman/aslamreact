@@ -32,20 +32,10 @@ const MenuItem = ({ Href, Title, Menu }) => {
 
 const Layout = ({ children }) => {
     const [menu, setMenu] = useState(false);
-    const [useSize, setUseSize] = useState("0");
     const [bkpMsg, setBkpMsg] = useState("");
 
     const router = useRouter();
 
-    const getLocalStorageSize = () => {
-        let totalSize = 0;
-        const keys = Object.keys(localStorage);
-        for (let i = 0; i < keys.length; i++) {
-            let key = keys[i];
-            totalSize += localStorage[key].length;
-        }
-        return totalSize / (1024 * 1024); // Returns size in characters (MB)
-    }
 
 
     useEffect(() => {
@@ -53,9 +43,6 @@ const Layout = ({ children }) => {
         if (!user) {
             router.push('/');
         }
-
-        setUseSize(getLocalStorageSize());
-
     }, [router]);
 
 
@@ -106,7 +93,6 @@ const Layout = ({ children }) => {
                 <div className="text-lg font-bold">
                     {menu ? (<h1>Menu</h1>) : (<Link href="/dashboard">ASLAM</Link>)}
                 </div>
-                <p className='font-[xs] text-gray-400'>{parseFloat(useSize).toFixed(3)} MB</p>
                 <button onClick={() => menu ? setMenu(false) : setMenu(true)}>
                     {menu ? (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-8 h-8">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

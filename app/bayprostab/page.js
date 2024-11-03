@@ -18,7 +18,7 @@ import { BayprostabPreparation } from '@/lib/BayprostabPreparation';
 const dtAdd15Days = (d1) => {
   const dt1 = new Date(d1);
   const dt2 = dt1.getTime() + (15 * 24 * 60 * 60 * 1000);
-  return formatedDateDot(new Date(dt2), true);
+  return new Date(dt2);
 }
 
 
