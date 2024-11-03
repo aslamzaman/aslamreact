@@ -1,12 +1,12 @@
 import { titleCamelCase } from "@/lib/utils";
-export const Delete = (tbl, datas, isSession) => {
+export const Delete = (tbl, datas, isLocalStorage) => {
 
     const replaceQutation = datas.replaceAll('`', '');
     const splitData = replaceQutation.split(",");
     const data = splitData.map(s => s.trim());
 
 
-    const storageType = isSession?'sessionStorageDeleteItem':'localStorageDeleteItem';
+    const storageType = isLocalStorage?'localStorageDeleteItem':'deleteDataFromIndexDB';
 
 
     const str = `import React, { useState, id, data } from "react";
@@ -34,9 +34,9 @@ const Delete = ({ message, id, data }) => {
     }
 
 
-    const deleteYesClick = async () => {
+    const deleteYesClick =  ${isLocalStorage?'':'async'}  () => {
         try {
-            const msg = ${storageType}('${tbl}', id);
+            const msg = ${isLocalStorage?'':'await'} ${storageType}('${tbl}', id);
             message(msg);
         } catch (error) {
             console.log(error);

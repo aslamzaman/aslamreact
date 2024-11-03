@@ -1,5 +1,5 @@
 import { titleCamelCase } from "@/lib/utils";
-export const Add = (tbl, datas, isSession) => {
+export const Add = (tbl, datas, isLocalStorage) => {
 
     const replaceQutation = datas.replaceAll('`', '');
     const splitData = replaceQutation.split(",");
@@ -28,7 +28,7 @@ export const Add = (tbl, datas, isSession) => {
     }
 
 
-    const storageType = isSession?'sessionStorageAddItem':'localStorageAddItem';
+    const storageType = isLocalStorage?'localStorageAddItem':'addDataToIndexDB';
 
     const str = `import React, { useState } from "react";
 import { BtnSubmit, TextEn } from "@/components/Form";
@@ -63,11 +63,11 @@ ${objectText}
     }
 
 
-    const saveHandler = (e) => {
+    const saveHandler = ${isLocalStorage?'':'async'} (e) => {
         e.preventDefault();
         try {
             const newObject = createObject();
-            const msg = ${storageType}('${tbl}', newObject);
+            const msg = ${isLocalStorage?'':'await'} ${storageType}('${tbl}', newObject);
             message(msg);
         } catch (error) {
             console.error("Error saving ${tbl} data:", error);

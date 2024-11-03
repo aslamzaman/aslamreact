@@ -1,5 +1,5 @@
 import { titleCamelCase, titleCase } from "@/lib/utils";
-export const Page = (tbl, datas, isSession) => {
+export const Page = (tbl, datas, isLocalStorage) => {
 
     const replaceQutation = datas.replaceAll('`', '');
     const splitData = replaceQutation.split(",");
@@ -16,7 +16,7 @@ export const Page = (tbl, datas, isSession) => {
         td += `                                                <td className="text-center py-2 px-4">{${tbl}.${data[i]}}</td>${i===data.length-1?'':'\n'}`;
     }
 
-const storageType = isSession?'sessionStorageGetItem':'localStorageGetItem';
+const storageType = isLocalStorage?'localStorageGetItem':'getDataFromIndexDB';
 
 const str = `"use client";
 import React, { useState, useEffect } from "react";
@@ -33,10 +33,10 @@ const ${titleCamelCase(tbl)} = () => {
 
 
     useEffect(() => {
-        const load = () => {
+        const load = ${isLocalStorage?'':'async'} () => {
             setWaitMsg('Please Wait...');
             try {
-                const data = ${storageType}("${tbl}");
+                const data = ${isLocalStorage?'':'await'} ${storageType}("${tbl}");
                 const result = data.sort((a, b) => parseInt(b.id) > parseInt(a.id) ? 1 : -1);
                 set${titleCamelCase(tbl)}s(result);
                 setWaitMsg('');

@@ -1,5 +1,5 @@
 import { titleCamelCase } from "@/lib/utils";
-export const Edit = (tbl, datas, isSession) => {
+export const Edit = (tbl, datas, isLocalStorage) => {
 
     const replaceQutation = datas.replaceAll('`', '');
     const splitData = replaceQutation.split(",");
@@ -36,7 +36,7 @@ for (let i = 1; i < data.length; i++) {
 }
 
 
-const storageType = isSession?'sessionStorageUpdateItem':'localStorageUpdateItem';
+const storageType = isLocalStorage?'localStorageUpdateItem':'updateDataToIndexDB';
 
     const str = `import React, { useState } from "react";
 import { BtnSubmit, TextEn } from "@/components/Form";
@@ -72,11 +72,11 @@ ${objectText}
     }
 
 
-    const updateHandler = async (e) => {
+    const updateHandler = ${isLocalStorage?'':'async'} (e) => {
         e.preventDefault();
         try {
             const newObject = createObject();
-            const msg = ${storageType}('${tbl}', id, newObject);
+            const msg = ${isLocalStorage?'':'await'} ${storageType}('${tbl}', id, newObject);
             message(msg);
         } catch (error) {
             console.error("Error updating ${tbl} data:", error);

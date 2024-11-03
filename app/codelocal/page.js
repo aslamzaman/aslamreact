@@ -10,6 +10,7 @@ import { Edit } from "@/components/codelocal/Edit";
 import { Delete } from "@/components/codelocal/Delete";
 import { Upload } from "@/components/codelocal/Upload";
 import { Download } from "@/components/codelocal/Download";
+import { Database } from "@/components/codelocal/Database";
 
 
 
@@ -75,6 +76,8 @@ const CodeLocal = () => {
         setTitleTxt(`components/${tbl}/Delete.js`);
     }
 
+
+
     const uploadCreateHandler = () => {
         local();
         setPageText(Upload(tbl, check));
@@ -85,6 +88,13 @@ const CodeLocal = () => {
         setPageText(Download(tbl, check));
         setTitleTxt(`components/${tbl}/Dowload.js`);
     }
+
+    const databaseHandler = () => {
+        local();
+        setPageText(Database(check));
+        setTitleTxt(`Database.js`);
+    }
+
 
 
     const copyPageHandler = () => {
@@ -99,7 +109,7 @@ const CodeLocal = () => {
             <h1 className="w-full text-center text-3xl text-gray-500 font-bold py-4">Local Storage Code</h1>
 
             <div className="px-4 flex justify-start space-x-2">
-                    <input onChange={e => setCheck(e.target.checked)} type="checkbox" checked={check} /> <span>SessionStorage</span>
+                    <input onChange={e => setCheck(e.target.checked)} type="checkbox" checked={check} /> <span>localStorage</span>
                 </div>
             <div className="w-full px-4 grid grid-cols-5 gap-4 mt-6">
                 <div>
@@ -118,6 +128,7 @@ const CodeLocal = () => {
                 <BtnEn Title="Delete" Click={deleteCreateHandler} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-sm" />
                 <BtnEn Title="Upload" Click={uploadCreateHandler} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-sm" />
                 <BtnEn Title="Download" Click={downloadCreateHandler} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-sm" />
+                <BtnEn Title="Database" Click={databaseHandler} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-sm" />
             </div>
 
             <div className="w-full p-4 overflow-auto">

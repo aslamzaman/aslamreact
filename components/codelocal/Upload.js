@@ -1,9 +1,9 @@
 
-export const Upload = (tbl, isSession) => {
+export const Upload = (tbl, isLocalStorage) => {
  
   const x = "`fixed inset-0 py-16 bg-gray-900 ${show ? 'block' : 'hidden'}  bg-opacity-60 overflow-auto`";
 
-  const storageType = isSession?'sessionStorageSetItem':'localStorageSetItem';
+  const storageType = isLocalStorage?'localStorageSetItem':'setDataToIndexDB';
 
   const str = `import React, { useState } from "react";
 import { BtnEn } from "../Form";
@@ -26,9 +26,9 @@ const Upload = ({ message }) => {
 	const uploadHandler = (e) => {
 		if (file) {
 			const reader = new FileReader();
-			reader.onload = (() => {
+			reader.onload = (${isLocalStorage?'':'async'} () => {
 				let jsonData = JSON.parse(reader.result);
-				 ${storageType}("${tbl}", jsonData);
+				${isLocalStorage?'':'await'} ${storageType}("${tbl}", jsonData);
 				message("Data loaded successfully");
 				setShow(false);
 			})
