@@ -92,7 +92,7 @@ const CodeLocal = () => {
     const databaseHandler = () => {
         local();
         setPageText(Database(check));
-        setTitleTxt(`Database.js`);
+        setTitleTxt("lib/Database.js");
     }
 
 

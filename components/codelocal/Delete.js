@@ -11,7 +11,7 @@ export const Delete = (tbl, datas, isLocalStorage) => {
 
     const str = `import React, { useState, id, data } from "react";
 import { BtnEn } from "@/components/Form";
-import { ${storageType} } from "@/lib/utils";
+import { ${storageType} } from "@/lib/Database";
 
 const Delete = ({ message, id, data }) => {
     const [${data[1]}, set${titleCamelCase(data[1])}] = useState("");

@@ -32,7 +32,7 @@ export const Add = (tbl, datas, isLocalStorage) => {
 
     const str = `import React, { useState } from "react";
 import { BtnSubmit, TextEn } from "@/components/Form";
-import { ${storageType} } from "@/lib/utils";
+import { ${storageType} } from "@/lib/Database";
 
 const Add = ({ message }) => {
 ${use_state}   

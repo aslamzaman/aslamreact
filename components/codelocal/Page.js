@@ -23,7 +23,9 @@ import React, { useState, useEffect } from "react";
 import Add from "@/components/${tbl}/Add";
 import Edit from "@/components/${tbl}/Edit";
 import Delete from "@/components/${tbl}/Delete";
-import { ${storageType} } from "@/lib/utils";
+import Download from "@/components/test/Dowload";
+import Upload from "@/components/test/Upload";
+import { ${storageType} } from "@/lib/Database";
 
 
 const ${titleCamelCase(tbl)} = () => {
@@ -64,12 +66,18 @@ const ${titleCamelCase(tbl)} = () => {
 
             <div className="w-full lg:w-3/4 mx-auto border-2 p-4 shadow-md rounded-md">
                 <div className="overflow-auto">
+                    <div className="w-full flex justify-end">
+                        <div className="w-auto flex items-center">
+                            <Download message={messageHandler} />
+                            <Upload message={messageHandler} />
+                        </div>
+                    </div>
                     <table className="w-full border border-gray-200">
                         <thead>
                             <tr className="w-full bg-gray-200">
 ${thead}
                                 <th className="w-[100px] font-normal">
-                                    <div className="w-full flex justify-end mt-1 pr-[3px] lg:pr-2 font-normal">
+                                    <div className="w-full flex justify-end items-center pr-2.5 font-normal">
                                         <Add message={messageHandler} />
                                     </div>
                                 </th>

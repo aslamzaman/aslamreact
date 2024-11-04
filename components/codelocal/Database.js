@@ -205,7 +205,7 @@ export const deleteDataFromIndexDB = async (key, id) => {
  * @param {string} key - Storage key
  * @returns {Promise<string>} - Success or error message
  */
-export const deleteDataFromIndexDB = async (key) => {
+export const deleteKeyFromIndexDB = async (key) => {
     try {
         await del(key);
         return \`Data deleted successfully.\`;

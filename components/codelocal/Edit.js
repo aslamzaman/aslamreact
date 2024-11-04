@@ -40,7 +40,7 @@ const storageType = isLocalStorage?'localStorageUpdateItem':'updateDataToIndexDB
 
     const str = `import React, { useState } from "react";
 import { BtnSubmit, TextEn } from "@/components/Form";
-import { ${storageType} } from "@/lib/utils";
+import { ${storageType} } from "@/lib/Database";
 
 const Edit = ({ message, id, data  }) => {
 ${use_state}   
