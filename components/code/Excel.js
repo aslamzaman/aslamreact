@@ -73,6 +73,14 @@ const downloadHandler = () => {
 
 
 
+
+//----------------------------------------------------------
+//----------------------------------------------------------
+//----------------------------------------------------------
+
+
+
+
 // Create and Download with server API as an excel file with styling convert into JSON file ---------
 // Api route.js
 import { NextResponse } from 'next/server';
@@ -108,9 +116,9 @@ export const POST = async (Request) => {
         sheet.column("C").width(18);
 
         //Style
-        sheet.cell("C1").formula("SUM(C1:C3)").style({ fill: 'bfdbf5', fontSize: 10, border: true, bold: true, horizontalAlignment: 'center', verticalAlignment: 'center' });
+        sheet.cell("C1").formula("SUM(C1:C3)").style({numberFormat: '@', fill: 'bfdbf5', fontSize: 10, border: true, bold: true, horizontalAlignment: 'center', verticalAlignment: 'center' });
         // or
-        sheet.cell('D1').value("Attendance sheet").style({ fill: '5b92e5', horizontalAlignment: 'center', verticalAlignment: 'center' });
+        sheet.cell('D1').value("Attendance sheet").style({numberFormat: '@', fill: '5b92e5', horizontalAlignment: 'center', verticalAlignment: 'center' });
 
         data.forEach((item, i) => {
             sheet.cell("A1").value("Md. Jamal");
