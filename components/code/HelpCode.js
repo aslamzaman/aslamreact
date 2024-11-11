@@ -428,11 +428,10 @@ const fileChangeHandlerImage = async (e) => {
   }
 
 ***------react-to-print -------- 
-
 import { useReactToPrint } from "react-to-print";
 const contentRef = useRef(null);
 
-const pageStyle = `@media print {
+const pageStyle = \`@media print {
         @page {
             size: A4 portrait;
             margin: 1in;
@@ -441,7 +440,7 @@ const pageStyle = `@media print {
             font-size: 16px;
             font-family: Arial, Helvetica, sans-serif;
         }
-    }`;
+    }\`;
 
 const reactToPrintFn = useReactToPrint({ 
         contentRef, pageStyle,
