@@ -428,29 +428,40 @@ const fileChangeHandlerImage = async (e) => {
   }
 
 ***------react-to-print -------- 
+"react-to-print": "^2.15.1",
 import { useReactToPrint } from "react-to-print";
-const contentRef = useRef(null);
+
 
 const pageStyle = \`@media print {
         @page {
             size: A4 portrait;
             margin: 1in;
         }
+        footer{
+            page-break-after: always;
+        }    
+        #noPrint{
+            display:none;
+        }  
         #page{
             font-size: 16px;
             font-family: Arial, Helvetica, sans-serif;
         }
     }\`;
 
-const reactToPrintFn = useReactToPrint({ 
-        contentRef, pageStyle,
-        documentTitle:"Sale report from react print",
-       
-    });
+const contentRef = useRef(null);
+const reactToPrintFn = useReactToPrint({
+    content: () => contentRef.current,
+    pageStyle,
+    documentTitle: "Honda report from react print",
+});
 
-return <div id="page" ref={contentRef}>Print Content</div>
-
-
+return(
+    <>
+        <button id="noPrint" onClick={reactToPrintFn}>Print</button>
+        <div id="page" ref={contentRef}>Print Content</div>
+    </>
+)
       `;
 
   return str;
