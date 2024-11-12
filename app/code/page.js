@@ -12,6 +12,12 @@ import Help_code from "@/components/code/HelpCode";
 import TwoPart from "@/components/code/TowPart";
 import OnePage from "@/components/code/OnePage";
 import Excle from "@/components/code/Excel";
+import FirebaseConfig from "@/components/code/FirebaseConfig";
+import FirebaseFunction from "@/components/code/FirebaseFunction";
+import MongooseDB from "@/components/code/MongooseDB";
+import MongooseModels from "@/components/code/MongooseModels";
+import MongooseRoute from "@/components/code/MongooseRoute";
+import MongooseRouteDynamic from "@/components/code/MongooseRouteDynamic";
 
 
 
@@ -100,7 +106,38 @@ const Code = () => {
         setResult(OnePage(tbl, fld));
     }
 
+    const FirebaseConfigHandle = () => {
+        setTitleText(`lib/firebaseConfig.js`);
+        setResult(FirebaseConfig());
+    }
+    const FirebaseFunctionsHandle = () => {
+        setTitleText(`lib/firebaseFunction.js`);
+        setResult(FirebaseFunction());
+    }
+    
 
+    const MongooseHandle = () => {
+        setTitleText(`lib/DB.js`);
+        setResult(MongooseDB());
+    }
+
+    const MongooseModelHandle = () => {
+        setTitleText(`lib/Models.js`);
+        setResult(MongooseModels());
+    }
+
+    const MongooseRouteHandle = () => {
+        setTitleText(`api/post/route.js`);
+        setResult(MongooseRoute());
+    }
+
+    const MongooseRouteDynamicHandle = () => {
+        setTitleText(`api/post/[id]/route.js`);
+        setResult(MongooseRouteDynamic());
+    }
+
+
+    
     const DropdownById = () => {
         const tblName = prompt("Collection Name, Referance Id(say: post, postId)");
         if (tblName === null || tblName === '') return false;
@@ -251,6 +288,12 @@ const Code = () => {
                         <BtnEn Title="Joint Table" Click={JoinCollections} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Excel" Click={ExcelGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Help" Click={HelpPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="FirebaseConfig" Click={FirebaseConfigHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="FirebaseFunctions" Click={FirebaseFunctionsHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="MongooseDB" Click={MongooseHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="MongooseModel" Click={MongooseModelHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="MongooseRoute" Click={MongooseRouteHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="MongooseRouteDy" Click={MongooseRouteDynamicHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                     </div>
                 </div>
                 <div className="col-span-2 py-4 max-h-[800px] overflow-auto">
