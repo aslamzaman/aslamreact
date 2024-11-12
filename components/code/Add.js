@@ -2,12 +2,7 @@ import { addPageStateVariables, addPageResetVariables, addPageCreateObject, addP
 
 const Add = (tbl, datas) => {
 
-    const titleCase = (str) => {
-        return str
-            .split(' ')
-            .map((word) => word[0].toUpperCase() + word.slice(1).toLowerCase())
-            .join(' ');
-    }
+
 
     const replaceQutation = datas.replaceAll('`', '');
     const splitData = replaceQutation.split(",");

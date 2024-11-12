@@ -1,20 +1,27 @@
+import { titleCamelCase } from "@/lib/utils";
 
-const MongooseRoute = () => {
 
+const MongooseRoute = (tbl, datas) => {
 
-    const str = `import { NextResponse } from 'next/server';
+  const splitData = datas.split(",");
+  const data = splitData.map(s => s.trim());
+  const newData = data.map(item => item);
+  const dataToString = newData.slice(0,newData.length-1).join(', ');
+  console.log(dataToString);
+
+  const str = `    import { NextResponse } from 'next/server';
     import { Connect } from '@/lib/Db';
-    import { HondahistoryModel } from '@/lib/Models';
+    import { ${titleCamelCase(tbl)}Model } from '@/lib/Models';
     
     
     export const GET = async () => {
       try {
         await Connect();
-        const hondahistorys = await HondahistoryModel.find({isDeleted: false}).sort({_id:'desc'});
-        return NextResponse.json( hondahistorys );
+        const ${tbl}s = await ${titleCamelCase(tbl)}Model.find({isDeleted: false}).sort({_id:'desc'});
+        return NextResponse.json( ${tbl}s );
       } catch (error) {
         console.error('GET Error:', error);
-        return NextResponse.json({ message: 'Failed to fetch hondahistorys' }, { status: 500 });
+        return NextResponse.json({ message: 'Failed to fetch ${tbl}s' }, { status: 500 });
       }
     }
     
@@ -23,9 +30,9 @@ const MongooseRoute = () => {
     export const POST = async (Request) => {
       try {
         await Connect();
-        const { dt, name, mobile } = await Request.json();
-        const hondahistorys = await HondahistoryModel.create({ dt, name, mobile });
-        return NextResponse.json(hondahistorys);
+        const { ${dataToString} } = await Request.json();
+        const ${tbl}s = await ${titleCamelCase(tbl)}Model.create({ ${dataToString} });
+        return NextResponse.json(${tbl}s);
       } catch (err) {
         console.error(err);
         return NextResponse.json({ message: "POST Error", err }, { status: 500 });
@@ -34,7 +41,7 @@ const MongooseRoute = () => {
   
 `;
 
-    return str;
+  return str;
 }
 
 export default MongooseRoute;

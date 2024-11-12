@@ -123,17 +123,17 @@ const Code = () => {
 
     const MongooseModelHandle = () => {
         setTitleText(`lib/Models.js`);
-        setResult(MongooseModels());
+        setResult(MongooseModels(tbl, fld));
     }
 
     const MongooseRouteHandle = () => {
         setTitleText(`api/post/route.js`);
-        setResult(MongooseRoute());
+        setResult(MongooseRoute(tbl, fld));
     }
 
     const MongooseRouteDynamicHandle = () => {
         setTitleText(`api/post/[id]/route.js`);
-        setResult(MongooseRouteDynamic());
+        setResult(MongooseRouteDynamic(tbl, fld));
     }
 
 
@@ -287,13 +287,13 @@ const Code = () => {
                         <BtnEn Title="DropdownById" Click={DropdownById} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Joint Table" Click={JoinCollections} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Excel" Click={ExcelGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Help" Click={HelpPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="FirebaseConfig" Click={FirebaseConfigHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="FirebaseFunctions" Click={FirebaseFunctionsHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="MongooseDB" Click={MongooseHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="MongooseModel" Click={MongooseModelHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="MongooseRoute" Click={MongooseRouteHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="MongooseRouteDy" Click={MongooseRouteDynamicHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="DynamicRoute" Click={MongooseRouteDynamicHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="Help" Click={HelpPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                     </div>
                 </div>
                 <div className="col-span-2 py-4 max-h-[800px] overflow-auto">

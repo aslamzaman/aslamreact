@@ -1,25 +1,33 @@
+import { titleCamelCase } from "@/lib/utils";
 
-const MongooseModels = () => {
+const MongooseModels = (tbl, datas) => {
 
+
+    const splitData = datas.split(",");
+    const data = splitData.map(s => s.trim());
+
+    
+    let obj = "";
+    for(let i = 0; i < data.length-1; i++){
+        obj+= `            ${data[i]}: { type: String, required: true },\n`;
+    }
+    obj+= `            isDeleted: { type: Boolean, default: false }`;
+  
 
     const str = `import mongoose, { Schema } from "mongoose";
 	    
-	import mongoose,{ Schema } from "mongoose";
 
-    //  projectId: { type: Schema.Types.ObjectId, ref: 'Project' },
-    const HondahistorySchema = new Schema(
+    //  ${tbl}Id: { type: Schema.Types.ObjectId, ref: '${titleCamelCase(tbl)}' },
+    const ${titleCamelCase(tbl)}Schema = new Schema(
         {
-            dt: { type: String, required: true },
-            name: { type: String, required: true },
-            mobile: { type: String, required: true },
-            isDeleted: { type: Boolean, default: false }      
+${obj}            
         },
         {
             timestamps: true
         }
     );
     
-    export const HondahistoryModel = mongoose.models.Hondahistory || mongoose.model("Hondahistory", HondahistorySchema);  
+    export const ${titleCamelCase(tbl)}Model = mongoose.models.${titleCamelCase(tbl)} || mongoose.model("${titleCamelCase(tbl)}", ${titleCamelCase(tbl)}Schema);  
     
   
 `;
