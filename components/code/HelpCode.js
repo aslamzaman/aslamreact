@@ -462,6 +462,32 @@ return(
         <div id="page" ref={contentRef}>Print Content</div>
     </>
 )
+
+*** Unique Id
+export const customIdForFirebase = () => {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let customId = '';
+    for (let i = 0; i < 20; i++) {
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        customId += chars[randomIndex];
+    }
+    return customId;
+}
+
+
+*** Excel Num Date to Real Date 
+export const excelDateToJSDate = (excelDate)=> {
+    const epochDate = new Date(1900, 0, 1);
+    const oneDay = 24 * 60 * 60 * 1000; // milliseconds in a day
+    if (excelDate > 60) {
+      excelDate--;
+    }
+    const milliseconds = (excelDate - 1) * oneDay;
+    return new Date(epochDate.getTime() + milliseconds);
+  }
+
+
+
       `;
 
   return str;
