@@ -7,6 +7,7 @@ import Delete from "@/components/land/Delete";
 import { getDataFromFirebase } from "@/lib/firebaseFunction";
 import { formatedDateDot, sortArray } from "@/lib/utils";
 import Detail from "@/components/land/Detail";
+import Print from "@/components/land/Print";
 
 
 
@@ -17,6 +18,8 @@ const Land = () => {
     const [msg, setMsg] = useState("Data ready");
     const [total, setTotal] = useState(0);
     const [gt, setGt] = useState(0);
+    
+
 
 
     useEffect(() => {
@@ -29,6 +32,7 @@ const Land = () => {
                 const rtcData = data.filter(rtc => rtc.school === 'RTC');
                 const sortedData = rtcData.sort((a, b) => sortArray(a.unit, b.unit));
                 console.log(sortedData);
+
                 setLands(sortedData);
                 setWaitMsg('');
                 //--------------------------------
@@ -60,6 +64,7 @@ const Land = () => {
             </div>
             <div className="px-4 lg:px-6">
                 <div className="p-4 overflow-auto">
+                 <Print data={allLands} />
                     <table className="w-full border border-gray-200">
                         <thead>
                             <tr className="w-full bg-gray-200">
