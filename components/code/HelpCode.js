@@ -89,39 +89,46 @@ undefined, null, NaN, 0, "", false
 
 
   *** PDF Multiple Page:-
-const printMultiplePageHandler = async () => {
-    const doc = new jsPDF({
-        orientation: "p",
-        unit: "mm",
-        format: "a4",
-        putOnlyUsedFonts: true,
-        floatPrecision: 16
-    });
+const multiPageForjsPdf = () => {
+  const doc = new jsPDF({
+    orientation: "p",
+    unit: "mm",
+    format: "a4",
+    putOnlyUsedFonts: true,
+    floatPrecision: 16
+  });
 
-    const margin = 30;
-    const linePerPage = 31;
-    let y = margin;
+  // Margins and lines per page
+  const marginFirstPage = 60;
+  const linesPerPageFirst = 25;
 
-    doc.setFontSize(12);
+  const marginOtherPages = 30;
+  const linesPerPageOther = 31;
 
-    for (let i = 0; i < staffs.length; i++) {
-        doc.text(\`\${i + 1}. \${staffs[i].nmEn}\`, 30, y, 'left');
-        y += 8;
+  let y = marginFirstPage;
+  let linesCount = 0;
 
-        if ((i + 1) % linePerPage === 0) {
-            if (i !== staffs.length - 1) {
-                doc.addPage();
-                y = margin;
-            }
-        }
+  for (let i = 0; i < sales.length; i++) {
+    doc.text(\`\${i + 1}. \${sales[i].customer}\`, 40, y, "left");
+    y += 8;
+    linesCount++;
+
+    // Check if the page is filled up
+    if (linesCount === linesPerPageFirst && doc.internal.getNumberOfPages() === 1) {
+      // Add a new page for the second page and subsequent pages
+      doc.addPage();
+      y = marginOtherPages;
+      linesCount = 0;
+    } else if (linesCount === linesPerPageOther) {
+      doc.addPage();
+      y = marginOtherPages;
+      linesCount = 0;
     }
-    const pageCount = doc.internal.getNumberOfPages();
-    for (let i = 0; i < pageCount; i++) {
-        doc.setPage(i + 1);
-        doc.text(\`Page: \${i + 1}/\${pageCount}\`, 199, 288, null, null, 'right');
-    }
-    doc.save("staff.pdf");
-}
+  }
+
+  doc.save("sales.pdf");
+};
+
 
 
 
