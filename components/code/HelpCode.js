@@ -67,16 +67,23 @@ const returnCode = "`+${image.name}`";
  const result = staffs.find(s => parseInt(s.place_id) === 1699884047193); // return object
 
 
-*** Sort-1:-
-const SortResult = datas.sort((a, b) => {
-    if (parseInt(a.id) < parseInt(b.id)) {
-      return -1;
+*** Sort:
+/**
+ * Sort array function
+ * @param {*} a 
+ * @param {*} b 
+ * @returns 
+ */
+export const sortArray = (a, b) => {
+    if (a < b) {
+        return -1;
+    } else if (a > b) {
+        return 1;
     } else {
-      return 1;
+        return 0;
     }
-  });
-*** Sort-2:
-const sortPost = responsePost.sort((a, b) => (a.nmEn).toUpperCase() < (b.nmEn).toUpperCase() ? -1 : 1);
+}
+
 
 
 *** Unique Array:-
@@ -85,53 +92,6 @@ const uniqueArray = [...new Set(arrayData)];
 
 *** Six falsey values:-
 undefined, null, NaN, 0, "", false
-
-
-
-  *** PDF Multiple Page:-
-const multiPageForjsPdf = () => {
-  const doc = new jsPDF({
-    orientation: "p",
-    unit: "mm",
-    format: "a4",
-    putOnlyUsedFonts: true,
-    floatPrecision: 16
-  });
-
-  // Margins and lines per page
-  const marginFirstPage = 60;
-  const linesPerPageFirst = 25;
-
-  const marginOtherPages = 30;
-  const linesPerPageOther = 31;
-
-  let y = marginFirstPage;
-  let linesCount = 0;
-
-  for (let i = 0; i < sales.length; i++) {
-    doc.text(\`\${i + 1}. \${sales[i].customer}\`, 40, y, "left");
-    y += 8;
-    linesCount++;
-
-    // Check if the page is filled up
-    if (linesCount === linesPerPageFirst && doc.internal.getNumberOfPages() === 1) {
-      // Add a new page for the second page and subsequent pages
-      doc.addPage();
-      y = marginOtherPages;
-      linesCount = 0;
-    } else if (linesCount === linesPerPageOther) {
-      doc.addPage();
-      y = marginOtherPages;
-      linesCount = 0;
-    }
-  }
-
-  doc.save("sales.pdf");
-};
-
-
-
-
 
 
 
@@ -236,33 +196,6 @@ export const myAge = (dt) => {
     let d3 = d2 - d1;
 
     return Math.round(d3 / (1000 * 31556952));
-}
-
-
-
-*** Data array sort (reduce)
-export const sortVillage = (unit) => {
-    const searchVillage = villageDropdown.filter(village => village.unit === unit)
-    const uniqueNames = new Set();
-    const result = searchVillage.filter(item => {
-        const isDuplicate = uniqueNames.has(item.name);
-        uniqueNames.add(item.name);
-        return !isDuplicate;
-    });
-    return result;
-}
-
-*** Is mobile number correct (From string textbox)
-export const isMobileCorrect = (num) => {
-    const convertToString = num.toString();
-    const firstLetter = convertToString.substring(0,1);
-    const isNumChecking = parseInt(num).toString();
-    if (firstLetter != "0" || isNumChecking === NaN || isNumChecking.length < 10) {
-        console.log(firstLetter, isNumChecking,isNumChecking.length );
-        return false;
-    } else {
-        return true;
-    }
 }
 
 
