@@ -18,6 +18,7 @@ import MongooseDB from "@/components/code/MongooseDB";
 import MongooseModels from "@/components/code/MongooseModels";
 import MongooseRoute from "@/components/code/MongooseRoute";
 import MongooseRouteDynamic from "@/components/code/MongooseRouteDynamic";
+import { jsPDFFunction } from "@/components/code/JsPdfFunction";
 
 
 
@@ -256,7 +257,10 @@ const Code = () => {
         navigator.clipboard.writeText(result);
     }
 
-
+    const helpJsPdf = () => {
+        setTitleText(`lib.js & page.js`);
+        setResult(jsPDFFunction());
+    }
 
 
     return (
@@ -294,6 +298,7 @@ const Code = () => {
                         <BtnEn Title="MongooseRoute" Click={MongooseRouteHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="DynamicRoute" Click={MongooseRouteDynamicHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Help" Click={HelpPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="Help-jsPDF" Click={helpJsPdf} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                     </div>
                 </div>
                 <div className="col-span-2 py-4 max-h-[800px] overflow-auto">
