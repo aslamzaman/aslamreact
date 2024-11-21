@@ -368,7 +368,7 @@ const fileChangeHandlerImage = async (e) => {
   }
 
 ***------react-to-print -------- 
-"react-to-print": "^3.0.2",
+npm install react-to-print@3.0.2
 import { useReactToPrint } from "react-to-print";
 
 
