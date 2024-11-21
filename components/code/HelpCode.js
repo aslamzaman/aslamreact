@@ -368,7 +368,7 @@ const fileChangeHandlerImage = async (e) => {
   }
 
 ***------react-to-print -------- 
-"react-to-print": "^2.15.1",
+"react-to-print": "^3.0.2",
 import { useReactToPrint } from "react-to-print";
 
 
@@ -389,17 +389,29 @@ const pageStyle = \`@media print {
         }
     }\`;
 
-const contentRef = useRef(null);
-const reactToPrintFn = useReactToPrint({
-    content: () => contentRef.current,
-    pageStyle,
-    documentTitle: "Honda report from react print",
-});
+ const componentRef = useRef(null);
+ const handleAfterPrint = useCallback(() => {
+        console.log("`onAfterPrint` called");
+    }, []);
+
+    const handleBeforePrint = useCallback(() => {
+        console.log("`onBeforePrint` called");
+        return Promise.resolve();
+    }, []);
+
+    const printHandler = useReactToPrint({
+        contentRef: componentRef,
+        documentTitle: "AwesomeFileName",
+        onAfterPrint: handleAfterPrint,
+        onBeforePrint: handleBeforePrint,
+        pageStyle: pageStyle,
+        documentTitle: "Sample report from react print",
+    });
 
 return(
     <>
-        <button id="noPrint" onClick={reactToPrintFn}>Print</button>
-        <div id="page" ref={contentRef}>Print Content</div>
+        <button id="noPrint" onClick={printHandler}>Print</button>
+        <div id="page" ref={componentRef}>Print Content</div>
     </>
 )
 
