@@ -2,7 +2,8 @@
 const FirebaseFunction = () => {
 
 
-    const str = `import { db } from "./firebaseConfig";
+    const str = `npm install idb-keyval@6.2.1
+import { db } from "./firebaseConfig";
 import { collection, addDoc, deleteDoc, doc, getDocs, setDoc } from 'firebase/firestore';
 import { get, set } from "idb-keyval";
 
