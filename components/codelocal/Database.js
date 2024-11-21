@@ -113,7 +113,8 @@ export const localStorageRemoveItem = (key) => {
     }
 };
 `;
-    const strIndexDB = `import { get, set, del } from "idb-keyval";
+    const strIndexDB = `// npm install idb-keyval@6.2.1
+import { get, set, del } from "idb-keyval";
 
 
 
