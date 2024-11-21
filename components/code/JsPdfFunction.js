@@ -69,7 +69,7 @@ export const jsPDFPrintOtherPage = ({ doc }, data, dataFormat, margin, linesPerP
 };
 
 
-
+// npm install jspdf@2.5.1
 // import { jsPDFPrintFirstPage, jsPDFPrintOtherPage } from "@/lib/JspdfPrintPage";
 
 
