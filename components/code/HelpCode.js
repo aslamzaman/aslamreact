@@ -391,11 +391,11 @@ const pageStyle = \`@media print {
 
  const componentRef = useRef(null);
  const handleAfterPrint = useCallback(() => {
-        console.log("`onAfterPrint` called");
+        console.log("\`onAfterPrint\` called");
     }, []);
 
     const handleBeforePrint = useCallback(() => {
-        console.log("`onBeforePrint` called");
+        console.log("\`onBeforePrint\` called");
         return Promise.resolve();
     }, []);
 
