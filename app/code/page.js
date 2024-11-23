@@ -18,6 +18,7 @@ import MongooseDB from "@/components/code/MongooseDB";
 import MongooseModels from "@/components/code/MongooseModels";
 import MongooseRoute from "@/components/code/MongooseRoute";
 import MongooseRouteDynamic from "@/components/code/MongooseRouteDynamic";
+import SampleReactToPrint from "@/components/code/SampleReactToPrint";
 import { jsPDFFunction } from "@/components/code/JsPdfFunction";
 
 
@@ -137,7 +138,10 @@ const Code = () => {
         setResult(MongooseRouteDynamic(tbl, fld));
     }
 
-
+ const SampleReactToPrintHandle = () => {
+         setTitleText(`components/${tbl}/ReactToPrint.js`);
+        setResult(SampleReactToPrint());
+    }
     
     const DropdownById = () => {
         const tblName = prompt("Collection Name, Referance Id(say: post, postId)");
@@ -299,6 +303,7 @@ const Code = () => {
                         <BtnEn Title="DynamicRoute" Click={MongooseRouteDynamicHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Help" Click={HelpPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Help-jsPDF" Click={helpJsPdf} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="SampleReactToPrint" Click={SampleReactToPrintHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                     </div>
                 </div>
                 <div className="col-span-2 py-4 max-h-[800px] overflow-auto">
