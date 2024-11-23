@@ -1,7 +1,7 @@
 export const SampleReactToPrint = ()=>{
 let str =`
 // npm install react-to-print@3.0.2
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { useReactToPrint } from "react-to-print";
 import { formatedDateDot } from "@/lib/utils";
 import { Tiro_Bangla } from 'next/font/google';
@@ -39,13 +39,15 @@ const PrintPage = ({ data }) => {
         }\`;
 
 
-    const printHandler = useReactToPrint({
+    const printFn = useReactToPrint({
         contentRef: componentRef,
         pageStyle: pageStyle,
         documentTitle: \`\${new Date().toISOString()}_Invoice\`,
     });
 
-
+    const printHandler = useCallback(() => {
+        printFn();
+    }, [printFn]);
 
     return (
         <>
