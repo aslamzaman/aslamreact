@@ -139,7 +139,7 @@ const Code = () => {
     }
 
  const SampleReactToPrintHandle = () => {
-         setTitleText(`components/${tbl}/ReactToPrint.js`);
+         setTitleText(`components/${tbl}/PrintPage.js`);
         setResult(SampleReactToPrint());
     }
     
