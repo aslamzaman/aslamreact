@@ -149,5 +149,5 @@ const PrintPage = ({ data }) => {
 export default PrintPage;
 `
 
-return str'
+return str;
 }
