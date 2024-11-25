@@ -214,6 +214,13 @@ const myTimer = setInterval(() => {
 }, 100)
 
 
+*** evaluate
+import { evaluate } from 'mathjs';
+//npm install mathjs@14.0.0
+const str = evaluate('12 + (2 * 7)');
+console.log(str); // 26
+
+
 
 *** Imagees
 const getImageWidthHeight = (url) => {
