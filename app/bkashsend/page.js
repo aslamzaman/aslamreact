@@ -18,7 +18,7 @@ const Bkash = () => {
         e.preventDefault();
         const bill = parseFloat(eval(tk));
         const bCharge = bill * (charge / 1000);
-        const sendCharge = 5;
+        const sendCharge = 10;
 
         const total = bill + bCharge + sendCharge; // 1023.5
         const restTaka = total % 5;
