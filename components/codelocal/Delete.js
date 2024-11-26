@@ -9,7 +9,7 @@ export const Delete = (tbl, datas, isLocalStorage) => {
     const storageType = isLocalStorage?'localStorageDeleteItem':'deleteDataFromIndexDB';
 
 
-    const str = `import React, { useState, id, data } from "react";
+    const str = `import React, { useState } from "react";
 import { BtnEn } from "@/components/Form";
 import { ${storageType} } from "@/lib/Database";
 
