@@ -3,7 +3,7 @@ let str =`
 // npm install react-to-print@3.0.2
 import React, { useState, useRef, useCallback } from "react";
 import { useReactToPrint } from "react-to-print";
-import { formatedDateDot } from "@/lib/utils";
+import { formatedDateDot, numberWithComma } from "@/lib/utils";
 import { Tiro_Bangla } from 'next/font/google';
 import { BtnEn } from "../Form";
 const tiro = Tiro_Bangla({ subsets: ['bengali'], weight: "400" });
@@ -13,8 +13,26 @@ const PrintPage = ({ data }) => {
     const [show, setShow] = useState(false);
     const componentRef = useRef(null);
     
-    const showPrintForm = async () => {
+    const showPrintForm = () => {
         setShow(true);
+        console.log(data);
+
+        // sales, dt1, dt2
+        const salesData = data.sales;
+        const salesD1 = new Date(data.dt1);
+        const salesD2 = new Date(data.dt2);
+
+        const searchSale = salesData.filter(sale => {
+            const dataDate = new Date(sale.dt);
+            return dataDate >= salesD1 && dataDate <= salesD2;
+        })
+
+        const total = searchSale.reduce((t, c) => t + parseFloat(c.total), 0);
+
+        setSales(searchSale);
+        setGtTaka(total);
+        setD1(salesD1);
+        setD2(salesD2);
     }
 
     const closePrintForm = () => {
@@ -42,7 +60,7 @@ const PrintPage = ({ data }) => {
     const printFn = useReactToPrint({
         contentRef: componentRef,
         pageStyle: pageStyle,
-        documentTitle: \`\${new Date().toISOString()}_Invoice\`,
+        documentTitle: \`\${new Date().toISOString()}_sales_reports\`,
     });
 
     const printHandler = useCallback(() => {
@@ -72,71 +90,64 @@ const PrintPage = ({ data }) => {
                             </div>
 
                         </div>
-                        <div className="w-full h-auto p-16">
+                        <div className="w-full h-auto p-16 overflow-auto">
                             <div ref={componentRef} className="w-full h-full text-black">
-
-                                <div className="w-full flex justify-between items-center">
-                                    <h1 className="text-2xl text-start font-bold leading-5 uppercase"><span className="text-red-700">your</span><br /><span className="text-blue-700">logo</span></h1>
-                                    <p>No: 012121211</p>
-                                </div>
-
-
-                                <div className="mt-[48px] font-bold uppercase text-6xl bg-no-repeat bg-center bg-cover">invoice</div>
-
-
-                                <p><span className="font-bold">Date: </span>{formatedDateDot(new Date(), true)}</p>
+                                <h1 className="mt-[30px] text-center font-bold uppercase text-[20px]">SALES REPORTS</h1>
+                                <p className="text-center">Period: {formatedDateDot(new Date(d1), true)}-{formatedDateDot(new Date(d2), true)}</p>
+                                <p className="text-center">Date: {formatedDateDot(new Date(), true)}</p>
 
                                 <br />
-                                <br />
-
-
-                                <div className="w-full grid grid-cols-2 gap-4">
-                                    <p className="leading-none"><span className="font-bold">Billed to: </span><br />
-                                        Sumona Haque Traders<br />
-                                        56, Elephant Road<br />
-                                        Dhaka - 1005<br />
-                                        sumonatraders@gmail.com
-                                    </p>
-
-
-                                    <p className="leading-none text-end"><span className="font-bold">Billed from: </span><br />
-                                        Sumona Haque Traders<br />
-                                        56, Elephant Road<br />
-                                        Dhaka - 1005<br />
-                                        sumonatraders@gmail.com
-                                    </p>
-                                </div>
-                                <br />
-                                <table className="w-full border border-bray-500">
-                                    <thead>
-                                        <tr className="border border-bray-500 bg-gray-200">
-                                            <th className="text-start pl-2">Name</th>
-                                            <th className="text-start">Name</th>
-                                            <th className="text-center">Id</th>
-                                            <th className="text-end pr-2">Mobile</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {data.length ? data.map(staff => (
-                                            <tr className="border border-bray-500" key={staff.id}>
-                                                <td className="text-start pl-2">{staff.nmEn}</td>
-                                                <td className={\`text-start \${tiro.className}\`}>{staff.nmUn}</td>
-                                                <td className="text-center">{staff.empId}</td>
-                                                <td className="text-end pr-2">{staff.mobile}</td>
+                                <div className="w-full h-auto p-1 overflow-auto">
+                                    <table className="w-full text-[12px] border border-gray-400">
+                                        <thead>
+                                            <tr className="w-full bg-gray-200 border border-gray-400">
+                                                <th className="text-center px-2 py-2">Date</th>
+                                                <th className="text-start px-2 py-2">Customer</th>
+                                                <th className="text-start px-2 py-2">Item</th>
+                                                <th className="text-center px-2 py-2">Shipment</th>
+                                                <th className="text-end px-2 py-2">Weight</th>
+                                                <th className="text-end px-2 py-2">Rate</th>
+                                                <th className="text-end px-2 py-2">Total</th>
                                             </tr>
-                                        )) : null}
+                                        </thead>
+                                        <tbody>
+                                            {sales.length ? (
+                                                sales.map((sale, i) => (
+                                                    <tr className="border border-gray-400 hover:bg-gray-100" key={i}>
+                                                        <td className="text-center px-2 py-0.5">{formatedDateDot(sale.dt, true)}</td>
+                                                        <td className="text-start px-2 py-0.5">{sale.customer}</td>
+                                                        <td className="text-start px-2 py-0.5">{sale.item}</td>
+                                                        <td className="text-center px-2 py-0.5">{sale.shipment}</td>
+                                                        <td className="text-end px-2 py-0.5">{numberWithComma(sale.weight, true)}</td>
+                                                        <td className="text-end px-2 py-0.5">{numberWithComma(sale.rate, true)}</td>
+                                                        <td className="text-end px-2 py-0.5">{numberWithComma(sale.total, true)}</td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan={7} className="text-center py-10 px-4">
+                                                        Data not available.
+                                                    </td>
+                                                </tr>
+                                            )}
 
-                                    </tbody>
-                                </table>
+                                            <tr className="font-bold border border-gray-400 hover:bg-gray-100">
+                                                <td className="text-center px-2 py-0.5"></td>
+                                                <td className="text-start px-2 py-0.5">Total</td>
+                                                <td className="text-center px-2 py-0.5"></td>
+                                                <td className="text-center px-2 py-0.5"></td>
+                                                <td className="text-center px-2 py-0.5"></td>
+                                                <td className="text-center px-2 py-0.5"></td>
+                                                <td className="text-end px-2 py-0.5">{numberWithComma(gtTaka, true)}</td>
+                                            </tr>
 
+                                        </tbody>
+                                    </table>
 
-                                <br />
-                                <p><span className="font-bold">Payment Method: </span>Cash</p>
-
-
-                                <br />
-                                <p><span className="font-bold">Note: </span>Thank you for choosing us</p>
-
+                                    <br />
+                                    <br />
+                                    <p><span className="font-bold">Note: </span>Thank you for choosing us</p>
+                                </div>
 
                             </div>
                         </div>
@@ -144,7 +155,7 @@ const PrintPage = ({ data }) => {
                     </div>
                 </div>
             )}
-            <BtnEn Click={showPrintForm} Title="Print Form" Class="bg-blue-600 hover:bg-blue-800 text-white" />
+            <button onClick={showPrintForm} className="text-center mx-0.5 px-4 py-2 bg-gray-600 hover:bg-gray-800 text-white font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300  cursor-pointer">Print Form</button>
         </>
     )
 }
