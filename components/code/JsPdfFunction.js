@@ -1,7 +1,7 @@
 
 export const jsPDFFunction = ()=>{
 
-let str =`
+let str =`// npm install jspdf@2.5.1
 // Function to print the header each pages
 const printHeader = ({ doc }, dataFormat, margin) => {
     doc.setFont("times", "bold");
