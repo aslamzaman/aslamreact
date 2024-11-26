@@ -270,6 +270,7 @@ const Code = () => {
     return (
         <div className="pb-10">
             <h1 className="w-full text-center text-3xl text-gray-500 font-bold py-7">Code Generator</h1>
+            <p className="w-full text-center text-gray-400">npx create-next-app@14.1.3</p>
 
             <div className="w-full px-4 grid grid-cols-5 gap-4 mt-12">
                 <div>
