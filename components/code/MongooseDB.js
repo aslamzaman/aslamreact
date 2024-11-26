@@ -2,7 +2,8 @@
 const MongooseDB = () => {
 
 
-    const str = `import mongoose from "mongoose";
+    const str = `// npm install mongoose@8.6.4
+import mongoose from "mongoose";
 
 export const Connect = async () => {
 	try {
