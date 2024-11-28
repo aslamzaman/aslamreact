@@ -6,7 +6,6 @@ import Page from "@/components/code/Page";
 import Add from "@/components/code/Add";
 import Edit from "@/components/code/Edit";
 import Delete from "@/components/code/Delete";
-import Print from "@/components/code/Print";
 import LayoutPage from "@/components/code/LayoutPage";
 import Help_code from "@/components/code/HelpCode";
 import TwoPart from "@/components/code/TowPart";
@@ -82,12 +81,6 @@ const Code = () => {
         setTitleText(`components/${tbl}/Delete.js`);
         setResult(Delete(tbl, fld));
     }
-
-    const PrintGenerate = () => {
-        setTitleText(`components/${tbl}/Print.js`);
-        setResult(Print(tbl, fld));
-    }    
-
 
     const LayoutPageGenerate = () => {
         setTitleText(`app/${tbl}/layout.js`);
@@ -301,8 +294,7 @@ const Code = () => {
                         <BtnEn Title="LayoutPage" Click={LayoutPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Add" Click={AddGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Edit" Click={EditGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Delete" Click={DeleteGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Print" Click={PrintGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="Delete" Click={DeleteGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />                       
                         <BtnEn Title="Two Part" Click={TwoPartHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="One Page" Click={OnePartHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="DropdownById" Click={DropdownById} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
