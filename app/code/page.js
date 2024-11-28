@@ -18,6 +18,7 @@ import MongooseDB from "@/components/code/MongooseDB";
 import MongooseModels from "@/components/code/MongooseModels";
 import MongooseRoute from "@/components/code/MongooseRoute";
 import MongooseRouteDynamic from "@/components/code/MongooseRouteDynamic";
+import FetchData from "@/components/code/FetchData";
 import {SampleReactToPrint} from "@/components/code/SampleReactToPrint";
 import { jsPDFFunction } from "@/components/code/JsPdfFunction";
 
@@ -266,6 +267,11 @@ const Code = () => {
         setResult(jsPDFFunction());
     }
 
+    const fetchData = () => {
+        setTitleText(``);
+        setResult(FetchData());
+    }
+    
 
     return (
         <div className="pb-10">
@@ -302,6 +308,7 @@ const Code = () => {
                         <BtnEn Title="MongooseModel" Click={MongooseModelHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="MongooseRoute" Click={MongooseRouteHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="DynamicRoute" Click={MongooseRouteDynamicHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="FetchData" Click={fetchData} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Help" Click={HelpPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Help-jsPDF" Click={helpJsPdf} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="ReactToPrint" Click={SampleReactToPrintHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
