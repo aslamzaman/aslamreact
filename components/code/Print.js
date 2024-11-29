@@ -63,12 +63,15 @@ const Print = ({ data }) => {
         @page {
             size: A4 portrait;
             margin: 1in;
+            @bottom-right {
+                content: counter(page) " of " counter(pages);
+            }
         }
         footer{
             page-break-after: always;
         }
         #page{
-            font-size: 16px;
+            font-size: 10px;
             font-family: Arial, Helvetica, sans-serif;
         }
     }\`;
