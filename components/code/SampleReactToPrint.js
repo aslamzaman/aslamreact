@@ -43,6 +43,9 @@ const PrintPage = ({ data }) => {
             @page {
                 size: A4 portrait;
                 margin: .75in;
+                @bottom-right {
+                    content: counter(page) " of " counter(pages);
+                }
             }
             footer{
                 page-break-after: always;
