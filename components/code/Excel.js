@@ -5,7 +5,6 @@ const api = "`${process.env.NEXT_PUBLIC_BASE_URL}/api/attendance`";
 
 
   const str = `npm install xlsx@0.18.5
-npm install xlsx-populate@1.21.0
 // Upload an excel file and convert into JSON file ------------------------------------
 import * as XLSX from 'xlsx';
 
@@ -82,7 +81,7 @@ const downloadHandler = () => {
 
 
 
-
+// npm install xlsx-populate@1.21.0
 // Create and Download with server API as an excel file with styling convert into JSON file ---------
 // Api route.js
 import { NextResponse } from 'next/server';
