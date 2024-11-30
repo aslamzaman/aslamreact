@@ -26,13 +26,12 @@ export const Add = (tbl, datas, isLocalStorage) => {
     for (let i = 1; i < data.length; i++) {
         objectText += `            ${data[i]}: ${data[i]}${i===data.length-1?'':',\n'}`;
     }
-
-
-    const storageType = isLocalStorage?'localStorageAddItem':'addDataToIndexDB';
+ 
+    const storageType = isLocalStorage?'localStorageAddItem':'addDataToIndexedDB';
 
     const str = `import React, { useState } from "react";
 import { BtnSubmit, TextEn } from "@/components/Form";
-import { ${storageType} } from "@/lib/Database";
+import { ${storageType} } from "@/lib/${isLocalStorage?'DatabaseLocalStorage':'DatabaseIndexedDB'}";
 
 const Add = ({ message }) => {
 ${use_state}   

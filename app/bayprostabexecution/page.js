@@ -12,6 +12,8 @@ import { getDataFromFirebase } from "@/lib/firebaseFunction";
 import { numberWithComma, inwordBangla, formatedDate, formatedDateDot, localStorageSetItem, localStorageGetItem, sortArray } from "@/lib/utils";
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
+import { evaluate } from 'mathjs';
+
 
 
 const Bayprostabexecution = () => {
@@ -39,7 +41,7 @@ const Bayprostabexecution = () => {
     console.log("Aslam", getLocalData);
     setBayprostabexecutions(getLocalData);
 
-    const total = getLocalData.reduce((t, c) => t + (parseFloat(eval(c.taka)) * parseFloat(c.nos)), 0);
+    const total = getLocalData.reduce((t, c) => t + (parseFloat(evaluate(c.taka)) * parseFloat(c.nos)), 0);
     setTotal(total);
     setDt2(formatedDate(new Date()));
 
@@ -85,7 +87,7 @@ const Bayprostabexecution = () => {
       setMsg("No data!!");
       return false;
     }
-    const totalTaka = x.reduce((t, c) => t + parseFloat(eval(c.taka)) * parseFloat(c.nos), 0);
+    const totalTaka = x.reduce((t, c) => t + parseFloat(evaluate(c.taka)) * parseFloat(c.nos), 0);
 
     setWaitMsg("Please wait...");
     setTimeout(() => {
@@ -102,9 +104,9 @@ const Bayprostabexecution = () => {
       let gt = 0;
 
       for (let i = 0; i < x.length; i++) {
-        const total = parseFloat(x[i].nos) * parseFloat(eval(x[i].taka));
+        const total = parseFloat(x[i].nos) * parseFloat(evaluate(x[i].taka));
         const no = parseFloat(x[i].nos);
-        const tk = parseFloat(eval(x[i].taka));
+        const tk = parseFloat(evaluate(x[i].taka));
         const line = doc.splitTextToSize(`${x[i].item}`, 50);
 
         if (tk === 0) {
@@ -211,10 +213,10 @@ const Bayprostabexecution = () => {
                   <tbody>
                     {
                       bayprostabexecutions.length ? bayprostabexecutions.map(bayprostabexecution => {
-                        const subTotal = parseFloat(bayprostabexecution.nos) * parseFloat(eval(bayprostabexecution.taka));
+                        const subTotal = parseFloat(bayprostabexecution.nos) * parseFloat(evaluate(bayprostabexecution.taka));
                         return (
                           <tr className="border-b border-gray-200 hover:bg-gray-100" key={bayprostabexecution.id}>
-                            <td className={`text-center py-2 px-4 ${parseInt(eval(bayprostabexecution.taka)) === 0 ? 'font-sans' : 'font-sutonnyN'}`}>{bayprostabexecution.item}</td>
+                            <td className={`text-center py-2 px-4 ${parseInt(evaluate(bayprostabexecution.taka)) === 0 ? 'font-sans' : 'font-sutonnyN'}`}>{bayprostabexecution.item}</td>
                             <td className="text-center py-2 px-4">{bayprostabexecution.nos}</td>
                             <td title={subTotal} className="text-center py-2 px-4">{bayprostabexecution.taka}</td>
                             <td className="flex justify-end items-center mt-1">

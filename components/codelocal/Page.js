@@ -16,7 +16,7 @@ export const Page = (tbl, datas, isLocalStorage) => {
         td += `                                                <td className="text-center py-2 px-4">{${tbl}.${data[i]}}</td>${i===data.length-1?'':'\n'}`;
     }
 
-const storageType = isLocalStorage?'localStorageGetItem':'getDataFromIndexDB';
+const storageType = isLocalStorage?'localStorageGetItem':'getDataFromIndexedDB';
 
 const str = `"use client";
 import React, { useState, useEffect } from "react";
@@ -25,7 +25,7 @@ import Edit from "@/components/${tbl}/Edit";
 import Delete from "@/components/${tbl}/Delete";
 import Download from "@/components/test/Dowload";
 import Upload from "@/components/test/Upload";
-import { ${storageType} } from "@/lib/Database";
+import { ${storageType} } from "@/lib/${isLocalStorage?'DatabaseLocalStorage':'DatabaseIndexedDB'}";
 
 
 const ${titleCamelCase(tbl)} = () => {

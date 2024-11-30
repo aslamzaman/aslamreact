@@ -92,7 +92,7 @@ const CodeLocal = () => {
     const databaseHandler = () => {
         local();
         setPageText(Database(check));
-        setTitleTxt("lib/Database.js");
+        setTitleTxt(`lib/${check?'DatabaseLocalStorage':'DatabaseIndexedDB'}.js`);
     }
 
 

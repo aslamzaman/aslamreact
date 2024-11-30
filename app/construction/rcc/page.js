@@ -1,8 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { BtnSubmit, TextNum, DropdownEn } from "@/components/Form";
+import { BtnSubmit, TextNum, DropdownEn, TextEn } from "@/components/Form";
 import {  getDataFromFirebase } from "@/lib/firebaseFunction";
 import { numberWithComma } from "@/lib/utils";
+import { evaluate } from 'mathjs';
+
 
 
 const Rccwork = () => {
@@ -43,10 +45,10 @@ const Rccwork = () => {
                 const khoaPrice = response.find(khoa => khoa.id === 'PoYjiI0qdpXEPpHSvbmx');
                 const rodPrice = response.find(rod => rod.id === '2ihLY7ZNyJgYKT3fO03v');
 
-                setCementPrice(cementPrice.taka);
-                setSandPrice(sandPrice.taka);
-                setKhoaPrice(khoaPrice.taka);
-                setRodPrice(rodPrice.taka);
+                setCementPrice(cementPrice.tk);
+                setSandPrice(sandPrice.tk);
+                setKhoaPrice(khoaPrice.tk);
+                setRodPrice(rodPrice.tk);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error loading prices:", error);
@@ -59,7 +61,7 @@ const Rccwork = () => {
     const resultHandler = (e) => {
         e.preventDefault();
 
-        let x = eval(w);
+        let x = evaluate(w);
         let cement = 0;
         let sand = 0;
         let khoa = 0;
@@ -102,7 +104,7 @@ const Rccwork = () => {
 
 
     return (
-        <div className="w-11/12 md:w-9/12 mx-auto my-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
+        <div className="w-full md:w-9/12 mx-auto my-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
             <div className="py-2 border-b border-gray-300">
                 <h1 className="text-center text-xl font-bold text-blue-600">RCC Works</h1>
                 <p className="text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
@@ -113,7 +115,7 @@ const Rccwork = () => {
 
                         <div className="w-full grid grid-cols-3 gap-4">
                             <div className="col-span-2">
-                                <TextNum Title="Total Works" Id="w" Change={e => setW(e.target.value) } Value={w} />
+                                <TextEn Title="Total Works" Id="w" Change={e => setW(e.target.value) } Value={w} Chr="150" />
                             </div>
                             <DropdownEn Title="Option" Id="cft" Change={e => setCft(e.target.value) } Value={cft}>
                                 <option value="0">M3</option>

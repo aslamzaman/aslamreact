@@ -123,7 +123,7 @@ import { get, set, del } from "idb-keyval";
  * @param {string} key - Storage key
  * @returns {Promise<Array>} - Retrieved data or an empty array
  */
-export const getDataFromIndexDB = async (key) => {
+export const getDataFromIndexedDB = async (key) => {
     try {
         const data = await get(key);
         return Array.isArray(data) ? data : [];
@@ -141,7 +141,7 @@ export const getDataFromIndexDB = async (key) => {
  * @param {Object} item - Item to add, should contain a unique \`id\` property
  * @returns {Promise<string>} - Success or error message
  */
-export const addDataToIndexDB = async (key, item) => {
+export const addDataToIndexedDB = async (key, item) => {
     try {
         const data = await getDataFromIndexDB(key);
         data.push(item);
@@ -162,7 +162,7 @@ export const addDataToIndexDB = async (key, item) => {
  * @param {Object} updatedItem - Updated item data
  * @returns {Promise<string>} - Success or error message
  */
-export const updateDataToIndexDB = async (key, id, updatedItem) => {
+export const updateDataToIndexedDB = async (key, id, updatedItem) => {
     try {
         const data = await getDataFromIndexDB(key);
         const updatedData = data.map((item) => (parseInt(item.id) === parseInt(id) ? updatedItem : item));
@@ -182,7 +182,7 @@ export const updateDataToIndexDB = async (key, id, updatedItem) => {
  * @param {number} id - ID of the item to delete
  * @returns {Promise<string>} - Success or error message
  */
-export const deleteDataFromIndexDB = async (key, id) => {
+export const deleteDataFromIndexedDB = async (key, id) => {
     try {
         const data = await getDataFromIndexDB(key);
         const initialLength = data.length;
@@ -206,7 +206,7 @@ export const deleteDataFromIndexDB = async (key, id) => {
  * @param {string} key - Storage key
  * @returns {Promise<string>} - Success or error message
  */
-export const deleteKeyFromIndexDB = async (key) => {
+export const deleteKeyFromIndexedDB = async (key) => {
     try {
         await del(key);
         return \`Data deleted successfully.\`;
@@ -227,7 +227,7 @@ export const deleteKeyFromIndexDB = async (key) => {
  * @param {Object} item - Item to add, should contain a unique \`id\` property
  * @returns {Promise<string>} - Success or error message
  */
-export const setDataToIndexDB = async (key, item) => {
+export const setDataToIndexedDB = async (key, item) => {
     try {
         await set(key, item);
         return \`Data uploded successfully.\`;

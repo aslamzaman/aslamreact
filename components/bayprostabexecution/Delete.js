@@ -1,6 +1,9 @@
 import React, { useState, id, data } from "react";
 import { BtnEn } from "@/components/Form";
 import { localStorageDeleteItem } from "@/lib/utils";
+import { evaluate } from 'mathjs';
+
+
 
 const Delete = ({ message, id, data }) => {
     const [item, setItem] = useState("");
@@ -12,7 +15,7 @@ const Delete = ({ message, id, data }) => {
         try {
             const { item, taka } = data;
             setItem(item);
-            setTaka(parseInt(eval(taka)));
+            setTaka(parseInt(evaluate(taka)));
         }
         catch (err) {
             console.log(err);

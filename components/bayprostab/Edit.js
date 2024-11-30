@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { BtnSubmit, TextBn, TextEn, TextNum } from "@/components/Form";
 import { localStorageUpdateItem } from "@/lib/utils";
+import { evaluate } from 'mathjs';
+
 
 const Edit = ({ message, id, data }) => {
     const [item, setItem] = useState('');
@@ -17,7 +19,7 @@ const Edit = ({ message, id, data }) => {
             setItem(item);
             setNos(nos);
             setTaka(taka);
-            setCheck(parseInt(eval(taka)) === 0 ? true : false);
+            setCheck(parseInt(evaluate(taka)) === 0 ? true : false);
         } catch (err) {
             console.log(err);
         }

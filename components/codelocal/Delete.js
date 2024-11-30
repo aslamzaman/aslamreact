@@ -6,12 +6,12 @@ export const Delete = (tbl, datas, isLocalStorage) => {
     const data = splitData.map(s => s.trim());
 
 
-    const storageType = isLocalStorage?'localStorageDeleteItem':'deleteDataFromIndexDB';
+    const storageType = isLocalStorage?'localStorageDeleteItem':'deleteDataFromIndexedDB';
 
 
     const str = `import React, { useState } from "react";
 import { BtnEn } from "@/components/Form";
-import { ${storageType} } from "@/lib/Database";
+import { ${storageType} } from "@/lib/${isLocalStorage?'DatabaseLocalStorage':'DatabaseIndexedDB'}";
 
 const Delete = ({ message, id, data }) => {
     const [${data[1]}, set${titleCamelCase(data[1])}] = useState("");

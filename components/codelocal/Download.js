@@ -3,10 +3,10 @@ export const Download = (tbl, isLocalStorage) => {
   const x = "`${new Date().toISOString()}-registration.json`";
 
 
-  const storageType = isLocalStorage?'localStorageGetItem':'getDataFromIndexDB';
+  const storageType = isLocalStorage?'localStorageGetItem':'getDataFromIndexedDB';
 
   const str = `import React from "react";
-import {  ${storageType} } from "@/lib/Database";
+import {  ${storageType} } from "@/lib/${isLocalStorage?'DatabaseLocalStorage':'DatabaseIndexedDB'}";
 
 
 const Download = ({ message }) => {

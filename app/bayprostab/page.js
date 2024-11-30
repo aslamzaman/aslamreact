@@ -13,6 +13,9 @@ import { formatedDate, formatedDateDot, localStorageGetItem, sortArray } from '@
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 import { BayprostabPreparation } from '@/lib/BayprostabPreparation';
+import { evaluate } from 'mathjs';
+
+
 
 
 const dtAdd15Days = (d1) => {
@@ -70,7 +73,7 @@ const Bayprostab = () => {
 
     console.log("locladata ",locaData)
     setBayprostabs(locaData);
-    const totalTaka = locaData.reduce((t, c) => t + (parseFloat(eval(c.taka)) * parseFloat(c.nos)), 0);
+    const totalTaka = locaData.reduce((t, c) => t + (parseFloat(evaluate(c.taka)) * parseFloat(c.nos)), 0);
     const totalRound = Math.round(totalTaka);
     setTotal(totalRound);
 
@@ -251,10 +254,10 @@ const Bayprostab = () => {
                   <tbody>
                     {
                       bayprostabs.length ? bayprostabs.map(bayprostab => {
-                        const subTotal = parseFloat(bayprostab.nos) * parseFloat(eval(bayprostab.taka));
+                        const subTotal = parseFloat(bayprostab.nos) * parseFloat(evaluate(bayprostab.taka));
                         return (
                           <tr className="border-b border-gray-200 hover:bg-gray-100" key={bayprostab.id}>
-                            <td className={`text-center py-2 px-4 ${parseInt(eval(bayprostab.taka)) === 0 ? 'font-sans' : 'font-sutonnyN'}`}>{bayprostab.item}</td>
+                            <td className={`text-center py-2 px-4 ${parseInt(evaluate(bayprostab.taka)) === 0 ? 'font-sans' : 'font-sutonnyN'}`}>{bayprostab.item}</td>
                             <td className="text-center py-2 px-4">{bayprostab.nos}</td>
                             <td title={subTotal} className="text-center py-2 px-4">{bayprostab.taka}</td>
                             <td className="flex justify-end items-center mt-1">

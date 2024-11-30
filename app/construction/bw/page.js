@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { BtnSubmit, DropdownEn, TextNum } from "@/components/Form";
+import { BtnSubmit, DropdownEn, TextNum, TextEn } from "@/components/Form";
 import { getDataFromFirebase } from "@/lib/firebaseFunction";
 import { numberWithComma } from "@/lib/utils";
+import { evaluate } from 'mathjs';
 
 
 const Brickwork = () => {
@@ -36,9 +37,9 @@ const Brickwork = () => {
                 const cementPrice = response.find(cement => cement.id === 'aj4THFRGdOZjs0QNPlrF');
                 const sandPrice = response.find(sand => sand.id === 'SFlvASnMa3RjbPgzz0Tw');
   
-                setBrickPrice(brickPrice.taka);
-                setCementPrice(cementPrice.taka);
-                setSandPrice(sandPrice.taka);
+                setBrickPrice(brickPrice.tk);
+                setCementPrice(cementPrice.tk);
+                setSandPrice(sandPrice.tk);
                 setWaitMsg('');
 
             } catch (error) {
@@ -52,7 +53,7 @@ const Brickwork = () => {
     const resultHandler = (e) => {
         e.preventDefault();
 
-        let x = eval(w);
+        let x = evaluate(w);
         let brick = 0;
         let cement = 0;
         let sand = 0;
@@ -86,7 +87,7 @@ const Brickwork = () => {
 
 
     return (
-        <div className="w-11/12 md:w-9/12 mx-auto my-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
+        <div className="w-full md:w-9/12 mx-auto my-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
 
             <div className="py-2 border-b border-gray-300">
                 <h1 className="text-center text-xl font-bold text-blue-600">Brick Works</h1>
@@ -99,7 +100,7 @@ const Brickwork = () => {
 
                         <div className="w-full grid grid-cols-3 gap-4">
                             <div className="col-span-2">
-                                <TextNum Title="Total Works" Id="w" Change={e => setW(e.target.value)} Value={w} />
+                                <TextEn Title="Total Works" Id="w" Change={e => setW(e.target.value)} Value={w} Chr="150" />
                             </div>
                             <DropdownEn Title="Option" Id="cft" Change={e => setCft(e.target.value)} Value={cft}>
                                 <option value="0">M3</option>

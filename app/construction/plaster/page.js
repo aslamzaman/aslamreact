@@ -1,8 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { BtnSubmit, TextNum, DropdownEn } from "@/components/Form";
+import { BtnSubmit, TextNum, DropdownEn, TextEn } from "@/components/Form";
 import {  getDataFromFirebase } from "@/lib/firebaseFunction";
 import { numberWithComma } from "@/lib/utils";
+import { evaluate } from 'mathjs';
+
+
 
 
 const Plasterwork = () => {
@@ -36,8 +39,8 @@ const Plasterwork = () => {
                 console.log(response);
                 const cementPrice = response.find(cement => cement.id === 'aj4THFRGdOZjs0QNPlrF');
                 const sandPrice = response.find(sand => sand.id === 'SFlvASnMa3RjbPgzz0Tw');
-                setCementPrice(cementPrice.taka);
-                setSandPrice(sandPrice.taka);
+                setCementPrice(cementPrice.tk);
+                setSandPrice(sandPrice.tk);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error loading prices:", error);
@@ -50,7 +53,7 @@ const Plasterwork = () => {
     const resultHandler = (e) => {
         e.preventDefault();
 
-        let x = eval(w);
+        let x = evaluate(w);
         let cement = 0;
         let sand = 0;
         let st = "";
@@ -100,7 +103,7 @@ const Plasterwork = () => {
 
     return (
 
-        <div className="w-11/12 md:w-9/12 mx-auto my-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
+        <div className="w-full md:w-9/12 mx-auto my-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
 
             <div className="py-2 border-b border-gray-300">
                 <h1 className="text-center text-xl font-bold text-blue-600">Plaster Works</h1>
@@ -112,7 +115,7 @@ const Plasterwork = () => {
 
                         <div className="w-full grid grid-cols-3 gap-4">
                             <div className="col-span-2">
-                                <TextNum Title="Total Works" Id="w" Change={e => setW(e.target.value)} Value={w} />
+                                <TextEn Title="Total Works" Id="w" Change={e => setW(e.target.value)} Value={w} Chr="150" />
                             </div>
                             <DropdownEn Title="Option" Id="cft" Change={optChangeHandle} Value={cft}>
                                 <option value="0">M2</option>

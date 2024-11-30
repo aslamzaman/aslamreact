@@ -3,12 +3,12 @@ export const Upload = (tbl, isLocalStorage) => {
  
   const x = "`fixed inset-0 py-16 bg-gray-900 ${show ? 'block' : 'hidden'}  bg-opacity-60 overflow-auto`";
 
-  const storageType = isLocalStorage?'localStorageSetItem':'setDataToIndexDB';
+  const storageType = isLocalStorage?'localStorageSetItem':'setDataToIndexedDB';
 
   const str = `import React, { useState } from "react";
 import { BtnEn } from "../Form";
 import { Close } from "../Icons";
-import {  ${storageType} } from "@/lib/Database";
+import {  ${storageType} } from "@/lib/${isLocalStorage?'DatabaseLocalStorage':'DatabaseIndexedDB'}";
 
 
 const Upload = ({ message }) => {

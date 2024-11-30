@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { BtnSubmit, TextEn, DropdownEn, TextBn } from "@/components/Form";
 import { getDataFromFirebase } from "@/lib/firebaseFunction";
 import { numberWithComma } from "@/lib/utils";
-
+import { evaluate } from 'mathjs';
 
 const Brickflatsolling = () => {
     const [waitMsg, setWaitMsg] = useState("");
@@ -30,8 +30,8 @@ const Brickflatsolling = () => {
                 console.log("price ", response);
                 const brickPrice = response.find(brick => brick.id === 'AXc2dF5VYHRVc0KtW5i7');
                 const sandPrice = response.find(sand => sand.id === 'SFlvASnMa3RjbPgzz0Tw');
-                setBrickPrice(brickPrice.taka);
-                setSandPrice(sandPrice.taka);
+                setBrickPrice(brickPrice.tk);
+                setSandPrice(sandPrice.tk);
                 setWaitMsg('');
             } catch (error) {
                 console.error("Error loading prices:", error);
@@ -44,7 +44,7 @@ const Brickflatsolling = () => {
     const resultHandler = (e) => {
         e.preventDefault();
 
-        let x = eval(w);
+        let x = evaluate(w);
         let brick = 0;
         let sand = 0;
         let sandRate = 0;
@@ -55,6 +55,7 @@ const Brickflatsolling = () => {
             brick = parseFloat(x) * 3;
             sand = parseFloat(x) * 0.05;
             sandRate = parseFloat(sandPrice);
+
         }
         else {
             brick = parseFloat(x) * 3 * 10.76;
@@ -73,7 +74,7 @@ const Brickflatsolling = () => {
 
     return (
 
-        <div className="w-11/12 md:w-1/2 mx-auto my-10 border-2 border-gray-300 rounded-md shadow-md duration-300">
+        <div className="w-full md:w-1/2 mx-auto my-10 border-2 border-gray-300 rounded-md shadow-md duration-300">
 
             <div className="py-2 border-b border-gray-300">
                 <h1 className="text-center text-xl font-bold text-blue-600">Brick Flat Solling</h1>
@@ -85,7 +86,7 @@ const Brickflatsolling = () => {
 
                         <div className="w-full grid grid-cols-3 gap-4">
                             <div className="col-span-2">
-                                <TextEn Title="Total Works" Id="w" Change={(e) => { setW(e.target.value) }} Value={w} Chr="50" />
+                                <TextEn Title="Total Works" Id="w" Change={(e) => { setW(e.target.value) }} Value={w} Chr="150" />
                             </div>
                             <DropdownEn Title="Option" Id="cft" Change={(e) => { setSft(e.target.value) }} Value={sft}>
                                 <option value="0">M2</option>
