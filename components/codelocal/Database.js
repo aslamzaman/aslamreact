@@ -143,7 +143,7 @@ export const getDataFromIndexedDB = async (key) => {
  */
 export const addDataToIndexedDB = async (key, item) => {
     try {
-        const data = await getDataFromIndexDB(key);
+        const data = await getDataFromIndexedDB(key);
         data.push(item);
         await set(key, data);
         return \`Data saved successfully. New Id: \${item.id}\`;
@@ -164,7 +164,7 @@ export const addDataToIndexedDB = async (key, item) => {
  */
 export const updateDataToIndexedDB = async (key, id, updatedItem) => {
     try {
-        const data = await getDataFromIndexDB(key);
+        const data = await getDataFromIndexedDB(key);
         const updatedData = data.map((item) => (parseInt(item.id) === parseInt(id) ? updatedItem : item));
         await set(key, updatedData);
         return \`Data updated successfully. Updated Id: \${id}\`;
@@ -184,7 +184,7 @@ export const updateDataToIndexedDB = async (key, id, updatedItem) => {
  */
 export const deleteDataFromIndexedDB = async (key, id) => {
     try {
-        const data = await getDataFromIndexDB(key);
+        const data = await getDataFromIndexedDB(key);
         const initialLength = data.length;
         const updatedData = data.filter((item) => parseInt(item.id) !== parseInt(id));
 

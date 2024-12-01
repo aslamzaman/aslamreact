@@ -9,11 +9,12 @@ import Download from '@/components/bayprostab/Download';
 import Upload from '@/components/bayprostab/Upload';
 
 import { getDataFromFirebase } from '@/lib/firebaseFunction';
-import { formatedDate, formatedDateDot, localStorageGetItem, sortArray } from '@/lib/utils';
+import { formatedDate, localStorageGetItem, sortArray } from '@/lib/utils';
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 import { BayprostabPreparation } from '@/lib/BayprostabPreparation';
 import { evaluate } from 'mathjs';
+import { getDataFromIndexedDB } from '@/lib/DatabaseIndexedDB';
 
 
 
@@ -42,7 +43,7 @@ const Bayprostab = () => {
   const [subject, setSubject] = useState("mvwf©m †m›Uv‡ii Mvwoi R¡vjvwb (AK‡Ub) µq");
   const [note, setNote] = useState(`Mvwoi R¡vjvwb (AK‡Ub) cÖ‡qvRb Abyhvqx wewfbœ cv¤ú †_‡K µq Kiv n‡e`);
   const [total, setTotal] = useState("");
-  const [budgetHead, setBudgetHead] = useState("");
+  const [budgetHead, setBudgetHead] = useState("Utilities");
   const [payType, setPayType] = useState("");
   const [cheque, setCheque] = useState("");
 
@@ -57,10 +58,23 @@ const Bayprostab = () => {
           getDataFromFirebase('project')
         ]);
         const scStaff = staffs.filter(staff => staff.placeId === "6BtqRhIrKQ776jyywIC8");
-        const sortData = scStaff.sort((a, b)=>sortArray(a.nmEn, b.nmEn));
+        const sortData = scStaff.sort((a, b) => sortArray(a.nmEn, b.nmEn));
         console.log(sortData);
         setStaffData(sortData);
         setProjectData(projects);
+        //-------------------------------------------------------
+        const locaData = await getDataFromIndexedDB('bayprostab');
+        const addSubTotal = locaData.map(bayprostab => {
+          const subtotal = parseFloat(bayprostab.nos) * evaluate("0" + bayprostab.taka);
+          return {
+            ...bayprostab, subtotal
+          }
+        })
+
+        const gt = addSubTotal.reduce((t, c) => t + c.subtotal, 0);
+        setBayprostabs(addSubTotal);
+        setTotal(gt);
+
         setPayType('');
         setWaitMsg('');
       } catch (err) {
@@ -68,23 +82,6 @@ const Bayprostab = () => {
       }
     }
     getData();
-
-    const locaData = localStorageGetItem("bayprostab");
-
-    console.log("locladata ",locaData)
-    setBayprostabs(locaData);
-    const totalTaka = locaData.reduce((t, c) => t + (parseFloat(evaluate(c.taka)) * parseFloat(c.nos)), 0);
-    const totalRound = Math.round(totalTaka);
-    setTotal(totalRound);
-
-    const x = [];
-    for (let i = 0; i < locaData.length; i++) {
-      if (parseInt(locaData[i].taka) === 0) {
-        x.push(locaData[i].item);
-      }
-    }
-    const bhead = x.join(", ");
-    setBudgetHead(bhead);
   }, [msg])
 
 
@@ -96,8 +93,8 @@ const Bayprostab = () => {
 
   const handleCreate = (e) => {
     e.preventDefault();
-    if (bayprostabs.length < 2) {
-      setWaitMsg("No data!");
+    if (bayprostabs.length < 1) {
+      setWaitMsg("No data found!");
       return false;
     }
     setWaitMsg("Please wait...");
@@ -124,26 +121,26 @@ const Bayprostab = () => {
       payType: payType,
       cheque: cheque
     }
-    const db = localStorageGetItem("bayprostab");
-
+    
     setTimeout(() => {
       BayprostabPreparation.central({ doc, data });
-      BayprostabPreparation.tableOne({ doc, db }, 14.3, 90.5, 102, 131.5, 97, 55);
-      BayprostabPreparation.payment({ doc, data }, 174.7, 172, 49, payType);
+      BayprostabPreparation.tableOne({ doc}, bayprostabs, 14.3, 90.5, 102, 131.5, 101, 55);
+      BayprostabPreparation.payment({ doc }, bayprostabs, 174.7, 172, 49, payType);
       doc.addPage("a4", "p");
       BayprostabPreparation.completePlan({ doc, data });
-      BayprostabPreparation.tableOne({ doc, db }, 14.3, 90.5, 102, 131.5, 103, 55);
-      BayprostabPreparation.payment({ doc, data }, 166, 172, 64.5, payType);
-
+      BayprostabPreparation.tableOne({ doc }, bayprostabs, 14.3, 90.5, 102, 131.5, 107, 55);
+      BayprostabPreparation.payment({ doc }, bayprostabs, 166, 172, 64.5, payType);
+      
       if (project === 'GO') {
         doc.addPage("a4", "p");
         BayprostabPreparation.go({ doc, data });
-        BayprostabPreparation.tableTwo({ doc, db }, 19, 30, 131, 75, 74);
-      }
+        BayprostabPreparation.tableTwo({ doc }, bayprostabs, 19, 30, 131, 78, 74);
+        }
+     
       if (payType === 'br') {
         doc.addPage("a4", "p");
         BayprostabPreparation.bearer({ doc, data });
-        BayprostabPreparation.tableTwo({ doc, db }, 25, 33, 131, 117, 71);
+        BayprostabPreparation.tableTwo({ doc }, bayprostabs, 25, 33, 131, 121, 71);
       }
 
       doc.save(new Date().toISOString() + "-Bayprostab.pdf");
@@ -170,6 +167,9 @@ const Bayprostab = () => {
 
             <form onSubmit={handleCreate}>
               <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 my-2">
+                <div className="w-full col-span-4">
+                  <TextEn Title="Budget Head" Id="budgetHead" Change={(e) => { setBudgetHead(e.target.value) }} Value={budgetHead} Chr="150" />
+                </div>
 
 
                 <div className="w-full col-span-3">
@@ -241,9 +241,10 @@ const Bayprostab = () => {
                 <table className="w-full border border-gray-200">
                   <thead>
                     <tr className="w-full bg-gray-200">
-                      <th className="text-center border-b border-gray-200 px-4 py-2">Item</th>
+                      <th className="text-center border-b border-gray-200 px-4 py-2">SL</th>
+                      <th className="text-start border-b border-gray-200 px-4 py-2">Item</th>
                       <th className="text-center border-b border-gray-200 px-4 py-2">Nos</th>
-                      <th className="text-center border-b border-gray-200 px-4 py-2">Taka</th>
+                      <th className="text-end border-b border-gray-200 px-4 py-2">Taka</th>
                       <th className="w-[100px] font-normal">
                         <div className="w-full flex justify-end mt-1 pr-[3px] lg:pr-2">
                           <Add message={messageHandler} />
@@ -253,13 +254,13 @@ const Bayprostab = () => {
                   </thead>
                   <tbody>
                     {
-                      bayprostabs.length ? bayprostabs.map(bayprostab => {
-                        const subTotal = parseFloat(bayprostab.nos) * parseFloat(evaluate(bayprostab.taka));
+                      bayprostabs.length ? bayprostabs.map((bayprostab,i) => {
                         return (
                           <tr className="border-b border-gray-200 hover:bg-gray-100" key={bayprostab.id}>
-                            <td className={`text-center py-2 px-4 ${parseInt(evaluate(bayprostab.taka)) === 0 ? 'font-sans' : 'font-sutonnyN'}`}>{bayprostab.item}</td>
+                            <td className="text-center py-2 px-4">{i+1}.</td>
+                            <td className="text-start py-2 px-4 font-sutonnyN">{bayprostab.item}</td>
                             <td className="text-center py-2 px-4">{bayprostab.nos}</td>
-                            <td title={subTotal} className="text-center py-2 px-4">{bayprostab.taka}</td>
+                            <td title={bayprostab.subtotal} className="text-end py-2 px-4">{bayprostab.taka}</td>
                             <td className="flex justify-end items-center mt-1">
                               <Edit message={messageHandler} id={bayprostab.id} data={bayprostab} />
                               <Delete message={messageHandler} id={bayprostab.id} data={bayprostab} />
@@ -272,16 +273,15 @@ const Bayprostab = () => {
 
                     <tr className="border-b border-gray-200 hover:bg-gray-100">
                       <td className="font-bold"></td>
+                      <td className="text-start py-2 px-4 font-bold">Total</td>
                       <td></td>
-                      <td className="text-center py-2 px-4 font-bold">{total}</td>
+                      <td className="text-end py-2 px-4 font-bold">{total}</td>
                       <td></td>
                     </tr>
 
                   </tbody>
                 </table>
               </div>
-
-
 
             </div>
           </div>

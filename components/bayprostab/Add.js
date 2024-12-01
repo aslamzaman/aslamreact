@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { BtnSubmit, TextBn, TextEn, TextNum } from "@/components/Form";
-import { localStorageAddItem } from "@/lib/utils";
+import { addDataToIndexedDB } from "@/lib/DatabaseIndexedDB";
 
 const Add = ({ message }) => {
     const [item, setItem] = useState('');
     const [nos, setNos] = useState('');
-    const [taka, setTaka] = useState('');
+    const [taka, setTaka] = useState('');   
     const [show, setShow] = useState(false);
-    const [check, setCheck] = useState(false);
+
 
     const resetVariables = () => {
         setItem('');
         setNos('');
-        setTaka('');
+        setTaka('');        
     }
 
 
@@ -31,17 +31,17 @@ const Add = ({ message }) => {
         return {
             id: Date.now(),
             item: item,
-            nos: check ? 0 : nos,
-            taka: check ? 0 : taka
+            nos: nos,
+            taka: taka            
         }
     }
 
 
-    const saveHandler = (e) => {
+    const saveHandler = async (e) => {
         e.preventDefault();
         try {
             const newObject = createObject();
-            const msg = localStorageAddItem('bayprostab', newObject);
+            const msg = await addDataToIndexedDB('bayprostab', newObject);
             message(msg);
         } catch (error) {
             console.error("Error saving bayprostab data:", error);
@@ -50,9 +50,6 @@ const Add = ({ message }) => {
             setShow(false);
         }
     }
-
-
-
 
 
     return (
@@ -69,18 +66,11 @@ const Add = ({ message }) => {
                             </button>
                         </div>
                         <div className="px-6 pb-6 text-black">
-                            <div className="flex justify-start space-x-2">
-                                <input onChange={e => setCheck(e.target.checked)} type="checkbox" checked={check} /> <span>English</span>
-                            </div>
                             <form onSubmit={saveHandler}>
                                 <div className="grid grid-cols-1 gap-4 my-4">
-                                    {check ?
-                                        <TextEn Title="Item (English)" Id="item" Change={e => setItem(e.target.value)} Value={item} Chr={150} />
-                                        :
-                                        <TextBn Title="Item (Bangla)" Id="item" Change={e => setItem(e.target.value)} Value={item} Chr="150" />
-                                    }
-                                    <TextNum Title="Nos" Id="nos" Change={e => setNos(e.target.value)} Value={nos} />
-                                    <TextEn Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} Chr={150} />
+                                    <TextBn Title="Item" Id="item" Change={e => setItem(e.target.value)} Value={item} Chr={150} />
+                                    <TextNum Title="Nos" Id="nos" Change={e => setNos(e.target.value)} Value={nos}  />
+                                    <TextEn Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} Chr={150} />                                
                                 </div>
                                 <div className="w-full flex justify-start">
                                     <input type="button" onClick={closeAddForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />
@@ -100,4 +90,4 @@ const Add = ({ message }) => {
     )
 }
 export default Add;
-
+  
