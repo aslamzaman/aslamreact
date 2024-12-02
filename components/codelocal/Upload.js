@@ -43,13 +43,13 @@ const Upload = ({ message }) => {
 	return (
 		<>
 			<div className={${x}}>
-				<div className="w-11/12 md:w-8/12 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
+				<div className="w-full md:w-3/4 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
 					<div className="px-6 md:px-6 py-2 flex justify-between items-center border-b border-gray-300">
 						<h1 className="text-xl font-bold text-blue-600">Upload File</h1>
 						<Close Click={() => { setShow(false); Msg("Data ready") }} Size="w-9 h-9" />
 					</div>
 
-					<div className="p-6 text-black">
+					<div className="p-4 text-black">
 						<input type="file" onChange={(e) => { setFile(e.target.files[0]); }} className="w-full px-4 py-1.5 text-gray-600 ring-1 focus:ring-4 ring-blue-300 outline-none rounded duration-300" accept="application/json" />
 					</div>
 
