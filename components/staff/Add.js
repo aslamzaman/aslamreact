@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextEn, BtnSubmit, DropdownEn, TextBn, TextDt, TextNum } from "@/components/Form";
-import { addDataToFirebase } from "@/lib/firebaseFunction";
+import { addDataToFirebase, getDataFromFirebase } from "@/lib/firebaseFunction";
 import { formatedDate } from "@/lib/utils";
 
 
@@ -53,11 +53,11 @@ const Add = ({ message }) => {
         resetVariables();
         try {
             const [responseGender, responsePost, responseProject, responsePlace, responseUnit] = await Promise.all([
-                fetchDataFromAPI("gender"),
-                fetchDataFromAPI("post"),
-                fetchDataFromAPI("project"),
-                fetchDataFromAPI("place"),
-                fetchDataFromAPI("unit")
+                getDataFromFirebase("gender"),
+                getDataFromFirebase("post"),
+                getDataFromFirebase("project"),
+                getDataFromFirebase("place"),
+                getDataFromFirebase("unit")
             ]);
             setGenders(responseGender);
             setPosts(responsePost);
