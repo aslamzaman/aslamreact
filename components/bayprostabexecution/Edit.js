@@ -1,18 +1,15 @@
 import React, { useState } from "react";
 import { BtnSubmit, TextBn, TextEn, TextNum } from "@/components/Form";
-import { localStorageUpdateItem } from "@/lib/utils";
-import { evaluate } from 'mathjs';
+import { updateDataToIndexedDB } from "@/lib/DatabaseIndexedDB";
 
-
-const Edit = ({ message, id, data }) => {
+const Edit = ({ message, id, data  }) => {
     const [item, setItem] = useState('');
     const [nos, setNos] = useState('');
-    const [taka, setTaka] = useState('');
+    const [taka, setTaka] = useState('');   
     const [show, setShow] = useState(false);
-    const [check, setCheck] = useState(false);
 
 
-    const showEditForm = () => {
+  const showEditForm = () => {
         message("Ready to edit");
         setShow(true);
         try {
@@ -20,7 +17,6 @@ const Edit = ({ message, id, data }) => {
             setItem(item);
             setNos(nos);
             setTaka(taka);
-            setCheck(parseInt(evaluate(taka)) === 0 ? true : false);
         } catch (err) {
             console.log(err);
         }
@@ -37,7 +33,7 @@ const Edit = ({ message, id, data }) => {
             id: id,
             item: item,
             nos: nos,
-            taka: taka
+            taka: taka            
         }
     }
 
@@ -46,7 +42,7 @@ const Edit = ({ message, id, data }) => {
         e.preventDefault();
         try {
             const newObject = createObject();
-            const msg = localStorageUpdateItem('bayprostabexecution', id, newObject);
+            const msg = await updateDataToIndexedDB('bayprostabexecution', id, newObject);
             message(msg);
         } catch (error) {
             console.error("Error updating bayprostabexecution data:", error);
@@ -73,18 +69,11 @@ const Edit = ({ message, id, data }) => {
                         </div>
 
                         <div className="px-6 pb-6 text-black">
-                            <div className="flex justify-start space-x-2">
-                                <input onChange={e => setCheck(e.target.checked)} type="checkbox" checked={check} /> <span>English</span>
-                            </div>
                             <form onSubmit={updateHandler} >
                                 <div className="grid grid-cols-1 gap-4 my-4">
-                                    {check ?
-                                        <TextEn Title="Item (English)" Id="item" Change={e => setItem(e.target.value)} Value={item} Chr={150} />
-                                        :
-                                        <TextBn Title="Item (Bangla)" Id="item" Change={e => setItem(e.target.value)} Value={item} Chr="150" />
-                                    }
+                                    <TextBn Title="Item" Id="item" Change={e => setItem(e.target.value)} Value={item} Chr={150} />
                                     <TextNum Title="Nos" Id="nos" Change={e => setNos(e.target.value)} Value={nos} />
-                                    <TextEn Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} Chr={150} />
+                                    <TextEn Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} Chr={150} />                                
                                 </div>
                                 <div className="w-full flex justify-start">
                                     <input type="button" onClick={closeEditForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />
@@ -106,4 +95,4 @@ const Edit = ({ message, id, data }) => {
     )
 }
 export default Edit;
-
+  

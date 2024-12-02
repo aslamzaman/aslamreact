@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { BtnSubmit, DropdownEn, TextareaBn, TextDt, TextNum } from "@/components/Form";
+import { BtnSubmit, DropdownEn, TextareaBn, TextDt, TextEn, TextNum } from "@/components/Form";
 import { jsPDF } from "jspdf";
 import Add from "@/components/bayprostabexecution/Add";
 import Edit from "@/components/bayprostabexecution/Edit";
@@ -13,6 +13,7 @@ import { numberWithComma, inwordBangla, formatedDate, formatedDateDot, localStor
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 import { evaluate } from 'mathjs';
+import { getDataFromIndexedDB } from "@/lib/DatabaseIndexedDB";
 
 
 
@@ -32,18 +33,11 @@ const Bayprostabexecution = () => {
   const [advance, setAdvance] = useState(3000);
   const [note, setNote] = useState("");
   const [total, setTotal] = useState("");
+  const [bhead, setBhead] = useState("");
 
 
 
   useEffect(() => {
-
-    const getLocalData = localStorageGetItem("bayprostabexecution");
-    console.log("Aslam", getLocalData);
-    setBayprostabexecutions(getLocalData);
-
-    const total = getLocalData.reduce((t, c) => t + (parseFloat(evaluate(c.taka)) * parseFloat(c.nos)), 0);
-    setTotal(total);
-    setDt2(formatedDate(new Date()));
 
     const getData = async () => {
       setWaitMsg("Please wait...");
@@ -53,10 +47,26 @@ const Bayprostabexecution = () => {
           getDataFromFirebase('project')
         ]);
         const scStaff = staffs.filter(staff => staff.placeId === "6BtqRhIrKQ776jyywIC8");
-        const sortedStaff = scStaff.sort((a,b) => sortArray(a.nmEn, b.nmEn));
+        const sortedStaff = scStaff.sort((a, b) => sortArray(a.nmEn, b.nmEn));
         setStaffData(sortedStaff);
         setProjectData(projects);
+        //------------------------------------
+        const localData = await getDataFromIndexedDB('bayprostabexecution');
+        const addSubtotal = localData.map(item => {
+          const subtotal = parseFloat(item.nos) * evaluate("0" + item.taka);
+          return {
+            ...item, subtotal
+          }
+        })
+        setBayprostabexecutions(addSubtotal);
+        const totalTaka = addSubtotal.reduce((t, c) => t + parseFloat(c.subtotal), 0);
+        setTotal(totalTaka);
+        //----------------------------
+        setDt2(formatedDate(new Date()));
+        setBhead("Utilities")
+
         setWaitMsg("");
+
       } catch (err) {
         console.log(err);
       }
@@ -82,74 +92,54 @@ const Bayprostabexecution = () => {
       floatPrecision: 16 // or "smart", default is 16
     });
 
-    const x = localStorageGetItem("bayprostabexecution");
-    if (!x) {
-      setMsg("No data!!");
-      return false;
-    }
-    const totalTaka = x.reduce((t, c) => t + parseFloat(evaluate(c.taka)) * parseFloat(c.nos), 0);
 
     setWaitMsg("Please wait...");
+
     setTimeout(() => {
 
       doc.addImage("/images/formats/bayprostab2.png", "PNG", 0, 0, 210, 297);
       doc.setFontSize(14);
+      doc.setFont("times", "normal");
       doc.text(`${project}`, 168.438, 26, null, null, "left");
+      doc.text(`${bhead}`, 17, 100, null, null, "left");
       doc.setFont("SutonnyMJ", "normal");
       doc.text(`${staff} `, 38, 37, null, null, "left");
       doc.text(`${dt1 ? formatedDateDot(dt1) : ""}`, 150, 45, null, null, "left");
       doc.text(`${numberWithComma(parseFloat(advance))}/-`, 65, 45, null, null, "right");
 
-      let y = 100;
-      let gt = 0;
+      let y = 108;
+      for (let i = 0; i < bayprostabexecutions.length; i++) {
+        const no = parseFloat(bayprostabexecutions[i].nos);
+        const tk = parseFloat(evaluate(bayprostabexecutions[i].taka));
+        const line = doc.splitTextToSize(`${bayprostabexecutions[i].item}`, 50);
 
-      for (let i = 0; i < x.length; i++) {
-        const total = parseFloat(x[i].nos) * parseFloat(evaluate(x[i].taka));
-        const no = parseFloat(x[i].nos);
-        const tk = parseFloat(evaluate(x[i].taka));
-        const line = doc.splitTextToSize(`${x[i].item}`, 50);
-
-        if (tk === 0) {
-          y += 2;
-          doc.setFont("times", "normal");
-          doc.text(`${x[i].item}`, 17, y, null, null, "left");
-          y += 6;
+        doc.setFont("SutonnyMJ", "normal");
+        doc.text(line, 17, y, { maxWidth: 50, align: 'left' });
+        if (no > 1) {
+          doc.text(`${tk.toFixed(2)}`, 90, y, null, null, "right");
+          doc.text(`${no.toFixed(2)}`, 101.408, y, null, null, "center");
         } else {
-          doc.setFont("SutonnyMJ", "normal");
-          doc.text(line, 17, y, { maxWidth: 50, align: 'left' });
-          if (no > 1) {
-            doc.text(`${tk.toFixed(2)}`, 90, y, null, null, "right");
-            doc.text(`${no.toFixed(2)}`, 101.408, y, null, null, "center");
-          } else {
-            doc.text("-", 81, y, null, null, "center");
-            doc.text("-", 101.408, y, null, null, "center");
-          }
-          doc.text(`${numberWithComma(total)}/-`, 132, y, null, null, "right");
-          const lineNumber = line.length;
-          y += lineNumber * 6;
-
+          doc.text("-", 81, y, null, null, "center");
+          doc.text("-", 101.408, y, null, null, "center");
         }
-
-
+        doc.text(`${numberWithComma(bayprostabexecutions[i].subtotal)}/-`, 132, y, null, null, "right");
+        const lineNumber = line.length;
+        y += lineNumber * 6;
       }
 
-      doc.setFont("SutonnyMJ", "normal");
-      doc.text(`${numberWithComma(parseInt(totalTaka))}/-`, 65, 53, null, null, "right");
-      doc.text(`${numberWithComma(parseFloat(advance) - parseInt(totalTaka))}/-`, 65, 61, null, null, "right");
+
+      doc.text(`${numberWithComma(parseInt(total))}/-`, 65, 53, null, null, "right");
+      doc.text(`${numberWithComma(parseFloat(advance) - parseInt(total))}/-`, 65, 61, null, null, "right");
       doc.text(`${note ? note : ""}`, 174.347, 100, { maxWidth: 45, align: 'center' });
-      doc.text(`${numberWithComma(parseInt(totalTaka))}/-`, 132, 235, null, null, "right");
-      doc.text(`${inwordBangla(parseInt(totalTaka))} UvKv gvÎ`, 45, 241.5, null, null, "left");
+      doc.text(`${numberWithComma(parseInt(total))}/-`, 132, 235, null, null, "right");
+      doc.text(`${inwordBangla(parseInt(total))} UvKv gvÎ`, 45, 241.5, null, null, "left");
       doc.text(`${formatedDateDot(dt2)}`, 60, 247.5, null, null, "left");
       doc.save(new Date().toISOString() + "Bayprostab-Execution.pdf");
+
       setWaitMsg("");
     }, 0);
   }
 
-
-  const dd = () => {
-    let x = 'Aslam Zaman';
-    console.log(x.length);
-  }
 
 
   return (
@@ -158,13 +148,15 @@ const Bayprostabexecution = () => {
         <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Bayprostab Execution</h1>
         <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
       </div>
-      <button onClick={dd}>Click Me</button>
+
       <div className="px-4 lg:px-6">
         <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-y-4 lg:gap-x-4">
           <div className="w-full border-2 p-4 shadow-md rounded-md">
 
             <form onSubmit={createHandler}>
               <div className="grid grid-cols-1 gap-2 my-2">
+                <TextEn Title="Budget Head" Id="bhead" Change={e => setBhead(e.target.value)} Value={bhead} Chr="150" />
+
                 <DropdownEn Title="Staff Name *" Id="staff" Change={e => setStaff(e.target.value)} Value={staff}>
                   {staffData.length ? staffData.map(staff => <option value={staff.nmBn} key={staff.id}>{staff.nmEn}</option>) : null}
                 </DropdownEn>
@@ -178,7 +170,7 @@ const Bayprostabexecution = () => {
                 </div>
 
                 <TextDt Title="Executon Date *" Id="dt2" Change={e => setDt2(e.target.value)} Value={dt2} />
-                <TextNum Title="Advance Taka *" Id="dt2" Change={e => setAdvance(e.target.value)} Value={advance} />
+                <TextNum Title="Advance Taka *" Id="advance" Change={e => setAdvance(e.target.value)} Value={advance} />
                 <TextareaBn Title="Note" Id="note" Rows="1" Change={e => setNote(e.target.value)} Value={note} />
               </div>
               <div className="w-full flex justify-start">
@@ -213,12 +205,11 @@ const Bayprostabexecution = () => {
                   <tbody>
                     {
                       bayprostabexecutions.length ? bayprostabexecutions.map(bayprostabexecution => {
-                        const subTotal = parseFloat(bayprostabexecution.nos) * parseFloat(evaluate(bayprostabexecution.taka));
                         return (
                           <tr className="border-b border-gray-200 hover:bg-gray-100" key={bayprostabexecution.id}>
                             <td className={`text-center py-2 px-4 ${parseInt(evaluate(bayprostabexecution.taka)) === 0 ? 'font-sans' : 'font-sutonnyN'}`}>{bayprostabexecution.item}</td>
                             <td className="text-center py-2 px-4">{bayprostabexecution.nos}</td>
-                            <td title={subTotal} className="text-center py-2 px-4">{bayprostabexecution.taka}</td>
+                            <td title={bayprostabexecution.subtotal} className="text-center py-2 px-4">{bayprostabexecution.taka}</td>
                             <td className="flex justify-end items-center mt-1">
                               <Edit message={messageHandler} id={bayprostabexecution.id} data={bayprostabexecution} />
                               <Delete message={messageHandler} id={bayprostabexecution.id} data={bayprostabexecution} />
