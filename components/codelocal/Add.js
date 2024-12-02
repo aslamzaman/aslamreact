@@ -90,7 +90,7 @@ ${objectText}
                                 </svg>
                             </button>
                         </div>
-                        <div className="px-6 pb-6 text-black">
+                        <div className="px-4 pb-6 text-black">
                             <form onSubmit={saveHandler}>
                                 <div className="grid grid-cols-1 gap-4 my-4">
 ${form_text}                                
