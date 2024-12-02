@@ -64,8 +64,8 @@ const ${titleCamelCase(tbl)} = () => {
             </div>
 
 
-            <div className="w-full lg:w-3/4 mx-auto border-2 p-4 shadow-md rounded-md">
-                <div className="overflow-auto">
+            <div className="w-full lg:w-3/4 mx-auto border-2 border-gray-200 p-4 shadow-md rounded-md">
+                <div className="w-full overflow-auto">
                     <div className="w-full flex justify-end">
                         <div className="w-auto flex items-center">
                             <Download message={messageHandler} />
