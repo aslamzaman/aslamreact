@@ -2,6 +2,8 @@
 export const jsPDFFunction = ()=>{
 
 let str =`// npm install jspdf@2.5.1
+// doc.addFont("fonts/TiroBangla-Regular.ttf", "Tiro Bangla", "normal");
+// doc.setFont("Tiro Bangla", "normal"); // set font
 // Function to print the header each pages
 const printHeader = ({ doc }, dataFormat, margin) => {
     doc.setFont("times", "bold");
