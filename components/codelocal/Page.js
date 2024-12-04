@@ -23,8 +23,8 @@ import React, { useState, useEffect } from "react";
 import Add from "@/components/${tbl}/Add";
 import Edit from "@/components/${tbl}/Edit";
 import Delete from "@/components/${tbl}/Delete";
-import Download from "@/components/test/Dowload";
-import Upload from "@/components/test/Upload";
+import Download from "@/components/${tbl}/Dowload";
+import Upload from "@/components/${tbl}/Upload";
 import { ${storageType} } from "@/lib/${isLocalStorage?'DatabaseLocalStorage':'DatabaseIndexedDB'}";
 
 
