@@ -236,6 +236,24 @@ export const setDataToIndexedDB = async (key, item) => {
         return "Failed to upload data.";
     }
 };
+
+
+
+
+/**
+ * Retrieve data from IndexedDB by key
+ * @param {string} key - Storage key
+ * @returns {Promise<Array>} - Retrieved data or an empty array
+ */
+export const getValueFromIndexedDB = async (key) => {
+    try {
+        const data = await get(key);
+        return data;
+    } catch (error) {
+        console.error("Error retrieving data from IndexedDB:", error);
+    }
+}
+
 `;
     return isLocalStorage? strLocalStorage: strIndexDB;
 }
