@@ -49,6 +49,7 @@ const Staff = () => {
         
 
                 const sortedStaffs = withoutResignStaff.sort((a, b) => sortArray(parseInt(a.empId), parseInt(b.empId)));
+                 console.log(sortedStaffs);
                 setStaffs(sortedStaffs);
                 setWaitMsg('');
             } catch (error) {
