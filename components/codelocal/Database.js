@@ -254,6 +254,25 @@ export const getValueFromIndexedDB = async (key) => {
     }
 }
 
+
+
+
+/**
+ * Delete key from IndexedDB by key
+ * @param {string} key - Storage key
+ * @returns {Promise<Array>} - Retrieved data or an empty array
+ */
+export const delKeyFromIndexedDB = async (key) => {
+    try {
+        const data = await del(key);
+        return data;
+    } catch (error) {
+        console.error("Error retrieving data from IndexedDB:", error);
+    }
+}
+
+
+
 `;
     return isLocalStorage? strLocalStorage: strIndexDB;
 }
