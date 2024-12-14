@@ -1,4 +1,4 @@
-export const Utils = ()=>{
+export const Utilities = ()=>{
 
 let str = `
 /**
