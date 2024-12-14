@@ -21,6 +21,8 @@ import FetchData from "@/components/code/FetchData";
 import Server from "@/components/code/Server";
 import {SampleReactToPrint} from "@/components/code/SampleReactToPrint";
 import { jsPDFFunction } from "@/components/code/JsPdfFunction";
+import {Utilities} from "@/components/code/Utilities";
+
 
 
 
@@ -270,7 +272,13 @@ const Code = () => {
     setTitleText(``);
     setResult(Server());
     }
-    
+
+   const UtilitiesPageGenerate = () => {
+    setTitleText(``);
+    setResult(Utilities());
+    }   
+
+   
 
     return (
         <div className="pb-10">
@@ -309,6 +317,7 @@ const Code = () => {
                         <BtnEn Title="FetchData" Click={fetchData} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Server" Click={serverData} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Help" Click={HelpPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="Utils" Click={UtilitiesPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Help-jsPDF" Click={helpJsPdf} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="ReactToPrint" Click={SampleReactToPrintHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                     </div>
