@@ -16,7 +16,7 @@ const processExcelData = (readerResult, headerArray) => {
     return jsonData;
 }
 
-const headerArray = ["id", "name", "age"];
+
 // accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 
@@ -40,7 +40,7 @@ const headerArray = ["id", "name", "age"];
 
 
 
-// Upload Button Handler ------------------------------------
+// Upload Button Handler -----Only CSV to JSON-------------------------------
     const uploadHandler = () => {
         if (!file) {
             message("Please select a file.");
@@ -72,7 +72,8 @@ const headerArray = ["id", "name", "age"];
 
 
 
-
+// Upload Button Handler -----Direct JSON file-------------------------------
+const headerArray = ["id", "name", "age"];
 const uploadHandler = () => {
 		const reader = new FileReader();
 
