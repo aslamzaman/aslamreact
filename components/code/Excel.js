@@ -19,6 +19,60 @@ const processExcelData = (readerResult, headerArray) => {
 const headerArray = ["id", "name", "age"];
 // accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
+
+
+// Upload an excel file and convert into CSV file ------------------------------------
+  const convertCsvToJson = (csv) => {
+        const lines = csv.split("\n"); // Trim and split into rows
+        const dataRows = lines.slice(1);
+        return dataRows.map((item, index) => {
+            const values = item.split(";").map(value => value.trim());
+            return {
+                id: index + 1,
+                name: values[0],
+                date: values[1],
+                mobile: values[2]
+            }
+        })
+    }
+
+
+
+
+
+// Upload Button Handler ------------------------------------
+    const uploadHandler = () => {
+        if (!file) {
+            message("Please select a file.");
+            return;
+        }
+
+        try {
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const workbook = XLSX.read(event.target.result, { type: "binary" });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const csvFile = XLSX.utils.sheet_to_csv(worksheet,{FS:";"});
+              //  console.log(csvFile);
+                const data = convertCsvToJson(csvFile);
+                await setDataToIndexedDB("participant", data);
+                message("Data loaded successfully");
+                setShow(false);
+            }
+            reader.readAsArrayBuffer(file);
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
+
+
+
+
+
+
 const uploadHandler = () => {
 		const reader = new FileReader();
 
