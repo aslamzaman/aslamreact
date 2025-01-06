@@ -23,7 +23,7 @@ const processExcelData = (readerResult, headerArray) => {
 
 // Upload an excel file and convert into CSV file ------------------------------------
   const convertCsvToJson = (csv) => {
-        const lines = csv.split("\n"); // Trim and split into rows
+        const lines = csv.split("\\n"); // Trim and split into rows
         const dataRows = lines.slice(1);
         return dataRows.map((item, index) => {
             const values = item.split(";").map(value => value.trim());
