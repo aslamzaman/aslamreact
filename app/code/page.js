@@ -19,6 +19,7 @@ import MongooseRoute from "@/components/code/MongooseRoute";
 import MongooseRouteDynamic from "@/components/code/MongooseRouteDynamic";
 import FetchData from "@/components/code/FetchData";
 import Server from "@/components/code/Server";
+import LoadImages from "@/components/code/LoadImages";
 import {SampleReactToPrint} from "@/components/code/SampleReactToPrint";
 import { jsPDFFunction } from "@/components/code/JsPdfFunction";
 import {Utilities} from "@/components/code/Utilities";
@@ -278,6 +279,10 @@ const Code = () => {
     setResult(Utilities());
     }   
 
+    const LoadImagesHandle = ()=>{
+        setTitleText(``);
+        setResult(LoadImages()); 
+    }
    
 
     return (
@@ -320,7 +325,8 @@ const Code = () => {
                         <BtnEn Title="Utils" Click={UtilitiesPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Help-jsPDF" Click={helpJsPdf} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="ReactToPrint" Click={SampleReactToPrintHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                    </div>
+                        <BtnEn Title="LoadImages" Click={LoadImagesHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                </div>
                 </div>
                 <div className="col-span-2 py-4 max-h-[800px] overflow-auto">
                     <div className="w-full flex justify-between">
