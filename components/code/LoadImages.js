@@ -42,6 +42,17 @@ const fileChangeHandlerImage = async (e) => {
     }
 };
 
+
+const imagePosition = (orientation, w, h) => {
+    const width = orientation === "landscape" ? (631.4175 * 0.75) : ((631.4175 / h) * w * 0.75);
+    const height = (width / w) * h;
+    const x = orientation === "landscape" ? ((631.4175 - width) / 2) : ((446.46 - width) / 2);
+    const y = orientation === "landscape" ? ((446.46 - height) / 2) : ((631.4175 - height) / 2);
+    return { x, y, width, height };
+}
+
+
+
 `;
 
   return str;
