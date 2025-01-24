@@ -325,7 +325,7 @@ const Code = () => {
                         <BtnEn Title="Utils" Click={UtilitiesPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Help-jsPDF" Click={helpJsPdf} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="ReactToPrint" Click={SampleReactToPrintHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="LoadImages" Click={LoadImagesHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="MergeImages" Click={LoadImagesHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                 </div>
                 </div>
                 <div className="col-span-2 py-4 max-h-[800px] overflow-auto">
