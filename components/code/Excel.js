@@ -7,112 +7,53 @@ const api = "`${process.env.NEXT_PUBLIC_BASE_URL}/api/attendance`";
   const str = `npm install xlsx@0.18.5
 // Upload an excel file and convert into JSON file ------------------------------------
 import * as XLSX from 'xlsx';
-
-const processExcelData = (readerResult, headerArray) => {
-    const workbook = XLSX.read(readerResult, { type: "binary" });
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: headerArray });
-    return jsonData;
-}
-
-
-// accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-
-
+// <input type="file" onChange={fileChangeHandler} accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
 
 // Upload an excel file and convert into CSV file ------------------------------------
-  const convertCsvToJson = (csv) => {
-        const lines = csv.split("\\n"); // Trim and split into rows
-        const dataRows = lines.slice(1);
-        return dataRows.map((item, index) => {
+
+ const convertCsvToJson = (csv, headerArray) => {
+        const lines = csv.split("\n"); // Trim and split into rows
+        const dataRows = lines.slice(1);  // Deduct first row
+        return dataRows.map(item => {
             const values = item.split(";").map(value => value.trim());
-            return {
-                id: index + 1,
-                name: values[0],
-                date: values[1],
-                mobile: values[2]
+            let result = {};
+            for (let i = 0; i < headerArray.length; i++) {
+                result = { ...result, [headerArray[i]]: values[i] }
+            }
+            return result;
+        })
+    }
+
+const convertExcelToJson = (file, headerArray) => {
+        return new Promise((result, rejec) => {
+            try {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const workbook = XLSX.read(reader.result, { type: "binary" });
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const csvFile = XLSX.utils.sheet_to_csv(worksheet, { FS: ";" });
+                    const data = convertCsvToJson(csvFile, headerArray);
+                    result(data);
+                }
+                reader.readAsArrayBuffer(file);
+            } catch (error) {
+                rejec(error);
             }
         })
     }
 
 
-
-
-
-// Upload Button Handler -----Only CSV to JSON-------------------------------
-    const uploadHandler = () => {
-        if (!file) {
-            message("Please select a file.");
-            return;
-        }
-
-        try {
-            const reader = new FileReader();
-            reader.onload = async (event) => {
-                const workbook = XLSX.read(event.target.result, { type: "binary" });
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                const csvFile = XLSX.utils.sheet_to_csv(worksheet,{FS:";"});
-              //  console.log(csvFile);
-                const data = convertCsvToJson(csvFile);
-                await setDataToIndexedDB("participant", data);
-                message("Data loaded successfully");
-                setShow(false);
-            }
-            reader.readAsArrayBuffer(file);
-        } catch (err) {
-            console.log(err);
-        }
-
+ const fileChangeHandler = async (e) => {
+        const file = e.target.files[0];
+        const data = await convertExcelToJson(file, ["sl", "name", "date", "mobile"]);
+        console.log(data);
     }
 
 
-
-
-
-
-// Upload Button Handler -----Direct JSON file-------------------------------
-const headerArray = ["id", "name", "age"];
-const uploadHandler = () => {
-		const reader = new FileReader();
-
-		reader.onload = () => {
-			try {
-				const jsonData = processExcelData(reader.result, headerArray);
-				if (jsonData && jsonData.length > 1) {
-					const withoutFirstElement = jsonData.slice(1);
-					const stringifyData = JSON.stringify(withoutFirstElement);
-					localStorage.setItem("registration", stringifyData);
-					message("Upload successful");
-					console.log("Upload successful");
-				} else {
-					throw new Error("The processed data is invalid or empty.");
-				}
-			} catch (error) {
-				console.error("Error processing Excel data:", error);
-				message("Failed to upload. Please try again.");
-			}
-		};
-
-		reader.onerror = () => {
-			console.error("Error reading the file.");
-			message("Failed to read the file. Please try again.");
-		};
-
-		if (file) {
-			reader.readAsArrayBuffer(file);
-			setShow(false);
-		} else {
-			message("No file selected. Please choose a file to upload.");
-		}
-	};
-
-
-
-
-
-
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
+//------------------------------------------------------------------------
 
 // Create and Download as an excel file convert into JSON file ------------------------------------
 const saveJsonToExcelSheet = (jsonData) => {
