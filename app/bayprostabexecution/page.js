@@ -53,7 +53,7 @@ const Bayprostabexecution = () => {
         //------------------------------------
         const localData = await getDataFromIndexedDB('bayprostabexecution');
         const addSubtotal = localData.map(item => {
-          const subtotal = parseFloat(item.nos) * evaluate("0" + item.taka);
+          const subtotal = parseFloat(item.nos) * evaluate(`0${item.taka}`);
           return {
             ...item, subtotal
           }
