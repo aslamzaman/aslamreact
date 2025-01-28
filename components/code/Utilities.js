@@ -532,7 +532,7 @@ export const customIdForFirebase = () => {
 
 
 export const convertCsvToJson = (csv, headerArray) => {
-    const dataRows = csv.split("\n")
+    const dataRows = csv.split("\\n")
         .map(a => a.trim(''));
     return dataRows.map((item, index) => {
         const values = item.split(";").map(value => value.trim());
