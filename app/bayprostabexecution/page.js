@@ -58,6 +58,7 @@ const Bayprostabexecution = () => {
             ...item, subtotal
           }
         })
+        console.log(addSubtotal);
         setBayprostabexecutions(addSubtotal);
         const totalTaka = addSubtotal.reduce((t, c) => t + parseFloat(c.subtotal), 0);
         setTotal(totalTaka);
@@ -207,7 +208,7 @@ const Bayprostabexecution = () => {
                       bayprostabexecutions.length ? bayprostabexecutions.map(bayprostabexecution => {
                         return (
                           <tr className="border-b border-gray-200 hover:bg-gray-100" key={bayprostabexecution.id}>
-                            <td className={`text-center py-2 px-4 ${parseInt(evaluate(bayprostabexecution.taka)) === 0 ? 'font-sans' : 'font-sutonnyN'}`}>{bayprostabexecution.item}</td>
+                            <td className={`text-center py-2 px-4 font-sutonnyN`}>{bayprostabexecution.item}</td>
                             <td className="text-center py-2 px-4">{bayprostabexecution.nos}</td>
                             <td title={bayprostabexecution.subtotal} className="text-center py-2 px-4">{bayprostabexecution.taka}</td>
                             <td className="flex justify-end items-center mt-1">

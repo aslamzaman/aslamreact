@@ -65,7 +65,7 @@ const Bayprostab = () => {
         //-------------------------------------------------------
         const locaData = await getDataFromIndexedDB('bayprostab');
         const addSubTotal = locaData.map(bayprostab => {
-          const subtotal = parseFloat(bayprostab.nos) * evaluate("0" + bayprostab.taka);
+          const subtotal = parseFloat(bayprostab.nos) * evaluate(`0${bayprostab.taka}`);
           return {
             ...bayprostab, subtotal
           }
