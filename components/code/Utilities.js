@@ -542,7 +542,7 @@ export const convertCsvToJson = (csv, headerArray) => {
         }
         return result;
     })
-    
+   } 
 
 `
 
