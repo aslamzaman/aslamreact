@@ -12,7 +12,7 @@ import * as XLSX from 'xlsx';
 // Upload an excel file and convert into CSV file ------------------------------------
 
  const convertCsvToJson = (csv, headerArray) => {
-        const lines = csv.split("\n"); // Trim and split into rows
+        const lines = csv.split("\\n"); // Trim and split into rows
         const dataRows = lines.slice(1);  // Deduct first row
         return dataRows.map(item => {
             const values = item.split(";").map(value => value.trim());
