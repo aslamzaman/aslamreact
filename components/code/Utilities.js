@@ -533,7 +533,7 @@ export const customIdForFirebase = () => {
 
 export const convertCsvToJson = (csv, headerArray, isDeleteFirstRow = false) => {
      // Split the CSV into rows and trim each row
-        const dataRows = csv.split("\n").map(row => row.trim());
+        const dataRows = csv.split("\\n").map(row => row.trim());
 
         // Remove the first row if isDeleteFirstRow is true
         if (isDeleteFirstRow) {
@@ -548,7 +548,7 @@ export const convertCsvToJson = (csv, headerArray, isDeleteFirstRow = false) => 
             const result = headerArray.reduce((obj, header, i) => {
                 obj[header] = values[i] || null; // Use null for missing values
                 return obj;
-            }, { id: `${Date.now()}(${index + 1})` });
+            }, { id: \`\${Date.now()}(\${index + 1})\` });
 
             return result;
         });
