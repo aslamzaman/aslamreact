@@ -171,7 +171,32 @@ export const jsPDFPrintOtherPage = ({ doc }, data, dataFormat, margin, linesPerP
         doc.save(\`\${new Date().toISOString()}.pdf\`);
     };
 
-
+//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------
+    const dd = () => {
+        // npm i jspdf-autotable@3.8.4
+        // npm i jspdf@2.5.1
+        const doc = new jsPDF();
+        doc.autoTable({
+            theme: 'grid',
+            columnStyles: { 2: { halign: 'right', cellWidth: 20 } },
+            startY: 40, // Start position of the table
+            tableWidth: 'auto',
+            margin: { top: 20, botton: 20 },
+            head: [['ID', 'Mobile', { content: 'Salary', styles: { halign: 'right' } }]], // Table headers
+            body: data.map(row => [row.id, row.mobile, row.salary]), // Table data
+        });
+        // Save the PDF
+        const numOfPages = doc.internal.getNumberOfPages();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        doc.setFontSize(10);
+        for (let i = 1; i <= numOfPages; i++) {
+            doc.setPage(i);
+            doc.text(\`Page \${i}  of \${numOfPages}\`, 15, pageHeight - 10);
+        }
+        doc.save('database_information.pdf');
+    }
 
 `;
 return str;
