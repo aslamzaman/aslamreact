@@ -8,6 +8,7 @@ import Edit from "@/components/code/Edit";
 import Delete from "@/components/code/Delete";
 import LayoutPage from "@/components/code/LayoutPage";
 import Help_code from "@/components/code/HelpCode";
+import Helper_code from "@/components/code/Helper";
 import TwoPart from "@/components/code/TowPart";
 import OnePage from "@/components/code/OnePage";
 import Excle from "@/components/code/Excel";
@@ -284,7 +285,13 @@ const Code = () => {
         setResult(LoadImages()); 
     }
    
+    const HelperGenerate = () => {
+        setTitleText(`helpers/${tbl}Helpers.js`);
+        setResult(Helper_code(tbl));
+    }
 
+
+    
     return (
         <div className="pb-10">
             <h1 className="w-full text-center text-3xl text-gray-500 font-bold py-7">Code Generator</h1>
@@ -307,7 +314,8 @@ const Code = () => {
                         <BtnEn Title="LayoutPage" Click={LayoutPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Add" Click={AddGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Edit" Click={EditGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Delete" Click={DeleteGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />                       
+                        <BtnEn Title="Delete" Click={DeleteGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" /> 
+                        <BtnEn Title="Helpers" Click={HelperGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />  
                         <BtnEn Title="Two Part" Click={TwoPartHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="One Page" Click={OnePartHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="DropdownById" Click={DropdownById} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
