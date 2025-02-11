@@ -21,8 +21,7 @@ const Unique = () => {
         for (let i = 0; i < 5000; i++) {
           x.push(customIdForFirebase());
         }
-        const newSet = new Set(x);
-        const result = Array.from(newSet);
+        const result = [...new Set(x)];
         console.log(result);
         setMsg("Multiple unique IDs in the console");
     }
