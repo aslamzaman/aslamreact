@@ -18,7 +18,7 @@ const Unique = () => {
         setUniq3(customIdForFirebase());
 
         let x = [];
-        for (let i = 0; i < 5000; i++) {
+        for (let i = 0; i < 1000000; i++) {
           x.push(customIdForFirebase());
         }
         const result = [...new Set(x)];
