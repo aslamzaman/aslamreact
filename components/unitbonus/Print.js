@@ -78,7 +78,7 @@ const Print = ({ data, message }) => {
         doc.setFont("SutonnyMJ", "normal");
         doc.setFontSize(18);
         doc.text(`†m›Uvi di g¨vm GWz‡Kkb Bb mv‡qÝ (wmGgBGm)`, 149.2, 16, null, null, "center");
-        doc.text(`BDwbU óvd‡\`i Drme fvZv`, 149.2, 22, null, null, "center");
+        doc.text(`BDwbU óvd‡\`i evrmwiK Drme fvZv`, 149.2, 22, null, null, "center");
         doc.setFontSize(15);
         doc.text(`${mnth} ${yr}`, 149.2, 28, null, null, "center");
 
@@ -88,12 +88,12 @@ const Print = ({ data, message }) => {
 
         doc.setFontSize(13);
 
-        let y = 42; // 36
+        let y = 42; // BDwbU
         doc.setFont("SutonnyMJ", "bold");
         doc.text("µg.", 17.8, y - 6, null, null, "center");
-        doc.text("bvg	c`ex", 23, y - 6, null, null, "left");
-        doc.text("c`ex", 134.6, y - 6, null, null, "center");
-        doc.text("BDwbU", 101, y - 6, null, null, "center");
+        doc.text("bvg	c`ex", 26, y - 6, null, null, "left");
+        doc.text("BDwbU", 134.6, y - 6, null, null, "center");
+        doc.text("c`ex", 101, y - 6, null, null, "center");
         doc.text("†hvM`vb", 163, y - 6, null, null, "center"); // join
         doc.text("Drme fvZv", 195, y - 6, null, null, "center");
         doc.text("gšÍe¨", 249, y - 6, null, null, "center");
@@ -113,7 +113,7 @@ const Print = ({ data, message }) => {
 
             let total_taka = parseFloat(Math.round(staffs[i].bonus));
             doc.text(`${sl1}`, 17.5, y, null, null, "center");
-            doc.text(`${staffs[i].staff.nmBn}`, 23, y, null, null, "left");
+            doc.text(`${staffs[i].staff.nmBn}`, 26, y, null, null, "left");
             doc.text(`${staffs[i].staff.post.nmBn}`, 102, y, null, null, "center"); // correction
             doc.text(`${staffs[i].staff.unit.nmBn}`, 134.6, y, null, null, "center");
             doc.text(`${formatedDateDot(staffs[i].staff.joinDt, false)}`, 163, y, null, null, "center");
