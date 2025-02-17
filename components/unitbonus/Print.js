@@ -144,7 +144,7 @@ const Print = ({ data, message }) => {
         doc.text("G¨vKvD›Um", 220, y + 22, null, null, "center");
         doc.text("cÖkvmb", 280, y + 22, null, null, "center");
 
-        doc.save(new Date().toISOString() + "-Unit-Salary.pdf");
+        doc.save(new Date().toISOString() + "-Unit-Staff-Bonus.pdf");
     }
 
 
