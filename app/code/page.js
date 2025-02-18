@@ -24,6 +24,7 @@ import LoadImages from "@/components/code/LoadImages";
 import {SampleReactToPrint} from "@/components/code/SampleReactToPrint";
 import { jsPDFFunction } from "@/components/code/JsPdfFunction";
 import {Utilities} from "@/components/code/Utilities";
+import { titleCamelCase } from "@/lib/utils";
 
 
 
@@ -286,7 +287,7 @@ const Code = () => {
     }
    
     const HelperGenerate = () => {
-        setTitleText(`helpers/${tbl}Helpers.js`);
+        setTitleText(`helpers/${titleCamelCase(tbl)}Helpers.js`);
         setResult(Helper_code(tbl));
     }
 

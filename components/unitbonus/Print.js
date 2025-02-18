@@ -2,20 +2,11 @@ import React, { useState } from "react";
 import { jsPDF } from "jspdf";
 import { Close } from "@/components/Icons";
 import { DropdownEn, BtnSubmit } from "@/components/Form";
-import { numberWithComma, formatedDate, formatedDateDot } from "@/lib/utils";
+import { numberWithComma, formatedDateDot } from "@/lib/utils";
+import 'jspdf-autotable';
 
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
-
-const shortDt = (dt) => {
-    const d = new Date(dt);
-    const d1 = formatedDate(d);
-    const spltDt = d1.split('-');
-    const fullYear = d.getFullYear();
-    const strYear = fullYear.toString();
-    const twoDigit = strYear.substring(strYear.length - 2, strYear.length);
-    return spltDt[2] + "." + spltDt[1] + "." + twoDigit;
-}
 
 
 const MonthData = [
@@ -30,7 +21,7 @@ const MonthData = [
     { id: "†m‡Þ¤^i", option: "September" },
     { id: "A‡±vei", option: "October" },
     { id: "b‡f¤^i", option: "November" },
-    { id: "wW‡m¤^i", option: "December" }    
+    { id: "wW‡m¤^i", option: "December" }
 ]
 
 
@@ -58,11 +49,11 @@ const Print = ({ data, message }) => {
 
     const printShow = async () => {
         setShow(true);
-        message("Ready to print");
+      //  message("Ready to print");
         setStaffs(data);
     }
 
-    console.log("Data: ", data);
+
 
     const printHandler = async (e) => {
         e.preventDefault();
@@ -74,7 +65,7 @@ const Print = ({ data, message }) => {
             floatPrecision: 16
         });
 
-        console.log(staffs)
+       // console.log(staffs)
         doc.setFont("SutonnyMJ", "normal");
         doc.setFontSize(18);
         doc.text(`†m›Uvi di g¨vm GWz‡Kkb Bb mv‡qÝ (wmGgBGm)`, 149.2, 16, null, null, "center");

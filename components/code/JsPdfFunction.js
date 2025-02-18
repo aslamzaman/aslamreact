@@ -177,10 +177,12 @@ export const jsPDFPrintOtherPage = ({ doc }, data, dataFormat, margin, linesPerP
     const dd = () => {
         // npm i jspdf-autotable@3.8.4
         // npm i jspdf@2.5.1
+        // import jsPDF from 'jspdf'
+        // import 'jspdf-autotable';
         const doc = new jsPDF();
         doc.autoTable({
             theme: 'grid',
-            columnStyles: { 2: { halign: 'right', cellWidth: 20 } },
+            columnStyles: { 2: { halign: 'right', cellWidth: 20 } },  // 0, 1, 2, ...
             startY: 40, // Start position of the table
             tableWidth: 'auto',
             margin: { top: 20, botton: 20 },

@@ -4,9 +4,8 @@ import Add from "@/components/unitbonus/Add";
 import Edit from "@/components/unitbonus/Edit";
 import Delete from "@/components/unitbonus/Delete";
 import Print from "@/components/unitbonus/Print";
-import { getDataFromFirebase } from "@/lib/firebaseFunction";
-import { numberWithComma, sortArray } from "@/lib/utils";
-
+import { numberWithComma } from "@/lib/utils";
+import { UnitbonusHelper } from "@/helpers/unitbonus";
 
 const Unitbonus = () => {
     const [unitbonuss, setUnitbonuss] = useState([]);
@@ -17,39 +16,15 @@ const Unitbonus = () => {
 
 
     useEffect(() => {
+
         const loadData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const [unitbonusResponse, staffResponse, unitResponse, postResponse] = await Promise.all([
-                    getDataFromFirebase("unitbonus"),
-                    getDataFromFirebase("staff"),
-                    getDataFromFirebase("unit"),
-                    getDataFromFirebase("post")
-                ]);
-                const staffs = staffResponse.map(staff => {
-                    const getUnit = unitResponse.find(unit => unit.id === staff.unitId);
-                    const getPost = postResponse.find(post => post.id === staff.postId);
-                    return {
-                        ...staff,
-                        post: getPost,
-                        unit: getUnit
-                    }
-                })
-
-                const data = unitbonusResponse.map(bonus => {
-                    const staff = staffs.find(staff => staff.id === bonus.staffId);
-                    return {
-                        ...bonus,
-                        staff
-                    }
-                })
-                const sortData = data.sort((a, b) => sortArray(new Date(a.createdAt), new Date(b.createdAt)));
-                console.log({ sortData });
-                setUnitbonuss(sortData);
-                const totalBounus = data.reduce((t, c) => t + parseFloat(c.bonus), 0);
-                setTotal(totalBounus);
-
-                setWaitMsg('');
+                const helpers = await UnitbonusHelper();
+               // console.log({ helpers });
+                setUnitbonuss(helpers.data);
+                setTotal(helpers.total);
+               setWaitMsg('');
             } catch (error) {
                 console.error("Error fetching data:", error);
                 setMsg("Failed to fetch data");
@@ -68,7 +43,7 @@ const Unitbonus = () => {
     return (
         <>
             <div className="w-full mb-3 mt-8">
-                <h1 className="w-full text-xl lg:text-4xl font-bold text-center text-blue-700">Unit CTNG Bonus: {numberWithComma(parseFloat(total))}/-</h1>
+                <h1 className="w-full text-xl lg:text-4xl font-bold text-center text-blue-700">Unit Staff Bonus: {numberWithComma(parseFloat(total))}/-</h1>
                 <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
             </div>
             <div className="px-4 lg:px-6">
