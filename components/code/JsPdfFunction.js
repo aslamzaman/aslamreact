@@ -200,6 +200,35 @@ export const jsPDFPrintOtherPage = ({ doc }, data, dataFormat, margin, linesPerP
         doc.save('database_information.pdf');
     }
 
+
+------------------------------------------------------------------------------------
+------------------------ Display on iframe -------------------------------------------------------
+
+      // import { jsPDF } from "jspdf";
+              const doc = new jsPDF({
+                  orientation: 'p',
+                  unit: 'mm',
+                  format: 'a4',
+                  putOnlyUsedFonts: true,
+                  floatPrecision: 16 
+              });
+      
+              doc.setFont("SutonnyMJ", "normal");
+              doc.setFontSize(14);
+              doc.text("Avmjvg Rvgvb", 10, 10, null, null, "left");
+      
+              doc.setDocumentProperties({ title: "Leave Calculator", subject:"Leave entry calculation", author: "Aslam Zaman", keywords:"leave, calculator, aslam", creator:"aslamreact.web.app" });
+              const dataUrlString = doc.output('bloburl');
+              console.log(dataUrlString);
+      
+              const iframe = document.createElement('iframe');
+              iframe.setAttribute('src', dataUrlString);
+              iframe.setAttribute('style', 'width:100%; height:400px; border:2px solid red; zoom: 0.70')
+      
+              const divRef = pageRef.current;
+              divRef.appendChild(iframe);
+  
+
 `;
 return str;
 
