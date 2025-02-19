@@ -1,70 +1,25 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { TextNum, BtnSubmit, DropdownEn } from "@/components/Form";
+import { TextNum, BtnSubmit } from "@/components/Form";
+import { registerEntry, leftSide, rightSide } from "@/helpers/leavecalculation";
+import { jsPDF } from "jspdf";
+require("@/public/fonts/SUTOM_MJ-normal");
+require("@/public/fonts/SUTOM_MJ-bold");
 
 
 const Leavecalculation = () => {
     const [req, setReq] = useState(2);
-    const [cl, setCl] = useState(18);
+    const [cl, setCl] = useState(16);
     const [el, setEl] = useState(18);
 
     const [result, setResult] = useState("");
     const [resultColor, setResultColor] = useState({ color: "blue" });
+    const [url, setUrl] = useState("/images/formats/leave.png");
 
 
     useEffect(() => {
         setResult("Result");
     }, [])
-
-
-    const registerEntry = (balanceCl, balanceEl, requestedLeave) => {
-        //--------- Consume --------------------
-        const consumeCl = 20 - balanceCl;
-        const consumeEl = 18 - balanceEl;
-        let newBalanceCl = 0;
-
-        const totalReqCl = consumeCl + requestedLeave;
-
-        let extraCl = 0;
-
-        if (totalReqCl > 20) {
-            extraCl = totalReqCl - 20;
-            newBalanceCl = 0;
-        } else {
-            extraCl = 0;
-            newBalanceCl = 20 - totalReqCl;
-        }
-        const totalReqEl = extraCl + consumeEl;
-
-        const newBalanceEl = 18 - totalReqEl;
-        return { newBalanceCl, newBalanceEl };
-    }
-
-
-    const leftSide = (balanceCl, balanceEl, requestedLeave) => {
-        const consumeCl = 20 - balanceCl;
-        const consumeEl = 18 - balanceEl;
-        const totalConsume = consumeCl + consumeEl + requestedLeave;
-        return { consumeCl, consumeEl, requestedLeave, totalConsume }
-
-    }
-
-    const rightSide = (balanceCl, balanceEl, requestedLeave) => {
-        const registerBalance = registerEntry(balanceCl, balanceEl, requestedLeave);
-        const totalConsume = 38 - (registerBalance.newBalanceCl + registerBalance.newBalanceEl);
-        let quarter = 0;
-        if (totalConsume > 20) {
-            quarter = 38;
-        } else {
-            quarter = 20;
-        }
-        const lastConsume = totalConsume - requestedLeave;
-        const balance = quarter - (lastConsume + requestedLeave);
-        return { quarter, lastConsume, requestedLeave, balance };
-    }
-
-
-
 
     const calculateHandler = (e) => {
         e.preventDefault();
@@ -76,18 +31,40 @@ const Leavecalculation = () => {
         const leftApplicaion = leftSide(balanceCl, balanceEl, requestedLeave);
         const rightApplicaion = rightSide(balanceCl, balanceEl, requestedLeave);
 
-        //  console.log(registerBalance)
-        //  console.log(leftApplicaion)
-        //  console.log(rightApplicaion)
-
         const st = `Register: ${registerBalance.newBalanceCl}, ${registerBalance.newBalanceEl} ||  Left Side: ${leftApplicaion.consumeCl}, ${leftApplicaion.consumeEl}, ${leftApplicaion.requestedLeave}, ${leftApplicaion.totalConsume} || Right Side: ${rightApplicaion.quarter}, ${rightApplicaion.lastConsume}, ${rightApplicaion.requestedLeave}, ${rightApplicaion.balance}`;
         setResult(st);
+
+        const doc = new jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: 'a4',
+            putOnlyUsedFonts: true,
+            floatPrecision: 16 // or "smart", default is 16
+        });
+
+        doc.setFont("SutonnyMJ", "normal");
+        doc.setFontSize(14);
+        doc.text("Aslam Zaman", 10, 10, null, null, "left");
+        doc.text("Aslam Zaman", 10, 20, null, null, "left");
+        doc.text("Aslam Zaman", 10, 30, null, null, "left");
+        doc.text("Aslam Zaman", 10, 40, null, null, "left");
+        const x = doc.output('datauristring');
+       
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('src', x);
+        iframe.setAttribute('width', '500px');
+        iframe.setAttribute('height', '300px');
+        iframe.setAttribute('style', 'margin-left: auto; margin-right: auto; margin-bottom:50px');
+        document.body.appendChild(iframe);
+       
+        console.log(x);
+
     }
 
     return (
         <>
             <div className="w-full my-6 lg:my-10">
-                <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Octen</h1>
+                <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Leave Calculation</h1>
             </div>
 
             <div className="px-4 lg:px-6">
