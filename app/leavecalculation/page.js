@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { TextNum, BtnSubmit } from "@/components/Form";
 import { registerEntry, leftSide, rightSide } from "@/helpers/leavecalculation";
 import { jsPDF } from "jspdf";
@@ -14,9 +14,9 @@ const Leavecalculation = () => {
 
     const [result, setResult] = useState("");
     const [resultColor, setResultColor] = useState({ color: "blue" });
-    const [url, setUrl] = useState("/images/formats/leave.png");
+    const [url, setUrl] = useState("/images/blank/blank.pdf");
+    const [isPdf, setIsPdf] = useState(false);
 
-    const pageRef = useRef();
 
     useEffect(() => {
         setResult("Result");
@@ -24,6 +24,7 @@ const Leavecalculation = () => {
 
     const calculateHandler = (e) => {
         e.preventDefault();
+        setIsPdf(true);
         const balanceCl = parseFloat(cl);
         const balanceEl = parseFloat(el);
         const requestedLeave = parseFloat(req);
@@ -46,8 +47,8 @@ const Leavecalculation = () => {
         const y = 10;
         doc.setFont("SutonnyMJ", "normal");
         doc.setFontSize(14);
-        doc.line(70, 5, 70, 42);
-        doc.line(5, 11, 150, 11);
+        doc.line(105, 5, 105, 42);
+        doc.line(5, 11, 200, 11);
 
         doc.text("PjwZ eQ‡i †fvMK…Z QywUi cÖK…wZ:", 5, y, null, null, "left");
         doc.text("ˆbwgwËK QywU       =", 5, y + 7, null, null, "left");
@@ -61,11 +62,11 @@ const Leavecalculation = () => {
         doc.text("w`b", 60, y + 21, null, null, "left");
         doc.text("w`b", 60, y + 29, null, null, "left");
         //-----------------------------------------
-        doc.text("QywUi Z_¨:               ", 150, y, null, null, "right");
-        doc.text("1g, 2q, 3q, 4_© †KvqvU©v‡i cÖvc¨ QywU =       w`b", 150, y + 7, null, null, "right");
-        doc.text("BwZc~‡e© †fvMK…Z QywU =       w`b", 150, y + 14, null, null, "right");
-        doc.text("Av‡e`bK…Z QywU =               w`b", 150, y + 21, null, null, "right");
-        doc.text("Aewkó/AwZwi³  QywU =               w`b", 150, y + 29, null, null, "right");
+        doc.text("QywUi Z_¨:               ", 200, y, null, null, "right");
+        doc.text("1g, 2q, 3q, 4_© †KvqvU©v‡i cÖvc¨ QywU =       w`b", 200, y + 7, null, null, "right");
+        doc.text("BwZc~‡e© †fvMK…Z QywU =       w`b", 200, y + 14, null, null, "right");
+        doc.text("Av‡e`bK…Z QywU =               w`b", 200, y + 21, null, null, "right");
+        doc.text("Aewkó/AwZwi³  QywU =               w`b", 200, y + 29, null, null, "right");
 
         //----------- Left ----------------------------------------------------------------
 
@@ -74,10 +75,10 @@ const Leavecalculation = () => {
         doc.text(`${leftApplicaion.requestedLeave}`, 50, y + 21, null, null, "left");
         doc.text(`${leftApplicaion.totalConsume} `, 50, y + 29, null, null, "left");
         // ------------- Right --------------------------------------------
-        doc.text(`${rightApplicaion.quarter}`, 142, y + 7, null, null, "right");
-        doc.text(`${rightApplicaion.lastConsume}`, 142, y + 14, null, null, "right");
-        doc.text(`${rightApplicaion.requestedLeave}`, 142, y + 21, null, null, "right");
-        doc.text(`${rightApplicaion.balance}`, 142, y + 29, null, null, "right");
+        doc.text(`${rightApplicaion.quarter}`, 192, y + 7, null, null, "right");
+        doc.text(`${rightApplicaion.lastConsume}`, 192, y + 14, null, null, "right");
+        doc.text(`${rightApplicaion.requestedLeave}`, 192, y + 21, null, null, "right");
+        doc.text(`${rightApplicaion.balance}`, 192, y + 29, null, null, "right");
 
 
 
@@ -88,20 +89,14 @@ const Leavecalculation = () => {
         doc.text("(EL)", 22, y + 14, null, null, "left");
 
         doc.line(5, 34, 66, 34);
-        doc.line(80, 34, 150, 34);
+        doc.line(130, 34, 200, 34);
 
 
         doc.setDocumentProperties({ title: "Leave Calculator", subject: "Leave entry calculation", author: "Aslam Zaman", keywords: "leave, calculator, aslam", creator: "aslamreact.web.app" });
-        const dataUrlString = doc.output('bloburl');
-        console.log(dataUrlString);
 
-        const iframe = document.createElement('iframe');
-        iframe.setAttribute('src', dataUrlString);
-        iframe.setAttribute('scrolling', 'no');
-        iframe.setAttribute('style', 'width:100%; height:300px; border:2px solid red; zoom: 0.70')
-
-        const divRef = pageRef.current;
-        divRef.appendChild(iframe);
+        const blobUrl = doc.output('bloburl');
+        console.log(blobUrl);
+        setUrl(blobUrl)
     }
 
     return (
@@ -126,9 +121,14 @@ const Leavecalculation = () => {
                                 <BtnSubmit Title="Create Pdf" Class="bg-blue-600 hover:bg-blue-800 text-white" />
                             </div>
                         </form>
+                        {isPdf ? (
+                            <div className="w-full py-4">
+                                <iframe src={`${url}#zoom=70`} className="w-full h-[250px] border-2 border-red-600"></iframe>
+                            </div>
+                        ) : null}
                     </div>
 
-                    <div ref={pageRef} className="p-4"> </div>
+
 
                 </div>
             </div>
