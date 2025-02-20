@@ -69,7 +69,8 @@ const Print = ({ data, message }) => {
         doc.setFont("SutonnyMJ", "normal");
         doc.setFontSize(18);
         doc.text(`†m›Uvi di g¨vm GWz‡Kkb Bb mv‡qÝ (wmGgBGm)`, 149.2, 16, null, null, "center");
-        doc.text(`BDwbU óvd‡\`i evrmwiK Drme fvZv`, 149.2, 22, null, null, "center");
+        doc.setFontSize(17);
+        doc.text(`BDwbU óvd‡\`i (wmwUGbwR) evrmwiK Drme fvZv`, 149.2, 22, null, null, "center");
         doc.setFontSize(15);
         doc.text(`${mnth} ${yr}`, 149.2, 28, null, null, "center");
 
