@@ -60,12 +60,12 @@ const ${titleCamelCase(tbl)} = () => {
             <div className="w-full mb-3 mt-8">
                 <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">${titleCase(tbl)}</h1>
                 <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
-                <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
-            </div>
-
-
-            <div className="w-full lg:w-3/4 mx-auto border-2 border-gray-200 p-4 shadow-md rounded-md">
+                </div>
+                
+                
+                <div className="w-full lg:w-3/4 mx-auto border-2 border-gray-200 p-4 shadow-md rounded-md">
                 <div className="w-full overflow-auto">
+                    <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
                     <div className="w-full flex justify-end">
                         <div className="w-auto flex items-center">
                             <Download message={messageHandler} />

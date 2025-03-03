@@ -1,6 +1,6 @@
 "use client"
 import React, { useEffect, useState } from "react";
-import { BtnEn, TextEn } from "@/components/Form";
+import { TextEn } from "@/components/Form";
 
 import Page from "@/components/code/Page";
 import Add from "@/components/code/Add";
@@ -21,9 +21,9 @@ import MongooseRouteDynamic from "@/components/code/MongooseRouteDynamic";
 import FetchData from "@/components/code/FetchData";
 import Server from "@/components/code/Server";
 import LoadImages from "@/components/code/LoadImages";
-import {SampleReactToPrint} from "@/components/code/SampleReactToPrint";
+import { SampleReactToPrint } from "@/components/code/SampleReactToPrint";
 import { jsPDFFunction } from "@/components/code/JsPdfFunction";
-import {Utilities} from "@/components/code/Utilities";
+import { Utilities } from "@/components/code/Utilities";
 import { titleCamelCase } from "@/lib/utils";
 
 
@@ -43,6 +43,17 @@ const FirstCap = (str) => {
     const joinToOne = firstLetterCap + restLetter;
     return joinToOne
 }
+
+
+const BtnEn = ({ Title, Click, Class }) => {
+    return (
+        <button onClick={Click} className={`text-center p-1 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 ${Class} cursor-pointer`}>{Title}</button>
+
+    )
+}
+
+
+
 
 
 
@@ -116,7 +127,7 @@ const Code = () => {
         setTitleText(`lib/firebaseFunction.js`);
         setResult(FirebaseFunction());
     }
-    
+
 
     const MongooseHandle = () => {
         setTitleText(`lib/DB.js`);
@@ -138,11 +149,11 @@ const Code = () => {
         setResult(MongooseRouteDynamic(tbl, fld));
     }
 
- const SampleReactToPrintHandle = () => {
-         setTitleText(`components/${tbl}/PrintPage.js`);
+    const SampleReactToPrintHandle = () => {
+        setTitleText(`components/${tbl}/PrintPage.js`);
         setResult(SampleReactToPrint());
     }
-    
+
     const DropdownById = () => {
         const tblName = prompt("Collection Name, Referance Id(say: post, postId)");
         if (tblName === null || tblName === '') return false;
@@ -161,7 +172,7 @@ const Code = () => {
         str = str + "\n";
 
         str = str + "try {\n";
-        str = str + "    const response" + titleCase(tbl[0]) + ' = await getDataFromFirebase("'+tbl[0]+'");\n';
+        str = str + "    const response" + titleCase(tbl[0]) + ' = await getDataFromFirebase("' + tbl[0] + '");\n';
         str = str + "   set" + titleCase(tbl[0]) + "s(response" + titleCase(tbl[0]) + ");\n";
         str = str + "} catch (error) {\n";
         str = str + "    console.error('Failed to fetch delivery data:', error);\n";
@@ -220,10 +231,10 @@ const Code = () => {
 
         let m3 = "";
         for (let i = 1; i < sp.length - 1; i++) {
-            m3 = m3 + '                   ' + sp[i].trim() + ' : '+ sp[i].trim() + 's.find(' + sp[i].trim() + ' => ' + sp[i].trim() + '.id === ' + sp[0].trim() + '.' + sp[i].trim() + 'Id) || {},\n';;
+            m3 = m3 + '                   ' + sp[i].trim() + ' : ' + sp[i].trim() + 's.find(' + sp[i].trim() + ' => ' + sp[i].trim() + '.id === ' + sp[0].trim() + '.' + sp[i].trim() + 'Id) || {},\n';;
         }
 
-        m3 = m3 + '                   ' + sp[sp.length - 1].trim() + ' : '+ sp[sp.length - 1].trim() + 's.find(' + sp[sp.length - 1].trim() + ' => ' + sp[sp.length - 1].trim() + '.id ===' + sp[0].trim() + '.' + sp[sp.length - 1].trim() + 'Id) || {}\n';;
+        m3 = m3 + '                   ' + sp[sp.length - 1].trim() + ' : ' + sp[sp.length - 1].trim() + 's.find(' + sp[sp.length - 1].trim() + ' => ' + sp[sp.length - 1].trim() + '.id ===' + sp[0].trim() + '.' + sp[sp.length - 1].trim() + 'Id) || {}\n';;
 
         str = str + m3;
         str = str + `                }\n`;
@@ -231,7 +242,7 @@ const Code = () => {
         str = str + "\n";
         str = str + "            const sortedData = joinCollection.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));\n";
         str = str + "            set" + titleCase(sp[0]) + "s(sortedData);\n";
-         str = str + "            setWaitMsg('');\n";
+        str = str + "            setWaitMsg('');\n";
         str = str + "        } catch (error) {\n";
         str = str + '            console.error("Error fetching data:", error);\n';
         str = str + "            setWaitMsg('Failed to fetch data. Please try again.');\n";
@@ -272,27 +283,27 @@ const Code = () => {
     }
 
     const serverData = () => {
-    setTitleText(``);
-    setResult(Server());
-    }
-
-   const UtilitiesPageGenerate = () => {
-    setTitleText(``);
-    setResult(Utilities());
-    }   
-
-    const LoadImagesHandle = ()=>{
         setTitleText(``);
-        setResult(LoadImages()); 
+        setResult(Server());
     }
-   
+
+    const UtilitiesPageGenerate = () => {
+        setTitleText(``);
+        setResult(Utilities());
+    }
+
+    const LoadImagesHandle = () => {
+        setTitleText(``);
+        setResult(LoadImages());
+    }
+
     const HelperGenerate = () => {
         setTitleText(`helpers/${titleCamelCase(tbl)}Helpers.js`);
         setResult(Helper_code(tbl));
     }
 
 
-    
+
     return (
         <div className="pb-10">
             <h1 className="w-full text-center text-3xl text-gray-500 font-bold py-7">Nextjs Code Generator</h1>
@@ -307,44 +318,49 @@ const Code = () => {
                     <TextEn Title="Column (name, address, createdAt)" Id="fld" Change={e => setFld(e.target.value)} Value={fld} Chr={500} />
                 </div>
             </div>
-            <div className="w-full px-4 grid grid-cols-3 gap-4">
-                <div className="mt-7 py-4 max-h-96 overflow-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-x-2">
 
-                        <BtnEn Title="Page" Click={PageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="LayoutPage" Click={LayoutPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Add" Click={AddGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Edit" Click={EditGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Delete" Click={DeleteGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" /> 
-                        <BtnEn Title="Helpers" Click={HelperGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />  
-                        <BtnEn Title="Two Part" Click={TwoPartHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="One Page" Click={OnePartHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="DropdownById" Click={DropdownById} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Joint Table" Click={JoinCollections} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Excel" Click={ExcelGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="FirebaseConfig" Click={FirebaseConfigHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="FirebaseFunctions" Click={FirebaseFunctionsHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="MongooseDB" Click={MongooseHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="MongooseModel" Click={MongooseModelHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="MongooseRoute" Click={MongooseRouteHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="DynamicRoute" Click={MongooseRouteDynamicHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="FetchData" Click={fetchData} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Server" Click={serverData} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Help" Click={HelpPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Utils" Click={UtilitiesPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Help-jsPDF" Click={helpJsPdf} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="ReactToPrint" Click={SampleReactToPrintHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="MergeImages" Click={LoadImagesHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+
+            <div className="w-full grid grid-cols-5 gap-2">
+<div className="w-full col-span-2 py-6">
+                <div className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2 overflow-auto">
+
+                    <BtnEn Title="Page" Click={PageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="LayoutPage" Click={LayoutPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="Add" Click={AddGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="Edit" Click={EditGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="Delete" Click={DeleteGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="Helpers" Click={HelperGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="Two Part" Click={TwoPartHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="One Page" Click={OnePartHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="DropdownById" Click={DropdownById} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="Joint Table" Click={JoinCollections} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="Excel" Click={ExcelGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="FirebaseConfig" Click={FirebaseConfigHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="FirebaseFunctions" Click={FirebaseFunctionsHandle} Class="px-1 bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="MongooseDB" Click={MongooseHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="MongooseModel" Click={MongooseModelHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="MongooseRoute" Click={MongooseRouteHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="DynamicRoute" Click={MongooseRouteDynamicHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="FetchData" Click={fetchData} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="Server" Click={serverData} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="Help" Click={HelpPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="Utils" Click={UtilitiesPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="Help-jsPDF" Click={helpJsPdf} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="ReactToPrint" Click={SampleReactToPrintHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="MergeImages" Click={LoadImagesHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                 </div>
                 </div>
-                <div className="col-span-2 py-4 max-h-[800px] overflow-auto">
+
+                <div className="col-span-3 py-4 max-h-[800px] overflow-auto">
                     <div className="w-full flex justify-between">
-                    <p>{titleText}</p>
-                    <button className="px-3 py-0.5 border border-gray-300 rounded-full hover:font-bold" onClick={copyPageHandler}>Copy</button>
+                        <p>{titleText}</p>
+                        <button className="px-3 py-0.5 border border-gray-300 rounded-full hover:font-bold" onClick={copyPageHandler}>Copy</button>
                     </div>
                     <textarea rows={20} id="result" name="result" onChange={resultChangeHander} value={result} required maxLength={2500} className="w-full px-4 my-1.5 text-gray-600 ring-1 focus:ring-4 ring-blue-300 outline-none rounded duration-300" />
 
                 </div>
+
+
             </div>
         </div>
     )
