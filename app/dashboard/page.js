@@ -4,23 +4,20 @@ import dashboard from "@/public/images/landing/landing.png";
 import Image from "next/image";
 
 
-const Item = () => {
-    const [items, setItems] = useState([]);
-    const [msg, setMsg] = useState("Data ready");
+const DashboardPage = () => {
 
-   
     return (
         <>
-            <div className="w-full my-6 lg:my-8">
-                <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Dashboard</h1>
-                <Image src={dashboard} alt="dashboard" width={399.1} height={261.8} priority={true} className="w-11/12 h-auto mx-auto" />
-            </div>    
-          
+            <h1 className="w-full py-4 text-xl lg:text-3xl font-bold text-center text-blue-700">Dashboard</h1>
+            <div className="w-full lg:w-3/4 mx-auto border-2 shadow-md rounded-md overflow-auto">
+                <Image src={dashboard} alt="dashboard" width={399.1} height={261.8} priority={true} className="w-full h-auto mx-auto" />
+            </div>
+
         </>
     );
 
 };
 
-export default Item;
+export default DashboardPage;
 
 

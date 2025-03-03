@@ -38,13 +38,15 @@ const Gender = () => {
 
   return (
     <>
-      <div className="w-full mb-3 mt-8">
+      <div className="w-full py-4">
         <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Gender</h1>
         <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
         <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
       </div>
-      <div className="px-4 lg:px-6">
-        <div className="p-4 overflow-auto">
+
+
+
+        <div className="w-full lg:w-3/4 mx-auto  p-4 border-2 shadow-md rounded-md overflow-auto">
           <table className="w-full border border-gray-200">
             <thead>
               <tr className="w-full bg-gray-200">
@@ -80,7 +82,6 @@ const Gender = () => {
             </tbody>
           </table>
         </div>
-      </div>
     </>
   );
 

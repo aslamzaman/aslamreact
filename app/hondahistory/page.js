@@ -123,79 +123,80 @@ const Hondahistory = () => {
         setMsg(`Refresh time: ${new Date().toISOString()}`);
     }
 
+
+
     return (
         <>
-            <div className="w-full mb-3 mt-8">
+            <div className="w-full py-4">
                 <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Honda History</h1>
                 <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
                 <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
             </div>
-            <div className="px-4 lg:px-6">
+
+
+            <div className="w-full lg:w-3/4 mx-auto  p-4 border-2 shadow-md rounded-md overflow-auto">
                 <div className="w-full px-4 flex justify-end">
                     <button onClick={refreshHistoryHandler} className="px-3 text-gray-300">Refresh</button>
                 </div>
-                <div className="p-4 overflow-auto">
-                    <table className="w-full border border-gray-200">
-                        <thead>
-                            <tr className="w-full bg-gray-200">
-                                <th className="text-center border-b border-gray-200 px-4 py-1">SL</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-1">Date</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-1">Name</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-1">Honda</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-1">Remarks</th>
-                                <th className="text-center border-b border-gray-200 px-4 py-1">Is Editable</th>
-                                <th className="w-[95px] border-b border-gray-200 px-4 py-2">
-                                    <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1 font-normal">
-                                        {/* <Print data={hondahistorys} /> */}
-                                        <Add message={messageHandler} />
-                                    </div>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {hondahistorys.length ? (
-                                hondahistorys.map((hondahistory, i) => (
-                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={hondahistory.id}>
-                                        <td className="text-center py-1 px-4">{i + 1}</td>
-                                        <td className="text-center py-1 px-4">{formatedDateDot(hondahistory.dt, true)}</td>
-                                        <td className="text-center py-1 px-4"><span className="font-bold">{hondahistory.name}</span><br />
-                                            Designation: {hondahistory.post}<br />
-                                            Mobile: {hondahistory.mobile}<br />
-                                            Unit: {hondahistory.unit}<br />
-                                            Project: {hondahistory.project}
-                                        </td>
-                                        <td className="text-center py-1 px-4"><span className="font-bold">{hondahistory.honda.regNo}</span><br />
-                                            Registration Certificate: {hondahistory.regCertificate} <br />
-                                            Helmet: {hondahistory.helmet} <br />
-                                            Tax Certificate: {hondahistory.taxCertificate} <br />
-                                            Insurance Certificate: {hondahistory.insurance}
-                                        </td>
-                                        <td className="text-center py-1 px-4">{hondahistory.remarks}</td>
-                                        <td className="text-center py-1 px-4">{hondahistory.isEditable === 'yes' ? 'Editable' : 'Not'}</td>
-                                        <td className="text-center py-2">
-                                            <div className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
-                                                <Edit message={messageHandler} id={hondahistory.id} data={hondahistory} />
-                                                <Delete message={messageHandler} id={hondahistory.id} data={hondahistory} />
+                <table className="w-full border border-gray-200">
+                    <thead>
+                        <tr className="w-full bg-gray-200">
+                            <th className="text-center border-b border-gray-200 px-4 py-1">SL</th>
+                            <th className="text-center border-b border-gray-200 px-4 py-1">Date</th>
+                            <th className="text-center border-b border-gray-200 px-4 py-1">Name</th>
+                            <th className="text-center border-b border-gray-200 px-4 py-1">Honda</th>
+                            <th className="text-center border-b border-gray-200 px-4 py-1">Remarks</th>
+                            <th className="text-center border-b border-gray-200 px-4 py-1">Is Editable</th>
+                            <th className="w-[95px] border-b border-gray-200 px-4 py-2">
+                                <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1 font-normal">
+                                    {/* <Print data={hondahistorys} /> */}
+                                    <Add message={messageHandler} />
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {hondahistorys.length ? (
+                            hondahistorys.map((hondahistory, i) => (
+                                <tr className="border-b border-gray-200 hover:bg-gray-100" key={hondahistory.id}>
+                                    <td className="text-center py-1 px-4">{i + 1}</td>
+                                    <td className="text-center py-1 px-4">{formatedDateDot(hondahistory.dt, true)}</td>
+                                    <td className="text-center py-1 px-4"><span className="font-bold">{hondahistory.name}</span><br />
+                                        Designation: {hondahistory.post}<br />
+                                        Mobile: {hondahistory.mobile}<br />
+                                        Unit: {hondahistory.unit}<br />
+                                        Project: {hondahistory.project}
+                                    </td>
+                                    <td className="text-center py-1 px-4"><span className="font-bold">{hondahistory.honda.regNo}</span><br />
+                                        Registration Certificate: {hondahistory.regCertificate} <br />
+                                        Helmet: {hondahistory.helmet} <br />
+                                        Tax Certificate: {hondahistory.taxCertificate} <br />
+                                        Insurance Certificate: {hondahistory.insurance}
+                                    </td>
+                                    <td className="text-center py-1 px-4">{hondahistory.remarks}</td>
+                                    <td className="text-center py-1 px-4">{hondahistory.isEditable === 'yes' ? 'Editable' : 'Not'}</td>
+                                    <td className="text-center py-2">
+                                        <div className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
+                                            <Edit message={messageHandler} id={hondahistory.id} data={hondahistory} />
+                                            <Delete message={messageHandler} id={hondahistory.id} data={hondahistory} />
 
-                                                <button onClick={() => printHandler(hondahistory.id)} className="px-4 py-1 border border-blue-300 rounded-full bg-gray-200 hover:bg-white">Print</button>
+                                            <button onClick={() => printHandler(hondahistory.id)} className="px-4 py-1 border border-blue-300 rounded-full bg-gray-200 hover:bg-white">Print</button>
 
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan={13} className="text-center py-10 px-4">
-                                        Data not available.
+                                        </div>
                                     </td>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan={13} className="text-center py-10 px-4">
+                                    Data not available.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
-
-
+   
             <div className={`w-[1px] h-[1px] overflow-auto ${tiro.className}`}>
                 <div ref={pageRef} className="w-[595px] h-[842px] px-[52px] py-[70px] mx-auto text-[12px] border border-black">
                     <div className="w-full">
