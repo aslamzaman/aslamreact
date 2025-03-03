@@ -225,96 +225,100 @@ const Tabill = () => {
         alert("No actions!");
     }
     // let stf = s.nm_bn + "," + s.post + "," + s.place + "," + s.post_id;
+
+
     return (
         <>
-            <div className="w-full mb-3 mt-8">
+            <div className="w-full py-4">
                 <h1 className='text-center text-2xl font-bold'>TA Bill</h1>
                 <p className="text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
             </div>
 
-            <div className="px-4 lg:px-6">
-                <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-y-4 lg:gap-x-4">
-                    <div className="w-full border-2 p-4 shadow-md rounded-md">
-                        <form onSubmit={handleCreate}>
-                            <div className="grid grid-cols-1 gap-2 my-2">
-                                <DropdownEn Title="Staff Name" Id="staff" Change={(e) => { setStaff(e.target.value) }} Value={staff}>
-                                    {staffData.length ? staffData.map(staff => <option value={`${staff.nmBn},${staff.post.nmBn},${staff.da.tk}`} key={staff.id}>{staff.nmEn}</option>) : null}
-                                </DropdownEn>
-                                <DropdownEn Title="Project" Id="project" Change={(e) => { setProject(e.target.value) }} Value={project}>
-                                    {
-                                        projectData.length ? projectData.map(project => <option value={project.name} key={project.id}>{project.name}</option>) : null}
-                                </DropdownEn>
-                                <TextDt Title="Date" Id="dt" Change={(e) => { setDt1(e.target.value) }} Value={dt1} />
-                                <DropdownEn Title="Unit" Id="unit" Change={(e) => { setUnit(e.target.value) }} Value={unit}>
-                                    {unitData.length ? unitData.map(unit => <option value={`${unit.nmBn},${unit.ta}`} key={unit.id}>{unit.nmEn}</option>) : null}
-                                </DropdownEn>
-                            </div>
-                            <div className="w-full flex justify-start">
-                                <BtnSubmit Title="Create PDF" Class="bg-blue-600 hover:bg-blue-800 text-white" />
-                            </div>
-                        </form>
-                    </div>
-                    <div className="w-full col-span-2 border-2 p-4 shadow-md rounded-md">
-                        <div className="px-4 lg:px-6 overflow-auto">
-                            <p className="w-full text-sm text-red-700">{msg}</p>
-                            <table className="w-full border border-gray-200">
-                                <thead>
-                                    <tr className="w-full bg-gray-200">
-                                        <th className="text-center border-b border-gray-200 py-2">Date</th>
-                                        <th className="text-center border-b border-gray-200 py-2">From</th>
-                                        <th className="text-center border-b border-gray-200 py-2">Tm1</th>
-                                        <th className="text-center border-b border-gray-200 py-2">Where</th>
-                                        <th className="text-center border-b border-gray-200 py-2">Tm2</th>
-                                        <th className="text-center border-b border-gray-200 py-2">Vehicle</th>
-                                        <th className="text-center border-b border-gray-200 py-2">Taka</th>
-                                        <th className="text-center border-b border-gray-200 py-2">Cause</th>
-                                        <th className="w-[100px] font-normal">
-                                            <div className="w-full flex justify-end mt-1 pr-[3px] lg:pr-2">
-                                                <Add message={msgHandler} />
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        tabills.length
-                                            ? tabills.map((ta) => {
-                                                return (
-                                                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={ta.id}>
-                                                        <td className="text-center py-2 px-4 font-sutonnyN">{ta.dt}</td>
-                                                        <td className="text-center py-2 px-4 font-sutonnyN">{ta.place1}</td>
-                                                        <td className="text-center py-2 px-4 font-sutonnyN">{ta.tm1}</td>
-                                                        <td className="text-center py-2 px-4 font-sutonnyN">{ta.place2}</td>
-                                                        <td className="text-center py-2 px-4 font-sutonnyN">{ta.tm2}</td>
-                                                        <td className="text-center py-2 px-4 font-sutonnyN">{ta.vehicle}</td>
-                                                        <td className="text-center py-2 px-4 font-sutonnyN">{ta.taka}</td>
-                                                        <td className="text-center py-2 px-4 font-sutonnyN">{ta.cause}</td>
-                                                        <td className="flex justify-end items-center mt-1">
-                                                            <Edit message={msgHandler} Id={ta.id} data={ta} />
-                                                            <Delete message={msgHandler} Id={ta.id} />
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })
-                                            : null
-                                    }
-                                    <tr className="border-b border-gray-200 font-bold">
-                                        <td className="text-start py-2 px-4"></td>
-                                        <td className="text-start py-2 px-4"></td>
-                                        <td className="text-center py-2 px-4"></td>
-                                        <td className="text-start py-2 px-4"></td>
-                                        <td className="text-center py-2 px-4"></td>
-                                        <td className="text-start py-2 px-4"></td>
-                                        <td className="text-center py-2 px-4">{total}</td>
-                                        <td className="text-center py-2 px-4"></td>
-                                        <td className="flex justify-end items-center mt-1">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+
+            <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+
+                <div className="w-full border-2 p-4 shadow-md rounded-md">
+                    <form onSubmit={handleCreate}>
+                        <div className="grid grid-cols-1 gap-2 my-2">
+                            <DropdownEn Title="Staff Name" Id="staff" Change={(e) => { setStaff(e.target.value) }} Value={staff}>
+                                {staffData.length ? staffData.map(staff => <option value={`${staff.nmBn},${staff.post.nmBn},${staff.da.tk}`} key={staff.id}>{staff.nmEn}</option>) : null}
+                            </DropdownEn>
+                            <DropdownEn Title="Project" Id="project" Change={(e) => { setProject(e.target.value) }} Value={project}>
+                                {
+                                    projectData.length ? projectData.map(project => <option value={project.name} key={project.id}>{project.name}</option>) : null}
+                            </DropdownEn>
+                            <TextDt Title="Date" Id="dt" Change={(e) => { setDt1(e.target.value) }} Value={dt1} />
+                            <DropdownEn Title="Unit" Id="unit" Change={(e) => { setUnit(e.target.value) }} Value={unit}>
+                                {unitData.length ? unitData.map(unit => <option value={`${unit.nmBn},${unit.ta}`} key={unit.id}>{unit.nmEn}</option>) : null}
+                            </DropdownEn>
                         </div>
-                    </div>
+                        <div className="w-full flex justify-start">
+                            <BtnSubmit Title="Create PDF" Class="bg-blue-600 hover:bg-blue-800 text-white" />
+                        </div>
+                    </form>
                 </div>
+
+
+                <div className="w-full lg:col-span-2 p-4 border-2 shadow-md rounded-md overflow-auto">
+                    <p className="w-full text-sm text-red-700">{msg}</p>
+                    <table className="w-full border border-gray-200">
+                        <thead>
+                            <tr className="w-full bg-gray-200">
+                                <th className="text-center border-b border-gray-200 py-2">Date</th>
+                                <th className="text-center border-b border-gray-200 py-2">From</th>
+                                <th className="text-center border-b border-gray-200 py-2">Tm1</th>
+                                <th className="text-center border-b border-gray-200 py-2">Where</th>
+                                <th className="text-center border-b border-gray-200 py-2">Tm2</th>
+                                <th className="text-center border-b border-gray-200 py-2">Vehicle</th>
+                                <th className="text-center border-b border-gray-200 py-2">Taka</th>
+                                <th className="text-center border-b border-gray-200 py-2">Cause</th>
+                                <th className="w-[100px] font-normal">
+                                    <div className="w-full flex justify-end mt-1 pr-[3px] lg:pr-2">
+                                        <Add message={msgHandler} />
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                tabills.length
+                                    ? tabills.map((ta) => {
+                                        return (
+                                            <tr className="border-b border-gray-200 hover:bg-gray-100" key={ta.id}>
+                                                <td className="text-center py-2 px-4 font-sutonnyN">{ta.dt}</td>
+                                                <td className="text-center py-2 px-4 font-sutonnyN">{ta.place1}</td>
+                                                <td className="text-center py-2 px-4 font-sutonnyN">{ta.tm1}</td>
+                                                <td className="text-center py-2 px-4 font-sutonnyN">{ta.place2}</td>
+                                                <td className="text-center py-2 px-4 font-sutonnyN">{ta.tm2}</td>
+                                                <td className="text-center py-2 px-4 font-sutonnyN">{ta.vehicle}</td>
+                                                <td className="text-center py-2 px-4 font-sutonnyN">{ta.taka}</td>
+                                                <td className="text-center py-2 px-4 font-sutonnyN">{ta.cause}</td>
+                                                <td className="flex justify-end items-center mt-1">
+                                                    <Edit message={msgHandler} Id={ta.id} data={ta} />
+                                                    <Delete message={msgHandler} Id={ta.id} />
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                    : null
+                            }
+                            <tr className="border-b border-gray-200 font-bold">
+                                <td className="text-start py-2 px-4"></td>
+                                <td className="text-start py-2 px-4"></td>
+                                <td className="text-center py-2 px-4"></td>
+                                <td className="text-start py-2 px-4"></td>
+                                <td className="text-center py-2 px-4"></td>
+                                <td className="text-start py-2 px-4"></td>
+                                <td className="text-center py-2 px-4">{total}</td>
+                                <td className="text-center py-2 px-4"></td>
+                                <td className="flex justify-end items-center mt-1">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </>
     );

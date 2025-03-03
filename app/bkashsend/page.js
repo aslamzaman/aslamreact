@@ -10,10 +10,6 @@ const Bkash = () => {
     const [msg1, setMsg1] = useState("");
 
 
-
-
-
-
     const handleCreate = async (e) => {
         e.preventDefault();
         const bill = parseFloat(eval(tk));

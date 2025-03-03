@@ -47,14 +47,14 @@ const Electric = () => {
                     const matchPost = responsePost.find(post => post.id === staff.postId) || {}
                     return {
                         ...staff,
-                        post: matchPost ? matchPost.nmEn: ""
+                        post: matchPost ? matchPost.nmEn : ""
                     }
                 })
                 console.log(joinWithPost)
                 setStaffs(joinWithPost);
                 setProjects(responseProject);
 
-                const electricSort = response.sort((a, b)=>sortArray(new Date(a.createdAt),new Date(b.createdAt)))
+                const electricSort = response.sort((a, b) => sortArray(new Date(a.createdAt), new Date(b.createdAt)))
 
                 setElectrics(electricSort);
                 setWaitMsg('');
@@ -124,98 +124,102 @@ const Electric = () => {
 
     return (
         <>
-            <div className="w-full mb-3 mt-8">
+            <div className="w-full py-4">
                 <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Electric Bill</h1>
                 <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
             </div>
-            <div className="px-4 lg:px-6">
-                <div className="grid grid-cols-1 lg:grid-cols-3  gap-4">
-                    <div className="p-3 border-2 border-gray-400 shadow-lg rounded-lg">
-                        <form onSubmit={pdfCreateHandler}>
-                            <TextDt Title="Date" Id="dt" Change={e => setDt(e.target.value)} Value={dt} />
-                            <DropdownEn Title="Staff" Id="staffName" Change={e => setStaffName(e.target.value)} Value={staffName}>
-                                {staffs.length ? staffs.map(staff => <option value={`${staff.nmEn},${staff.post}`} key={staff.id}>{staff.nmEn}</option>) : null}
-                            </DropdownEn>
-                            <DropdownEn Title="Project" Id="projectName" Change={e => setProjectName(e.target.value)} Value={projectName}>
-                                {projects.length ? projects.map(project => <option value={project.name} key={project.id}>{project.name}</option>) : null}
-                            </DropdownEn>
 
-                            <DropdownEn Title="Month" Id="months" Change={e => setMonths(e.target.value)} Value={months}>
-                                <option value="January">January</option>
-                                <option value="February">February</option>
-                                <option value="March">March</option>
-                                <option value="April">April</option>
-                                <option value="May">May</option>
-                                <option value="June">June</option>
-                                <option value="July">July</option>
-                                <option value="August">August</option>
-                                <option value="September">September</option>
-                                <option value="October">October</option>
-                                <option value="November">November</option>
-                                <option value="December">December</option>
-                            </DropdownEn>
 
-                            <DropdownEn Title="Year" Id="yr" Change={e => setYr(e.target.value)} Value={yr}>
-                                <option value="2024">2024</option>
-                                <option value="2025">2025</option>
-                                <option value="2026">2026</option>
-                                <option value="2027">2027</option>
-                                <option value="2028">2028</option>
-                                <option value="2029">2029</option>
-                                <option value="2030">2030</option>
-                                <option value="2031">2031</option>
-                                <option value="2032">2032</option>
-                                <option value="2033">2033</option>
-                                <option value="2034">2034</option>
-                                <option value="2035">2035</option>
-                                <option value="2036">2036</option>
-                                <option value="2037">2037</option>
-                                <option value="2038">2038</option>
-                                <option value="2039">2039</option>
-                                <option value="2040">2040</option>
-                            </DropdownEn>
-                            <TextNum Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} />
-                            <BtnSubmit Title="Create Electric Bill" Class="bg-blue-600 hover:bg-blue-800 text-white" />
-                        </form>
-                    </div>
-                    <div className="col-span-1 lg:col-span-2 p-3 border-2 border-gray-400 shadow-lg rounded-lg">
-                        <p className="w-full text-sm text-red-700">{msg}</p>
-                        <div className="p-2 overflow-auto">
-                            <table className="w-full border border-gray-200">
-                                <thead>
-                                    <tr className="w-full bg-gray-200">
-                                        <th className="text-start border-b border-gray-200 px-4 py-2">Description</th>
-                                        <th className="w-[100px] font-normal">
-                                            <div className="w-full flex justify-end py-0.5 pr-4">
-                                                <Add message={messageHandler} />
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {electrics.length ? (
-                                        electrics.map(electric => (
-                                            <tr className="border-b border-gray-200 hover:bg-gray-100" key={electric.id}>
-                                                <td className="text-start py-2 px-4">{electric.description}</td>
-                                                <td className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
-                                                    <Edit message={messageHandler} id={electric.id} data={electric} />
-                                                    <Delete message={messageHandler} id={electric.id} data={electric} />
-                                                </td>
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td colSpan={2} className="text-center py-10 px-4">
-                                                Data not available.
+            <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+                <div className="w-full border-2 p-4 shadow-md rounded-md">
+                    <form onSubmit={pdfCreateHandler}>
+                        <TextDt Title="Date" Id="dt" Change={e => setDt(e.target.value)} Value={dt} />
+                        <DropdownEn Title="Staff" Id="staffName" Change={e => setStaffName(e.target.value)} Value={staffName}>
+                            {staffs.length ? staffs.map(staff => <option value={`${staff.nmEn},${staff.post}`} key={staff.id}>{staff.nmEn}</option>) : null}
+                        </DropdownEn>
+                        <DropdownEn Title="Project" Id="projectName" Change={e => setProjectName(e.target.value)} Value={projectName}>
+                            {projects.length ? projects.map(project => <option value={project.name} key={project.id}>{project.name}</option>) : null}
+                        </DropdownEn>
+
+                        <DropdownEn Title="Month" Id="months" Change={e => setMonths(e.target.value)} Value={months}>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </DropdownEn>
+
+                        <DropdownEn Title="Year" Id="yr" Change={e => setYr(e.target.value)} Value={yr}>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                            <option value="2028">2028</option>
+                            <option value="2029">2029</option>
+                            <option value="2030">2030</option>
+                            <option value="2031">2031</option>
+                            <option value="2032">2032</option>
+                            <option value="2033">2033</option>
+                            <option value="2034">2034</option>
+                            <option value="2035">2035</option>
+                            <option value="2036">2036</option>
+                            <option value="2037">2037</option>
+                            <option value="2038">2038</option>
+                            <option value="2039">2039</option>
+                            <option value="2040">2040</option>
+                        </DropdownEn>
+                        <TextNum Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} />
+                        <BtnSubmit Title="Create Electric Bill" Class="bg-blue-600 hover:bg-blue-800 text-white" />
+                    </form>
+                </div>
+
+
+                <div className="w-full lg:col-span-2 border-2 p-4 shadow-md rounded-md">
+                    <p className="w-full text-sm text-red-700">{msg}</p>
+                    <div className="p-2 overflow-auto">
+                        <table className="w-full border border-gray-200">
+                            <thead>
+                                <tr className="w-full bg-gray-200">
+                                    <th className="text-start border-b border-gray-200 px-4 py-2">Description</th>
+                                    <th className="w-[100px] font-normal">
+                                        <div className="w-full flex justify-end py-0.5 pr-4">
+                                            <Add message={messageHandler} />
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {electrics.length ? (
+                                    electrics.map(electric => (
+                                        <tr className="border-b border-gray-200 hover:bg-gray-100" key={electric.id}>
+                                            <td className="text-start py-2 px-4">{electric.description}</td>
+                                            <td className="h-8 flex justify-end items-center space-x-1 mt-1 mr-2">
+                                                <Edit message={messageHandler} id={electric.id} data={electric} />
+                                                <Delete message={messageHandler} id={electric.id} data={electric} />
                                             </td>
                                         </tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={2} className="text-center py-10 px-4">
+                                            Data not available.
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+
         </>
     );
 

@@ -239,8 +239,8 @@ const Sewerage_page = () => {
         <p className="w-full text-center text-lg text-blue-300">&nbsp;{msg}&nbsp;</p>
       </div>
 
-      <div className="px-4 lg:px-6">
-        <div className="w-11/12 md:w-1/2 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
+
+        <div className="w-full lg:w-3/4 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
           <div className="w-full p-4">
             <form onSubmit={createSewerage}>
               <div className="grid grid-cols-1 gap-2 my-2">
@@ -261,7 +261,6 @@ const Sewerage_page = () => {
           </div>
 
         </div>
-      </div>
     </>
   )
 }

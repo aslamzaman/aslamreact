@@ -145,13 +145,15 @@ const Bayprostabexecution = () => {
 
   return (
     <>
-      <div className="w-full mb-3 mt-8">
+    
+      <div className="w-full py-4">
         <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Bayprostab Execution</h1>
         <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
       </div>
 
-      <div className="px-4 lg:px-6">
-        <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-y-4 lg:gap-x-4">
+
+        <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-4">
+
           <div className="w-full border-2 p-4 shadow-md rounded-md">
 
             <form onSubmit={createHandler}>
@@ -179,7 +181,9 @@ const Bayprostabexecution = () => {
               </div>
             </form>
           </div>
-          <div className="w-full col-span-2 border-2 p-4 shadow-md rounded-md">
+
+
+          <div className="w-full lg:col-span-2 border-2 p-4 shadow-md rounded-md">
             <div className="px-4 lg:px-6 overflow-auto">
               <p className="w-full text-sm text-red-700">{msg}</p>
               <div className="w-full flex justify-end">
@@ -235,8 +239,9 @@ const Bayprostabexecution = () => {
 
             </div>
           </div>
+
         </div>
-      </div>
+ 
     </>
   );
 

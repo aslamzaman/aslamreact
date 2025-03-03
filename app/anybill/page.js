@@ -9,7 +9,7 @@ import { jsPDF } from "jspdf";
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 import { getDataFromFirebase } from "@/lib/firebaseFunction";
-import { localStorageGetItem, inwordBangla, numberWithComma, formatedDate, formatedDateDot,sortArray } from "@/lib/utils";
+import { localStorageGetItem, inwordBangla, numberWithComma, formatedDate, formatedDateDot, sortArray } from "@/lib/utils";
 
 
 const Anybill = () => {
@@ -28,19 +28,19 @@ const Anybill = () => {
         const load = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const [ staffs, posts ] = await Promise.all([
+                const [staffs, posts] = await Promise.all([
                     getDataFromFirebase("staff"),
                     getDataFromFirebase("post")
                 ]);
-    
-    
-                const joinCollection = staffs.map(staff=>{
+
+
+                const joinCollection = staffs.map(staff => {
                     return {
-                       ...staff,
-                       post : posts.find(post => post.id ===staff.postId) || {}
+                        ...staff,
+                        post: posts.find(post => post.id === staff.postId) || {}
                     }
                 });
-                const scStaff = joinCollection.filter(staff=> staff.placeId === '6BtqRhIrKQ776jyywIC8');
+                const scStaff = joinCollection.filter(staff => staff.placeId === '6BtqRhIrKQ776jyywIC8');
                 const sortedData = scStaff.sort((a, b) => sortArray(a.nmEn, b.nmEn));
                 setStaffs(sortedData);
                 //--------------------------------------------------------------------
@@ -136,72 +136,74 @@ const Anybill = () => {
 
     return (
         <>
-            <div className="w-full mb-3 mt-8">
+            <div className="w-full py-4">
                 <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Any Bill</h1>
                 <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
             </div>
 
-            <div className="px-4 lg:px-6">
-                <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-y-4 lg:gap-x-4">
-                    <div className="w-full border-2 p-4 shadow-md rounded-md">
-                        <form onSubmit={handleCreate}>
-                            <div className="grid grid-cols-1 gap-2 my-2">
-                                <TextDt Title="Date" Id="dt" Change={e => setDt(e.target.value)} Value={dt} />
-                                <DropdownEn Title="Staff" Id="staff" Change={e => setStaff(e.target.value)} Value={staff}>
-                                    {staffs.length ? staffs.map(staff => <option value={`${staff.nmBn},${staff.post.nmBn}`} key={staff.id}>{staff.nmEn}</option>) : null}
-                                </DropdownEn>
-                                <TextBn Title="Subject" Id="subject" Change={e => setSubject(e.target.value)} Value={subject} Chr={200} />
-                            </div>
-                            <div className="w-full flex justify-start">
-                                <BtnSubmit Title="Create PDF" Class="bg-blue-600 hover:bg-blue-800 text-white" />
-                            </div>
-                        </form>
-                    </div>
-                    <div className="w-full col-span-2 border-2 p-4 shadow-md rounded-md">
-                        <div className="px-4 lg:px-6 overflow-auto">
-                            <p className="w-full text-sm text-red-700">{msg}</p>
-                            <table className="w-full border border-gray-200">
-                                <thead>
-                                    <tr className="w-full bg-gray-200">
-                                        <th className="text-center border-b border-gray-200 px-4 py-2">Item</th>
-                                        <th className="text-center border-b border-gray-200 px-4 py-2">Nos.</th>
-                                        <th className="text-center border-b border-gray-200 px-4 py-2">Taka</th>
-                                        <th className="w-[100px] font-normal">
-                                            <div className="w-full flex justify-end mt-1 pr-[3px] lg:pr-2">
-                                                <Add message={messageHandler} />
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        anybills.length ? anybills.map(any => {
-                                            return (
-                                                <tr className="border-b border-gray-200 hover:bg-gray-100" key={any.id}>
-                                                    <td className="text-center py-2 px-4 font-sutonnyN">{any.item}</td>
-                                                    <td className="text-center py-2 px-4 font-sutonnyN">{any.no}</td>
-                                                    <td className="text-center py-2 px-4 font-sutonnyN">{any.taka}</td>
-                                                    <td className="flex justify-end items-center mt-1">
-                                                        <Edit message={messageHandler} id={any.id} data={any} />
-                                                        <Delete message={messageHandler} id={any.id} data={any} />
-                                                    </td>
-                                                </tr>
-                                            )
-                                        })
-                                            : null
-                                    }
 
-                                    <tr className="border-b border-gray-200 hover:bg-gray-100 font-bold">
-                                        <td className="text-center py-2 px-4 font-sutonnyN">†gvU</td>
-                                        <td className="text-center py-2 px-4 font-sutonnyN"></td>
-                                        <td className="text-center py-2 px-4 font-sutonnyN">{total}</td>
-                                        <td className="flex justify-end items-center mt-1"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+
+            <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+                <div className="w-full border-2 p-4 shadow-md rounded-md">
+                    <form onSubmit={handleCreate}>
+                        <div className="grid grid-cols-1 gap-2 my-2">
+                            <TextDt Title="Date" Id="dt" Change={e => setDt(e.target.value)} Value={dt} />
+                            <DropdownEn Title="Staff" Id="staff" Change={e => setStaff(e.target.value)} Value={staff}>
+                                {staffs.length ? staffs.map(staff => <option value={`${staff.nmBn},${staff.post.nmBn}`} key={staff.id}>{staff.nmEn}</option>) : null}
+                            </DropdownEn>
+                            <TextBn Title="Subject" Id="subject" Change={e => setSubject(e.target.value)} Value={subject} Chr={200} />
                         </div>
-                    </div>
+                        <div className="w-full flex justify-start">
+                            <BtnSubmit Title="Create PDF" Class="bg-blue-600 hover:bg-blue-800 text-white" />
+                        </div>
+                    </form>
                 </div>
+
+
+                <div className="w-full lg:col-span-2 p-4 border-2 shadow-md rounded-md overflow-auto">
+                    <p className="w-full text-sm text-red-700">{msg}</p>
+                    <table className="w-full border border-gray-200">
+                        <thead>
+                            <tr className="w-full bg-gray-200">
+                                <th className="text-center border-b border-gray-200 px-4 py-2">Item</th>
+                                <th className="text-center border-b border-gray-200 px-4 py-2">Nos.</th>
+                                <th className="text-center border-b border-gray-200 px-4 py-2">Taka</th>
+                                <th className="w-[100px] font-normal">
+                                    <div className="w-full flex justify-end mt-1 pr-[3px] lg:pr-2">
+                                        <Add message={messageHandler} />
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                anybills.length ? anybills.map(any => {
+                                    return (
+                                        <tr className="border-b border-gray-200 hover:bg-gray-100" key={any.id}>
+                                            <td className="text-center py-2 px-4 font-sutonnyN">{any.item}</td>
+                                            <td className="text-center py-2 px-4 font-sutonnyN">{any.no}</td>
+                                            <td className="text-center py-2 px-4 font-sutonnyN">{any.taka}</td>
+                                            <td className="flex justify-end items-center mt-1">
+                                                <Edit message={messageHandler} id={any.id} data={any} />
+                                                <Delete message={messageHandler} id={any.id} data={any} />
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                                    : null
+                            }
+
+                            <tr className="border-b border-gray-200 hover:bg-gray-100 font-bold">
+                                <td className="text-center py-2 px-4 font-sutonnyN">†gvU</td>
+                                <td className="text-center py-2 px-4 font-sutonnyN"></td>
+                                <td className="text-center py-2 px-4 font-sutonnyN">{total}</td>
+                                <td className="flex justify-end items-center mt-1"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </>
     );

@@ -330,10 +330,10 @@ const Home = ({ children }) => {
                     </div>
                     <Link href="/dashboard" className='flex items-center justify-start space-x-3'>
                         <Image src='/images/logo/logo.png' alt='Logo' width={256} height={256} className='w-8 h-auto' />
-                        <h1 className='text-start pb-1.5 text-2xl text-blue-600 font-bold uppercase'>aslam zaman</h1>
+                        <h1 className='text-start pb-1.5 text-base lg:text-2xl text-blue-600 font-bold uppercase'>aslam zaman</h1>
                     </Link>
                 </div>
-                <div className='flex items-center justify-end space-x-4'>
+                <div className='flex items-center justify-end space-x-2 lg:space-x-4'>
                     <Link href='/about' className='hover:underline underline-offset-2 decoration-2'>About</Link>
                     <Link href='/contact' className='hover:underline underline-offset-2 decoration-2'>Contact</Link>
                 </div>
