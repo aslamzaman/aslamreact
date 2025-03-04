@@ -24,10 +24,8 @@ const Plus = ({ message, data }) => {
 
 	const addVatTaxHandler = () => {
 		if (vatTax === "" || sl === "") return false;
-		const sls = sl.split(",").map(item => item.trim() - 1);
-		const result = data.filter(items => sls.some(index => parseInt(index) === data.indexOf(items)));
-		console.log(result);
-		const msg = addVatTax(result, vatTax);
+		const sls = sl.split(",").map(item => parseInt(item.trim()) - 1);
+		const msg = addVatTax(data, sls, parseFloat(vatTax));
 		message(msg);
 		setShow(false);
 	}
@@ -35,10 +33,8 @@ const Plus = ({ message, data }) => {
 
 	const addBkashCharge = () => {
 		if (bks === "" || sl === "") return false;
-		const sls = sl.split(",").map(item => item.trim() - 1);
-		const result = data.filter(items => sls.some(index => parseInt(index) === data.indexOf(items)));
-		console.log(result);
-		const msg = addBkash(result, bks, sendCharge);
+		const sls = sl.split(",").map(item => parseInt(item.trim()) - 1);
+		const msg = addBkash(data, sls, parseFloat(bks), parseFloat(sendCharge));
 		message(msg);
 		setShow(false);
 	}

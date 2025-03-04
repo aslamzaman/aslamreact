@@ -11,17 +11,10 @@ import Plus from '@/components/bayprostab/Plus';
 
 import { getFirebaseData, getLocalData } from '@/helpers/bayprostabHelpers';
 
-
-
 import { formatedDate, numberWithComma } from '@/lib/utils';
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 import { BayprostabPreparation } from '@/lib/BayprostabPreparation';
-
-
-
-
-
 
 
 
@@ -52,11 +45,6 @@ const Bayprostab = () => {
   const [budgetHead, setBudgetHead] = useState("Utilities");
   const [payType, setPayType] = useState("");
   const [cheque, setCheque] = useState("");
-
-
-  const [vatTax, setVatTax] = useState("");
-  const [vt, setVt] = useState("12.5");
-
 
 
 
@@ -123,11 +111,11 @@ const Bayprostab = () => {
 
     setTimeout(() => {
       BayprostabPreparation.central({ doc, data });
-      BayprostabPreparation.tableOne({ doc }, bayprostabs, 14.3, 90.5, 102, 131.5, 101, 55);
+      BayprostabPreparation.tableOne({ doc }, bayprostabs, 12, 90.5, 102, 131.5, 101, 55);
       BayprostabPreparation.payment({ doc }, bayprostabs, 174.7, 172, 49, payType);
       doc.addPage("a4", "p");
       BayprostabPreparation.completePlan({ doc, data });
-      BayprostabPreparation.tableOne({ doc }, bayprostabs, 14.3, 90.5, 102, 131.5, 107, 55);
+      BayprostabPreparation.tableOne({ doc }, bayprostabs, 12, 90.5, 102, 131.5, 107, 55);
       BayprostabPreparation.payment({ doc }, bayprostabs, 166, 172, 64.5, payType);
 
       if (project === 'GO') {

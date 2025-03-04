@@ -37,21 +37,20 @@ export const getLocalData = () => {
 
 
 
-export const addVatTax = (data, vt) => {
+export const addVatTax = (data = [], serial = [], vt = 0) => {
     try {
-        const tk = data.reduce((t, c) => t + parseFloat(c.subtotal), 0);
-        console.log(tk)
+        const filtersData = data.filter((item, i) => serial.some((index) => parseInt(index) === i));
+        const tk = filtersData.reduce((t, c) => t + parseFloat(c.subtotal), 0);
         const vatTaxPercent = Math.round(tk * (vt / 100));
 
-        const createObject = () => {
-            return {
-                id: Date.now(),
-                item: `f¨vU Ges U¨v· (${vt}%)`,
-                nos: 1,
-                taka: vatTaxPercent
-            }
+        const slStr = serial.map(item => (parseInt(item) + 1)).join(",");
+        const newObject = {
+            id: Date.now(),
+            item: `f¨vU Ges U¨v· (${vt}%)`,
+            nos: 1,
+            taka: vatTaxPercent
         }
-        const newObject = createObject();
+
         const msg = localStorageAddItem('bayprostab', newObject);
         return msg;
     } catch (error) {
@@ -61,22 +60,21 @@ export const addVatTax = (data, vt) => {
 
 
 
-export const addBkash = (data, bk, sendCharge) => {
+export const addBkash = (data = [], serial = [], bk = 0, sendCharge = 0) => {
     try {
-        const tk = data.reduce((t, c) => t + parseFloat(c.subtotal), 0);
-        console.log(tk)
+        const filtersData = data.filter((item, i) => serial.some((index) => parseInt(index) === i));
+        const tk = filtersData.reduce((t, c) => t + parseFloat(c.subtotal), 0);
         const bkashCharge = Math.round(tk * (bk / 1000));
-        const totalSendCharge = data.length * parseFloat(sendCharge);
+        const totalSendCharge = filtersData.length * sendCharge;
 
-        const createObject = () => {
-            return {
-                id: Date.now(),
-                item: `weKvk PvR© (${bk}%)`,
-                nos: 1,
-                taka: bkashCharge + totalSendCharge
-            }
+        const slStr = serial.map(item => (parseInt(item) + 1)).join(",");
+        const newObject = {
+            id: Date.now(),
+            item: `PvR©: (weKvk= ${bk}, †mÛ= ${sendCharge})`,
+            nos: 1,
+            taka: (bkashCharge + totalSendCharge)
         }
-        const newObject = createObject();
+
         const msg = localStorageAddItem('bayprostab', newObject);
         return msg;
     } catch (error) {
