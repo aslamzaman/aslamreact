@@ -1,20 +1,26 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import { jsPDF } from "jspdf";
-import { BtnSubmit, DropdownEn, TextBn, TextEn, TextDt, TextareaBn } from "@/components/Form";
+import { BtnSubmit, DropdownEn, TextBn, TextEn, TextDt, TextareaBn, TextNum, BtnEn, PlusPlus } from "@/components/Form";
 import Add from "@/components/bayprostab/Add";
 import Edit from "@/components/bayprostab/Edit";
 import Delete from "@/components/bayprostab/Delete";
 import Download from '@/components/bayprostab/Download';
 import Upload from '@/components/bayprostab/Upload';
+import Plus from '@/components/bayprostab/Plus';
 
-import { getDataFromFirebase } from '@/lib/firebaseFunction';
-import { formatedDate, localStorageGetItem, sortArray } from '@/lib/utils';
+import { getFirebaseData, getLocalData } from '@/helpers/bayprostabHelpers';
+
+
+
+import { formatedDate, numberWithComma } from '@/lib/utils';
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 import { BayprostabPreparation } from '@/lib/BayprostabPreparation';
-import { evaluate } from 'mathjs';
-import { getDataFromIndexedDB } from '@/lib/DatabaseIndexedDB';
+
+
+
+
 
 
 
@@ -47,33 +53,26 @@ const Bayprostab = () => {
   const [payType, setPayType] = useState("");
   const [cheque, setCheque] = useState("");
 
+
+  const [vatTax, setVatTax] = useState("");
+  const [vt, setVt] = useState("12.5");
+
+
+
+
   useEffect(() => {
     setDt(formatedDate(new Date()));
 
     const getData = async () => {
       setWaitMsg('Please wait...');
       try {
-        const [staffs, projects] = await Promise.all([
-          getDataFromFirebase('staff'),
-          getDataFromFirebase('project')
-        ]);
-        const scStaff = staffs.filter(staff => staff.placeId === "6BtqRhIrKQ776jyywIC8");
-        const sortData = scStaff.sort((a, b) => sortArray(a.nmEn, b.nmEn));
-        console.log(sortData);
-        setStaffData(sortData);
-        setProjectData(projects);
+        const firebaseData = await getFirebaseData();
+        setStaffData(firebaseData.scStaff);
+        setProjectData(firebaseData.projects);
         //-------------------------------------------------------
-        const locaData = await getDataFromIndexedDB('bayprostab');
-        const addSubTotal = locaData.map(bayprostab => {
-          const subtotal = parseFloat(bayprostab.nos) * evaluate(`0${bayprostab.taka}`);
-          return {
-            ...bayprostab, subtotal
-          }
-        })
-
-        const gt = addSubTotal.reduce((t, c) => t + c.subtotal, 0);
-        setBayprostabs(addSubTotal);
-        setTotal(gt);
+        const locaData = getLocalData();
+        setBayprostabs(locaData.data);
+        setTotal(locaData.gt);
 
         setPayType('');
         setWaitMsg('');
@@ -151,6 +150,9 @@ const Bayprostab = () => {
 
 
 
+const addVatTaxHandler = ()=>{
+
+}
 
 
   return (
@@ -161,9 +163,9 @@ const Bayprostab = () => {
       </div>
 
 
-      <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-4">
-       
-        <div className="w-full border-2 p-4 shadow-md rounded-md">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-5 gap-4">
+
+        <div className="col-span-2 w-full border-2 p-4 shadow-md rounded-md">
           <form onSubmit={handleCreate}>
             <div className="grid grid-cols-2 gap-2">
               <div className="w-full col-span-2">
@@ -180,19 +182,19 @@ const Bayprostab = () => {
               <div className="w-full col-span-2">
                 <TextBn Title="Subject" Id="subject" Change={(e) => { setSubject(e.target.value) }} Value={subject} Chr="150" />
               </div>
-                <DropdownEn Title="Payment Type" Id="payType" Change={e => setPayType(e.target.value)} Value={payType}>
-                  <option value="ft">Fund Transfer</option>
-                  <option value="ace">A/C Pay English</option>
-                  <option value="acb">A/C Pay Bangla</option>
-                  <option value="br">Bearer Cheque</option>
-                </DropdownEn>
-                  {
-                    payType === '' ? null
-                      : payType === 'ft' ? null
-                        : payType === 'ace' ? (<TextEn Title="Name (English)" Id="cheque" Change={e => setCheque(e.target.value)} Value={cheque} Chr="100" />)
-                          : payType === 'acb' ? (<TextBn Title="Name (SutonnyMJ)" Id="cheque" Change={e => setCheque(e.target.value)} Value={cheque} Chr="100" />)
-                            : null
-                  }
+              <DropdownEn Title="Payment Type" Id="payType" Change={e => setPayType(e.target.value)} Value={payType}>
+                <option value="ft">Fund Transfer</option>
+                <option value="ace">A/C Pay English</option>
+                <option value="acb">A/C Pay Bangla</option>
+                <option value="br">Bearer Cheque</option>
+              </DropdownEn>
+              {
+                payType === '' ? null
+                  : payType === 'ft' ? null
+                    : payType === 'ace' ? (<TextEn Title="Name (English)" Id="cheque" Change={e => setCheque(e.target.value)} Value={cheque} Chr="100" />)
+                      : payType === 'acb' ? (<TextBn Title="Name (SutonnyMJ)" Id="cheque" Change={e => setCheque(e.target.value)} Value={cheque} Chr="100" />)
+                        : null
+              }
 
               <div className="w-full col-span-2">
                 <TextareaBn Title="Notes" Id="note" Rows="2" Change={(e) => { setNote(e.target.value) }} Value={note} />
@@ -206,68 +208,66 @@ const Bayprostab = () => {
 
 
 
-        <div className="w-full lg:col-span-2 p-4 border-2 shadow-md rounded-md overflow-auto">
-           
-            <p className="w-full text-center text-sm text-red-700">{msg}</p>
-            <div className='flex justify-end'>
-              <div className='flex space-x-1'>
-                <Download message={messageHandler} />
-                <Upload message={messageHandler} />
-              </div>
+
+
+        <div className="col-span-3 w-full overflow-auto">
+          <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
+
+          <div className="w-full flex justify-end">
+            <div className="w-auto flex items-center">
+              <Plus message={messageHandler} data={bayprostabs} />
+              <Download message={messageHandler} />
+              <Upload message={messageHandler} />
             </div>
-
-
-            <div className="overflow-auto">
-              <table className="w-full border border-gray-200">
-                <thead>
-                  <tr className="w-full bg-gray-200">
-                    <th className="text-center border-b border-gray-200 px-4 py-2">SL</th>
-                    <th className="text-start border-b border-gray-200 px-4 py-2">Item</th>
-                    <th className="text-center border-b border-gray-200 px-4 py-2">Nos</th>
-                    <th className="text-end border-b border-gray-200 px-4 py-2">Taka</th>
-                    <th className="w-[100px] font-normal">
-                      <div className="w-full flex justify-end mt-1 pr-[3px] lg:pr-2">
-                        <Add message={messageHandler} />
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    bayprostabs.length ? bayprostabs.map((bayprostab, i) => {
-                      return (
-                        <tr className="border-b border-gray-200 hover:bg-gray-100" key={bayprostab.id}>
-                          <td className="text-center py-2 px-4">{i + 1}.</td>
-                          <td className="text-start py-2 px-4 font-sutonnyN">{bayprostab.item}</td>
-                          <td className="text-center py-2 px-4">{bayprostab.nos}</td>
-                          <td title={bayprostab.subtotal} className="text-end py-2 px-4">{bayprostab.taka}</td>
-                          <td className="flex justify-end items-center mt-1">
-                            <Edit message={messageHandler} id={bayprostab.id} data={bayprostab} />
-                            <Delete message={messageHandler} id={bayprostab.id} data={bayprostab} />
-                          </td>
-                        </tr>
-                      )
-                    })
-                      : null
-                  }
-
-                  <tr className="border-b border-gray-200 hover:bg-gray-100">
-                    <td className="font-bold"></td>
-                    <td className="text-start py-2 px-4 font-bold">Total</td>
-                    <td></td>
-                    <td className="text-end py-2 px-4 font-bold">{total}</td>
-                    <td></td>
-                  </tr>
-
-                </tbody>
-              </table>
-            </div>
-
           </div>
 
-
-
+          <table className="w-full border border-gray-200">
+            <thead>
+              <tr className="w-full bg-gray-200">
+                <th className="text-center border-b border-gray-200 px-4 py-2">SL</th>
+                <th className="text-start border-b border-gray-200 px-4 py-2">Item</th>
+                <th className="text-center border-b border-gray-200 px-4 py-2">Nos</th>
+                <th className="text-end border-b border-gray-200 px-4 py-2">Taka</th>
+                <th className="w-[100px] font-normal">
+                  <div className="w-full flex justify-end items-center pr-2.5 font-normal">
+                    <Add message={messageHandler} />
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                bayprostabs.length ? bayprostabs.map((bayprostab, i) => {
+                  return (
+                    <tr className="border-b border-gray-200 hover:bg-gray-100" key={bayprostab.id}>
+                      <td className="text-center py-2 px-4 font-sutonnyN">{i + 1}.</td>
+                      <td className="text-start py-2 px-4 font-sutonnyN">{bayprostab.item}</td>
+                      <td className="text-center py-2 px-4">{bayprostab.nos}</td>
+                      <td title={bayprostab.subtotal} className="text-end py-2 px-4">{bayprostab.taka}</td>
+                      <td className="flex justify-end items-center mt-1">
+                        <Edit message={messageHandler} id={bayprostab.id} data={bayprostab} />
+                        <Delete message={messageHandler} id={bayprostab.id} data={bayprostab} />
+                      </td>
+                    </tr>
+                  )
+                })
+                  : null
+              }
+              <tr className="font-bold border-b border-gray-200 hover:bg-gray-100">
+                <td className="text-start py-2 px-4 font-sutonnyN"></td>
+                <td className="text-start py-2 px-4 font-sutonnyN">†gvU</td>
+                <td className="text-center py-2 px-4"></td>
+                <td className="text-end py-2 px-4">{numberWithComma(total)}</td>
+                <td className="flex justify-end items-center mt-1"></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
+
+
+      </div>
+
     </>
   )
 }
