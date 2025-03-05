@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BtnEn } from "@/components/Form";
-import { deleteDataFromIndexedDB } from "@/lib/DatabaseIndexedDB";
+import { localStorageDeleteItem } from "@/lib/DatabaseLocalStorage";
 
 const Delete = ({ message, id, data }) => {
     const [item, setItem] = useState("");
@@ -23,9 +23,9 @@ const Delete = ({ message, id, data }) => {
     }
 
 
-    const deleteYesClick =  async  () => {
+    const deleteYesClick = () => {
         try {
-            const msg = await deleteDataFromIndexedDB('bayprostabexecution', id);
+            const msg = localStorageDeleteItem('bayprostabexecution', id);
             message(msg);
         } catch (error) {
             console.log(error);
@@ -38,8 +38,8 @@ const Delete = ({ message, id, data }) => {
     return (
         <>
             {show && (
-                <div className="fixed inset-0 py-16 bg-black bg-opacity-30 backdrop-blur-sm z-10 overflow-auto">
-                    <div className="w-11/12 md:w-1/2 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
+                <div className="fixed inset-0 px-2 py-16 bg-black bg-opacity-30 backdrop-blur-sm z-10 overflow-auto">
+                    <div className="w-full md:w-[500px] lg:w-[800px] mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
                         <div className="px-6 md:px-6 py-2 flex justify-between items-center border-b border-gray-300">
                             <h1 className="text-xl font-bold text-blue-600">Delete Existing Data</h1>
                             <button onClick={closeDeleteForm} className="w-8 h-8 p-0.5 bg-gray-50 hover:bg-gray-300 rounded-md transition duration-500">
@@ -78,4 +78,4 @@ const Delete = ({ message, id, data }) => {
     )
 }
 export default Delete;
-  
+
