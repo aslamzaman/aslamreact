@@ -88,7 +88,7 @@ const Plus = ({ message, data }) => {
 					</div>
 				</div>
 			)}
-			<button onClick={showModal} className="w-7 h-7 rounded-full hover:bg-gray-200 mr-0.5 flex justify-center items-center">
+			<button title="Add Others" onClick={showModal} className="w-7 h-7 rounded-full hover:bg-gray-200 mr-0.5 flex justify-center items-center">
 				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 16" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
 					<path strokeLinecap="round" strokeLinejoin="round" d="M1 11 L9 11 M5 7 L5 15     M7 5 L15 5  M11 1 L11 9" />
 				</svg>

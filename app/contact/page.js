@@ -1,5 +1,10 @@
 "use client";
 
+import Image from "next/image";
+
+
+
+
 const Contact = () => {
 
     return (
@@ -12,10 +17,13 @@ const Contact = () => {
                 <p className="text-center">
                     <span className="font-bold">Aslam Zaman</span><br />
                     Centre for Mass Eduction in Science (CMES)<br />
+                    (CMES Head Office)<br />
                     House# 5/4, Block - F<br />
                     Lalmatia, Dhaka -1207<br />
                     Email Address: aslamcmes@gmail.com<br />
                 </p>
+
+                <Image src="/images/google_map/cmes_head_office.PNG" alt="locatin map" width={1343} height={636} className="w-full h-auto border-2 border-gray-400" />
             </div>
         </>
     );

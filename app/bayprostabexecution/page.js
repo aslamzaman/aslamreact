@@ -10,8 +10,12 @@ import Download from "@/components/bayprostabexecution/Download";
 import Upload from "@/components/bayprostabexecution/Upload";
 import Plus from '@/components/bayprostabexecution/Plus';
 
-import { getDataFromFirebase } from "@/lib/firebaseFunction";
-import { numberWithComma, inwordBangla, formatedDate, formatedDateDot, localStorageSetItem, localStorageGetItem, sortArray } from "@/lib/utils";
+
+import { numberWithComma, inwordBangla, formatedDate, formatedDateDot } from "@/lib/utils";
+import { localStorageRemoveItem } from "@/lib/DatabaseLocalStorage";
+import { Clear } from '@/components/Icons';
+
+
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 import { evaluate } from 'mathjs';
@@ -131,6 +135,21 @@ const Bayprostabexecution = () => {
 
 
 
+  const clearAllHandler = () => {
+    if (confirm("Be careful! All data will be deleted.")) {
+      try {
+        const msg = localStorageRemoveItem('bayprostabexecution');
+        setMsg(msg);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      setMsg("Canceled!");
+    }
+  }
+
+
+
   return (
     <>
 
@@ -173,14 +192,17 @@ const Bayprostabexecution = () => {
 
 
         <div className="col-span-2 w-full overflow-auto">
-          <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
-          <div className="w-full flex justify-end">
-            <div className="w-auto flex items-center">
-              <Plus message={messageHandler} data={bayprostabexecutions} />
-              <Download message={messageHandler} />
-              <Upload message={messageHandler} />
-            </div>
+
+          <p className="w-full text-sm text-start text-pink-600">&nbsp;{msg}&nbsp;</p>
+
+          <div className="w-auto flex items-center justify-end space-x-1">
+            <Clear Click={clearAllHandler} Size="w-7 h-7" />
+            <Plus message={messageHandler} data={bayprostabexecutions} />
+            <Download message={messageHandler} />
+            <Upload message={messageHandler} />
           </div>
+
+
           <table className="w-full border border-gray-200">
             <thead>
               <tr className="w-full bg-gray-200">
