@@ -4,43 +4,16 @@ import { jsPDF } from "jspdf";
 import { BtnSubmit, DropdownEn, TextDt } from "@/components/Form";
 import { formatedDate, formatedDateDot } from "@/lib/utils";
 
-
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
+
+
 
 const dtAdd15Days = (d1) => {
   const dt1 = new Date(d1);
   const dt2 = dt1.getTime() + (15 * 24 * 60 * 60 * 1000);
   return formatedDate(new Date(dt2));
 }
-
-const MonthData = [
-  { id: "Rvbyqvix", option: "January" },
-  { id: "†deªæqvix", option: "February" },
-  { id: "gvP©", option: "March" },
-  { id: "GwcÖj", option: "April" },
-  { id: "†g", option: "May" },
-  { id: "Ryb", option: "June" },
-  { id: "RyjvB", option: "July" },
-  { id: "AvMó", option: "August" },
-  { id: "†m‡Þ¤^i", option: "September" },
-  { id: "A‡±vei", option: "October" },
-  { id: "b‡f¤^i", option: "November" },
-  { id: "wW‡m¤^i", option: "December" }
-]
-
-const YearData = [
-  { id: 2023, option: '2023' },
-  { id: 2024, option: '2024' },
-  { id: 2025, option: '2025' },
-  { id: 2026, option: '2026' },
-  { id: 2027, option: '2027' },
-  { id: 2028, option: '2028' },
-  { id: 2029, option: '2029' },
-  { id: 2030, option: '2030' },
-  { id: 2031, option: '2031' },
-  { id: 2032, option: '2032' }
-]
 
 
 
@@ -89,17 +62,15 @@ const rentFormate = ({ doc }, m, y, dt) => {
 
 const Houserent = () => {
   const [msg, setMsg] = useState("");
-  const [mnth, setMnth] = useState("Rvbyqvix");
   const [dt, setDt] = useState("");
+  const [mnth, setMnth] = useState("Rvbyqvix");
   const [yr, setYr] = useState("");
 
 
   useEffect(() => {
     setDt(formatedDate(new Date()));
     const d = new Date();
-    const d1 = d.getMonth();
     const d2 = d.getFullYear();
-    setMnth(MonthData[d1].id);
     setYr(d2);
   }, [msg])
 
@@ -134,24 +105,42 @@ const Houserent = () => {
       </div>
 
 
-        <div className="w-full lg:w-3/4 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
-          <div className="w-full p-4">
-            <form onSubmit={createHouseRent}>
-              <div className="grid grid-cols-1 gap-2 my-2">
-                <TextDt Title="Date" Id="dt" Change={(e) => setDt(e.target.value)} Value={dt} />
-                <DropdownEn Title="Select Month" Id="mnth" Change={(e) => { setMnth(e.target.value) }} Value={mnth}>
-                  {MonthData.map((m, i) => <option value={m.id} key={i}>{m.option}</option>)}
-                </DropdownEn>
-                <DropdownEn Title="Select Year" Id="yr" Change={(e) => { setYr(e.target.value) }} Value={yr}>
-                  {YearData.map((y, i) => <option value={y.id} key={i}>{y.option}</option>)}
-                </DropdownEn>
-              </div>
-              <div className="w-full flex justify-start">
-                <BtnSubmit Title="Create Pdf" Class="bg-blue-600 hover:bg-blue-800 text-white" />
-              </div>
-            </form>
-          </div>
+      <div className="w-full lg:w-3/4 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
+        <div className="w-full p-4">
+          <form onSubmit={createHouseRent}>
+            <div className="grid grid-cols-1 gap-2 my-2">
+              <TextDt Title="Date" Id="dt" Change={(e) => setDt(e.target.value)} Value={dt} />
+              <DropdownEn Title="Select Month" Id="mnth" Change={(e) => { setMnth(e.target.value) }} Value={mnth}>
+                <option value="Rvbyqvix">January</option>
+                <option value="†deªæqvix">February</option>
+                <option value="gvP©">March</option>
+                <option value="GwcÖj">April</option>
+                <option value="†g">May</option>
+                <option value="Ryb">June</option>
+                <option value="RyjvB">July</option>
+                <option value="AvMó">August</option>
+                <option value="†m‡Þ¤^i">September</option>
+                <option value="A‡±vei">October</option>
+                <option value="b‡f¤^i">November</option>
+                <option value="wW‡m¤^i">December</option>
+              </DropdownEn>
+              <DropdownEn Title="Select Year" Id="yr" Change={(e) => { setYr(e.target.value) }} Value={yr}>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+                <option value="2031">2031</option>
+                <option value="2032">2032</option>
+              </DropdownEn>
+            </div>
+            <BtnSubmit Title="Create Pdf" Class="bg-blue-600 hover:bg-blue-800 text-white" />
+          </form>
         </div>
+      </div>
     </>
   )
 }

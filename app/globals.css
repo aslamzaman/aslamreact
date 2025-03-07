@@ -13,6 +13,11 @@
   src: url('/fonts/TiroBangla-Regular.ttf');
 }
 
+@font-face {
+  font-family:'Segoe UI' ;
+  src: url('/fonts/segoeuithis.ttf');
+}
+
 
 
 

@@ -33,6 +33,7 @@ const Bayprostab = () => {
   const [bayprostabs, setBayprostabs] = useState([]);
   const [waitMsg, setWaitMsg] = useState('');
   const [msg, setMsg] = useState("Data ready");
+  const [waitPage, setWaitPage] = useState(false);
 
 
   const [staffData, setStaffData] = useState([]);
@@ -88,7 +89,7 @@ const Bayprostab = () => {
       return false;
     }
     setWaitMsg("Please wait...");
-
+    setWaitPage(true);
     const doc = new jsPDF({
       orientation: 'p',
       unit: 'mm',
@@ -135,6 +136,7 @@ const Bayprostab = () => {
 
       doc.save(new Date().toISOString() + "-Bayprostab.pdf");
       setWaitMsg("");
+      setWaitPage(false);
     }, 100);
 
   }
@@ -152,6 +154,16 @@ const Bayprostab = () => {
     } else {
       setMsg("Canceled!");
     }
+  }
+
+  if (waitPage) {
+    return (
+      <>
+        <div className='fixed inset-0 flex items-center jusitfy-center bg-gray-100 bg-opacity-10 z-10'>
+          <p className='w-full text-center text-xl animate-bounce'>Please wait ...</p>
+        </div>
+      </>
+    )
   }
 
 
@@ -207,10 +219,6 @@ const Bayprostab = () => {
           </form>
         </div>
 
-
-
-
-
         <div className="col-span-3 w-full overflow-auto">
           <p className="w-full text-sm text-start text-pink-600">&nbsp;{msg}&nbsp;</p>
 
@@ -263,8 +271,6 @@ const Bayprostab = () => {
             </tbody>
           </table>
         </div>
-
-
 
       </div>
 

@@ -282,8 +282,8 @@ const LeftMenu = () => {
                 const menus = data.group;
                 return (
                     <div className='flex flex-col' key={i}>
-                        <label className='pl-4 pt-4 pb-0.5 text-xl text-gray-400 font-semibold border-b-2 border-gray-200'>{menuTitle}</label>
-                        {menus.map((item, index) => (<Link href={item.url} className='pl-8 py-[1px] hover:bg-gray-300 transition-all duration-500' key={index}>{item.label}</Link>))}
+                        <label className='pl-4 pt-4 pb-0.5 font-SegoeN text-xl text-gray-400 font-semibold border-b-2 border-gray-200'>{menuTitle}</label>
+                        {menus.map((item, index) => (<Link href={item.url} className='pl-8 py-[1px] hover:bg-gray-300 transition-all duration-500 font-SegoeN' key={index}>{item.label}</Link>))}
                     </div>
                 )
             })}

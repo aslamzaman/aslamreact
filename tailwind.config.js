@@ -15,6 +15,7 @@ module.exports = {
     fontFamily: {
       sutonnyN: ['SutonnyMJ_Normal','Regular'],
       tiroN: ['TiroBangla_Regular','Regular'],
+      SegoeN: ['Segoe UI','Regular'],
     },
   },
   plugins: [],
