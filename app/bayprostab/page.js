@@ -12,7 +12,7 @@ import Plus from '@/components/bayprostab/Plus';
 import { getFirebaseData, getLocalData } from '@/helpers/bayprostabHelpers';
 import { localStorageRemoveItem } from "@/lib/DatabaseLocalStorage";
 import { Clear } from '@/components/Icons';
-
+import Loading from '@/components/Loading';
 
 import { formatedDate, numberWithComma } from '@/lib/utils';
 require("@/app/fonts/SUTOM_MJ-normal");
@@ -157,15 +157,8 @@ const Bayprostab = () => {
   }
 
   if (waitPage) {
-    return (
-      <>
-        <div className='fixed inset-0 flex items-center jusitfy-center bg-gray-100 bg-opacity-10 z-10'>
-          <p className='w-full text-center text-xl animate-bounce'>Please wait ...</p>
-        </div>
-      </>
-    )
+   return <Loading />
   }
-
 
 
   return (

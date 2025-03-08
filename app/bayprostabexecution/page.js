@@ -14,7 +14,7 @@ import Plus from '@/components/bayprostabexecution/Plus';
 import { numberWithComma, inwordBangla, formatedDate, formatedDateDot } from "@/lib/utils";
 import { localStorageRemoveItem } from "@/lib/DatabaseLocalStorage";
 import { Clear } from '@/components/Icons';
-
+import Loading from '@/components/Loading';
 
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
@@ -27,6 +27,8 @@ const Bayprostabexecution = () => {
   const [bayprostabexecutions, setBayprostabexecutions] = useState([]);
   const [msg, setMsg] = useState("Data ready");
   const [waitMsg, setWaitMsg] = useState("");
+  const [waitPage, setWaitPage] = useState(false);
+
 
   const [staffData, setStaffData] = useState([]);
   const [projectData, setProjectData] = useState([]);
@@ -87,7 +89,7 @@ const Bayprostabexecution = () => {
 
 
     setWaitMsg("Please wait...");
-
+    setWaitPage(true);
     setTimeout(() => {
 
       doc.addImage("/images/formats/bayprostab2.png", "PNG", 0, 0, 210, 297);
@@ -103,7 +105,7 @@ const Bayprostabexecution = () => {
       let y = 108;
       for (let i = 0; i < bayprostabexecutions.length; i++) {
         const no = parseFloat(bayprostabexecutions[i].nos);
-        const tk = parseFloat(evaluate(bayprostabexecutions[i].taka));
+        const tk = evaluate(`0+${bayprostabexecutions[i].taka}`);
         const line = doc.splitTextToSize(`${bayprostabexecutions[i].item}`, 50);
 
         doc.setFont("SutonnyMJ", "normal");
@@ -130,6 +132,7 @@ const Bayprostabexecution = () => {
       doc.save(new Date().toISOString() + "Bayprostab-Execution.pdf");
 
       setWaitMsg("");
+      setWaitPage(false);
     }, 0);
   }
 
@@ -148,6 +151,10 @@ const Bayprostabexecution = () => {
     }
   }
 
+  if (waitPage) {
+    return <Loading />
+   }
+ 
 
 
   return (
