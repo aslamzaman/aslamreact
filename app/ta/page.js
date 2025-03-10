@@ -32,7 +32,7 @@ const Ta = () => {
                 });
 
                 const sortedData = joinCollection.sort((a, b) => sortArray(a.unitName.toUpperCase(), b.unitName.toUpperCase()));
-                // console.log(sortedData);
+                 console.log(sortedData);
                 setTas(sortedData);
                 setWaitMsg('');;
             } catch (error) {
