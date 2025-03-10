@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
   
     
 export const metadata = {
-  title: 'Octen',
+  title: 'Leave Calculation',
   description: 'Apps created by Aslam Zaman',
 }
 
