@@ -535,68 +535,44 @@ export const customIdForFirebase = () => {
 
 
 
-export const convertCsvToJson = (csv, headerArray, isDeleteFirstRow = false) => {
-     // Split the CSV into rows and trim each row
-        const dataRows = csv.split("\\n").map(row => row.trim());
-
-        // Remove the first row if isDeleteFirstRow is true
-        if (isDeleteFirstRow) {
-            dataRows.shift();
-        }
-
-        // Convert each row to a JSON object
-        return dataRows.map((row, index) => {
-            const values = row.split(";").map(value => value.trim());
-
-            // Create an object with the headerArray as keys and row values as values
-            const result = headerArray.reduce((obj, header, i) => {
-                obj[header] = values[i] || null; // Use null for missing values
-                return obj;
-            }, { id: \`\${Date.now()}(\${index + 1})\` });
-
-            return result;
-        });
-   } 
-
-
     export const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 
     export const unique = (data) => [...new Set(data)];
 
 
-    export const convertCsvToJson = (csv, headerArray) => {
-        const lines = csv.split("\\n"); // Trim and split into rows
-        const dataRows = lines.slice(1);  // Deduct first row
-        return dataRows.map(item => {
-            const values = item.split(";").map(value => value.trim());
-            let result = {};
-            for (let i = 0; i < headerArray.length; i++) {
-                result = { ...result, [headerArray[i]]: values[i] }
+export const convertCsvToJson = (csv, headerArray) => {
+    const lines = csv.split("\\n"); // Trim and split into rows
+    const dataRows = lines.slice(1);  // Deduct first row
+    return dataRows.map(item => {
+        const values = item.split(";").map(value => value.trim());
+        let result = {};
+        for (let i = 0; i < headerArray.length; i++) {
+            result = { ...result, [headerArray[i]]: values[i] }
+        }
+        return result;
+    })
+}
+
+
+export const convertExcelToJson = (file, headerArray) => {
+    return new Promise((result, rejec) => {
+        try {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const workbook = XLSX.read(reader.result, { type: "binary" });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const csvFile = XLSX.utils.sheet_to_csv(worksheet, { FS: ";" });
+                const data = convertCsvToJson(csvFile, headerArray);
+                result(data);
             }
-            return result;
-        })
-    }
-    
-    
-    export const convertExcelToJson = (file, headerArray) => {
-        return new Promise((result, rejec) => {
-            try {
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const workbook = XLSX.read(reader.result, { type: "binary" });
-                    const sheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[sheetName];
-                    const csvFile = XLSX.utils.sheet_to_csv(worksheet, { FS: ";" });
-                    const data = convertCsvToJson(csvFile, headerArray);
-                    result(data);
-                }
-                reader.readAsArrayBuffer(file);
-            } catch (error) {
-                rejec(error);
-            }
-        })
-    }
+            reader.readAsArrayBuffer(file);
+        } catch (error) {
+            rejec(error);
+        }
+    })
+}
 
 
 `
