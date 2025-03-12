@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face{
+  font-family: 'SutonnyMJ_Normal';
+  src: url('/fonts/SutonnyMJ-Regular.ttf');
+}
+
+
+@font-face{
+  font-family: 'TiroBangla_Regular';
+  src: url('/fonts/TiroBangla-Regular.ttf');
+}
+
+@font-face {
+  font-family:'Segoe UI' ;
+  src: url('/fonts/segoeuithis.ttf');
+}
+
+
+
+
+
+
+
+
