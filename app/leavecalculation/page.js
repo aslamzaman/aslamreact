@@ -37,7 +37,7 @@ const Leavecalculation = () => {
         const leftApplicaion = leftSide(balanceCl, balanceEl, requestedLeave);
         const rightApplicaion = rightSide(balanceCl, balanceEl, requestedLeave);
 
-        const st = `Register: ${registerBalance.newBalanceCl}, ${registerBalance.newBalanceEl} ||  Left Side: ${leftApplicaion.consumeCl}, ${leftApplicaion.consumeEl}, ${leftApplicaion.requestedLeave}, ${leftApplicaion.totalConsume} || Right Side: ${rightApplicaion.quarter}, ${rightApplicaion.lastConsume}, ${rightApplicaion.requestedLeave}, ${rightApplicaion.balance}`;
+        const st = `Register: ${registerBalance.newBalanceCl}, ${registerBalance.newBalanceEl}`;
         setResult(st);
 
         // import { jsPDF } from "jspdf";
