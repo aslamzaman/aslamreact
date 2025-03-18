@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Add from "@/components/increment/Add";
 import Edit from "@/components/increment/Edit";
 import Delete from "@/components/increment/Delete";
+import { getStaffData } from "@/helpers/common/getStaffData";
 
 
 
@@ -21,6 +22,7 @@ const Increment = () => {
     const router = useRouter();
 
     useEffect(() => {
+
         const getData = async () => {
             setWaitMsg('Please Wait...');
             try {
@@ -76,7 +78,7 @@ const Increment = () => {
             </div>
 
 
-            <div className="px-4 grid grid-cols-3 gap-4">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-y-4 lg:gap-x-4">
 
                 <div className="p-2 overflow-auto">
                     <form onSubmit={createPrintPage}>

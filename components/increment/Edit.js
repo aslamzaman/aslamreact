@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { BtnSubmit, DropdownEn, TextEn } from "@/components/Form";
-import {  getDataFromFirebase } from "@/lib/firebaseFunction";
 import { localStorageUpdateItem } from "@/lib/utils";
+import { getStaffData } from "@/helpers/common/getStaffData";
+
+
 
 const Edit = ({ message, id, data }) => {
     const [staffs, setStaffs] = useState([]);
@@ -15,8 +17,14 @@ const Edit = ({ message, id, data }) => {
         setShow(true);
         message("Ready to edit");
         try {
-            const response = await getDataFromFirebase("staff");
-            const result = response.filter(staff => staff.placeId === "6BtqRhIrKQ776jyywIC8");
+
+            const sataffData = await getStaffData();
+            const result = sataffData.sc.map(staff => {
+                return {
+                    value: `${staff.nmUn},${staff.matchPost.nmUn}`,
+                    caption: staff.nmEn
+                }
+            });
             console.log("Aslam", result)
             setStaffs(result);
 
@@ -81,7 +89,7 @@ const Edit = ({ message, id, data }) => {
                                 <div className="grid grid-cols-1 gap-4 my-4">
                                     <TextEn Title="RefNo" Id="refNo" Change={e => setRefNo(e.target.value)} Value={refNo} Chr={150} />
                                     <DropdownEn Title="Name" Id="name" Change={e => setName(e.target.value)} Value={name}>
-                                        {staffs.length ? staffs.map(staff => <option value={`${staff.nmUn};${staff.postId.nmUn}`} key={staff.id}>{staff.nmUn}</option>) : null}
+                                        {staffs.length ? staffs.map((staff,i) => <option value={staff.value} key={i}>{staff.caption}</option>) : null}
                                     </DropdownEn>
                                     <TextEn Title="Salary" Id="salary" Change={e => setSalary(e.target.value)} Value={salary} Chr={150} />
                                 </div>

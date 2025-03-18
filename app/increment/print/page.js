@@ -93,16 +93,18 @@ const Increment = () => {
                                         <br />
                                         <p>জনাব {nm[0]} <br />{nm[1]} <br />সিএমইএস, লালমাটিয়া, ঢাকা </p>
                                         <br />
-                                        <p className="text-justify">বিষয় : <span className="font-bold">{convertDigitToUnicode(incomeYr)} অর্থবছরের মূল্যায়নের ভিত্তিতে আপনার বাৎসরিক বেতন ৫% বৃদ্ধির সিদ্ধান্ত গ্রহণ এবং গত {formatedDateUnicode(activeDt)} তারিখ থেকে কার্যকর করা প্রসঙ্গে।</span> </p>
+                                        <p className="text-justify">বিষয় : <span className="font-bold">{convertDigitToUnicode(incomeYr)} অর্থবছরের মূল্যায়নের ভিত্তিতে বাৎসরিক বেতন ৫% বৃদ্ধি ও গত {formatedDateUnicode(activeDt)} তারিখ থেকে কার্যকর করণ প্রসঙ্গে।</span> </p>
                                         <br />
 
-                                        <p className="text-justify">জনাব,<br />আপনার অবগতির জন্য জানানো যাচ্ছে যে, {convertDigitToUnicode(incomeYr)} অর্থবছরের স্টাফ পারফরমেন্স মূল্যায়নের ভিত্তিতে আপনার বাৎসরিক বেতন ৫% বৃদ্ধি করা হয়েছে।</p>
+                                        <p className="text-justify">জনাব,<br />আপনার অবগতির জন্য জানানো যাচ্ছে যে, {convertDigitToUnicode(incomeYr)} অর্থবছরের স্টাফ পারফরমেন্স মূল্যায়নের ভিত্তিতে আপনার বাৎসরিক বেতন ৫% বৃদ্ধি করা হয়েছে। এ সিদ্ধান্ত গত {formatedDateUnicode(activeDt)} তারিখ থেকে কার্যকর হয়েছে।</p>
 
                                         <br />
 
 
-                                        <p className="text-justify">এর ফলে, আপনার বর্তমান বেতন সর্বসাকুল্যে {convertDigitToUnicode(numberWithComma(staff.salary))}/-({inwordUnicode(staff.salary)}) টাকায় উন্নীত করা হয়েছে, যা গত {formatedDateUnicode(activeDt)} তারিখ থেকে কার্যকর করা হয়েছে।</p>
+                                        <p className="text-justify">বেতন বৃদ্ধির ফলে আপনার বর্তমান বেতন সর্বসাকুল্যে {convertDigitToUnicode(numberWithComma(staff.salary))}/-({inwordUnicode(staff.salary)}) টাকায় উন্নীত করা হয়েছে। আশা করি, এই সিদ্ধান্ত আপনার জন্য আনন্দদায়ক হবে এবং ভবিষ্যতেও আপনি প্রতিষ্ঠানের উন্নয়নে আত্মনিয়োগ করে যাবেন।</p>
 
+                                        <br />
+                                        <p>আপনার সার্বিক সাফল্য ও সুস্বাস্থ্য কামনা করছি।</p>
                                         <br />
                                         <p>ধন্যবাদান্তে,</p>
 

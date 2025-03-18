@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BtnSubmit, DropdownEn, TextEn } from "@/components/Form";
-import {  getDataFromFirebase } from "@/lib/firebaseFunction";
 import { localStorageAddItem } from "@/lib/utils";
+import { getStaffData } from "@/helpers/common/getStaffData";
 
 const Add = ({ message }) => {
     const [staffs, setStaffs] = useState([]);
@@ -23,11 +23,16 @@ const Add = ({ message }) => {
         setShow(true);
         resetVariables();
         try {
-            const data = await getDataFromFirebase("staff");
-            const result = data.filter(staff => staff.placeId === "6BtqRhIrKQ776jyywIC8");
+            const data = await getStaffData();
+            console.log(data);
+            const result = data.sc.map(staff =>{
+                return{
+                    value: `${staff.nmUn};${staff.matchPost.nmUn}`,
+                    caption:staff.nmEn
+                }
+            });
             console.log("Aslam", result)
             setStaffs(result);
-            // message('');
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -84,7 +89,7 @@ const Add = ({ message }) => {
                                 <div className="grid grid-cols-1 gap-4 my-4">
                                     <TextEn Title="RefNo" Id="refNo" Change={e => setRefNo(e.target.value)} Value={refNo} Chr={150} />
                                     <DropdownEn Title="Name" Id="name" Change={e => setName(e.target.value)} Value={name}>
-                                        {staffs.length ? staffs.map(staff => <option value={`${staff.nmUn};${staff.postId.nmUn}`} key={staff.id}>{staff.nmUn}</option>) : null}
+                                        {staffs.length ? staffs.map((staff,i) => <option value={staff.value} key={i}>{staff.caption}</option>) : null}
                                     </DropdownEn>
                                     <TextEn Title="Salary" Id="salary" Change={e => setSalary(e.target.value)} Value={salary} Chr={150} />
                                 </div>

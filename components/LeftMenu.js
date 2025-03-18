@@ -67,11 +67,15 @@ const MenuData = [
         ]
     },
     {
-        title: 'Settings(Basic)',
+        title: 'Settings',
         group: [
             {
                 label: 'Author',
                 url: '/author'
+            },
+            {
+                label: 'Staff',
+                url: '/staff'
             },
             {
                 label: 'Post',
@@ -96,13 +100,7 @@ const MenuData = [
             {
                 label: 'District',
                 url: '/district'
-            }
-
-        ]
-    },
-    {
-        title: 'Setting(Advance)',
-        group: [
+            },
             {
                 label: 'TA',
                 url: '/ta'
@@ -122,10 +120,6 @@ const MenuData = [
             {
                 label: 'Honda History',
                 url: '/hondahistory'
-            },
-            {
-                label: 'Staff',
-                url: '/staff'
             },
             {
                 label: 'Staff Resign',
