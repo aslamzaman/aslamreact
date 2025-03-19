@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BtnSubmit, TextBn, TextNum } from "@/components/Form";
-import { localStorageAddItem } from "@/lib/utils";
+import { localStorageAddItem } from "@/lib/DatabaseLocalStorage";
 
 const Add = ({ message }) => {
     const [item, setItem] = useState('');

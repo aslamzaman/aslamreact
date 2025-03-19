@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BtnSubmit, DropdownEn, TextNum } from "@/components/Form";
 import { getDataFromFirebase } from "@/lib/firebaseFunction";
-import { localStorageUpdateItem } from "@/lib/utils";
+import { localStorageUpdateItem } from "@/lib/DatabaseLocalStorage";
 
 
 const Edit = ({ message, id, data }) => {

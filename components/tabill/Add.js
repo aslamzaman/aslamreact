@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { TextDt, TextTm, TextBn, BtnEn, TextNum, BtnSubmit, DropdownBn, TextEnDisabled } from "@/components/Form";
-import { localStorageAddItem, localStorageGetItem } from "@/lib/utils";
 const date_format = dt => new Date(dt).toISOString().split('T')[0];
-
+import { localStorageGetItem, localStorageAddItem } from "@/lib/DatabaseLocalStorage";
 
 
 const vehicles = [

@@ -8,10 +8,13 @@ import Delete from "@/components/localta/Delete";
 import { DropdownEn, TextDt, TextBn, BtnSubmit, TextNum } from "@/components/Form";
 
 import { getDataFromFirebase } from "@/lib/firebaseFunction";
-import { formatedDate, inwordBangla, localStorageGetItem, sortArray } from "@/lib/utils";
+import { formatedDate, inwordBangla,  sortArray } from "@/lib/utils";
+import { localStorageGetItem } from "@/lib/DatabaseLocalStorage";
 
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
+
+
 
 const LocalTaCreation = ({ doc }, data) => {
     const localtas = data.localtas;

@@ -6,10 +6,10 @@ import Edit from "@/components/bkash/Edit";
 import Delete from "@/components/bkash/Delete";
 import { jsPDF } from "jspdf";
 import { getDataFromFirebase } from "@/lib/firebaseFunction";
-import { formatedDate, formatedDateDot, localStorageGetItem, inwordBangla, sortArray } from "@/lib/utils";
+import { formatedDate, formatedDateDot,  inwordBangla, sortArray } from "@/lib/utils";
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
-
+import { localStorageGetItem } from "@/lib/DatabaseLocalStorage";
 
 
 const Bkash = () => {

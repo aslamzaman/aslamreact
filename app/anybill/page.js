@@ -9,7 +9,8 @@ import { jsPDF } from "jspdf";
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
 import { getDataFromFirebase } from "@/lib/firebaseFunction";
-import { localStorageGetItem, inwordBangla, numberWithComma, formatedDate, formatedDateDot, sortArray } from "@/lib/utils";
+import { inwordBangla, numberWithComma, formatedDate, formatedDateDot, sortArray } from "@/lib/utils";
+import { localStorageGetItem } from "@/lib/DatabaseLocalStorage";
 
 
 const Anybill = () => {

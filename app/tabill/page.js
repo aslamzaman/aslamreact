@@ -9,7 +9,8 @@ import Delete from "@/components/tabill/Delete";
 import { DropdownEn, TextDt, BtnSubmit } from "@/components/Form";
 
 import { getDataFromFirebase } from "@/lib/firebaseFunction";
-import { formatedDateDot, inwordBangla, numberWithComma, dateDifferenceInDays, localStorageGetItem, sortArray } from "@/lib/utils";
+import { formatedDateDot, inwordBangla, numberWithComma, dateDifferenceInDays,  sortArray } from "@/lib/utils";
+import { localStorageGetItem } from "@/lib/DatabaseLocalStorage";
 
 const date_format = dt => new Date(dt).toISOString().split('T')[0];
 require("@/app/fonts/SUTOM_MJ-normal");

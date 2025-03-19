@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { BtnSubmit, DropdownEn, TextEn } from "@/components/Form";
-import { localStorageUpdateItem } from "@/lib/utils";
 import { getStaffData } from "@/helpers/common/getStaffData";
+import { localStorageUpdateItem } from "@/lib/DatabaseLocalStorage";
+
 
 
 
@@ -21,7 +22,7 @@ const Edit = ({ message, id, data }) => {
             const sataffData = await getStaffData();
             const result = sataffData.sc.map(staff => {
                 return {
-                    value: `${staff.nmUn},${staff.matchPost.nmUn}`,
+                    value: `${staff.nmUn};${staff.matchPost.nmUn}`,
                     caption: staff.nmEn
                 }
             });

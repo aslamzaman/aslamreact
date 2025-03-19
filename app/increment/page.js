@@ -1,12 +1,17 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { TextDt, BtnSubmit, TextEn } from "@/components/Form";
-import { localStorageGetItem, formatedDate, localStorageSetItem } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { formatedDate, convertDigitToUnicode, formatedDateUnicode, numberWithComma, inwordUnicode, delay } from "@/lib/utils";
+import { localStorageGetItem } from "@/lib/DatabaseLocalStorage";
 import Add from "@/components/increment/Add";
 import Edit from "@/components/increment/Edit";
 import Delete from "@/components/increment/Delete";
-import { getStaffData } from "@/helpers/common/getStaffData";
+
+import { Tiro_Bangla } from 'next/font/google';
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+const tiro = Tiro_Bangla({ subsets: ['bengali'], weight: "400" });
+
 
 
 
@@ -14,12 +19,20 @@ const Increment = () => {
     const [increments, setIncrements] = useState([]);
     const [waitMsg, setWaitMsg] = useState("");
     const [msg, setMsg] = useState("");
+    const [busy, setBusy] = useState(false);
 
     const [incomeYr, setIncomeYr] = useState("");
     const [dt, setDt] = useState("");
     const [activeDt, setActiveDt] = useState("");
 
-    const router = useRouter();
+    const contentRef = useRef(null);
+
+    const [ref, setRef] = useState("");
+    const [nm1, setNm1] = useState("");
+    const [nm2, setNm2] = useState("");
+    const [sal, setSal] = useState("");
+
+
 
     useEffect(() => {
 
@@ -28,6 +41,7 @@ const Increment = () => {
             try {
                 const data = localStorageGetItem("increment");
                 const result = data.sort((a, b) => parseInt(b.id) > parseInt(a.id) ? 1 : -1);
+                console.log(result);
                 setIncrements(result);
                 setWaitMsg('');
             } catch (error) {
@@ -47,26 +61,46 @@ const Increment = () => {
         setMsg(data);
     }
 
-
-    const createPrintPage = (e) => {
+    const createPrintPage = async (e) => {
         e.preventDefault();
         if (increments.length < 1) {
             setMsg("No data!");
             return false;
         }
-        const fullyr = new Date().getFullYear();
-        const data = {
-            incomeYr: incomeYr,
-            dt: dt,
-            activeDt: activeDt,
-            fullyr: fullyr,
-            increments: increments
+
+
+        const doc = new jsPDF({
+            orientation: 'p',
+            unit: 'px',
+            format: 'a4'
+        });
+        setBusy(true);
+        const htmlElement = contentRef.current;
+        const pageW = doc.internal.pageSize.getWidth();
+        const pageH = doc.internal.pageSize.getHeight();
+
+        for (let i = 0; i < increments.length; i++) {
+            const nm = increments[i].name;
+            const spName = nm.split(";");
+            setRef(increments[i].refNo);
+            setNm1(spName[0]);
+            setNm2(spName[1]);
+            setSal(increments[i].salary);
+
+            await delay(50);
+            const canvas = await html2canvas(htmlElement);
+            const url = canvas.toDataURL('images/png');
+            doc.addImage(url, 'PNG', 0, 0, pageW, pageH);
+            doc.addPage('p');
         }
-        const response = localStorageSetItem('incrementForPrint', data);
-        console.log(response);
-        router.push("/increment/print");
+
+        doc.deletePage(increments.length + 1);
+        doc.save("increement.pdf");
+        setBusy(false);
     }
 
+
+   
 
 
     return (
@@ -75,11 +109,21 @@ const Increment = () => {
                 <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Increment</h1>
                 <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
                 <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
+                {busy ? (
+                    <div>
+                        <div className="w-[20px] h-[20px] mx-auto">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="#000000ff" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-full h-full p-0.5 stroke-black animate-ping">
+                                <circle cx="12" cy="12" r="8" />
+                            </svg>
+
+                        </div>
+                        <p className="text-center">Please wait..</p>
+                    </div>
+                ) : null}
             </div>
 
 
             <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-y-4 lg:gap-x-4">
-
                 <div className="p-2 overflow-auto">
                     <form onSubmit={createPrintPage}>
                         <div className="w-full grid grid-cols-1 gap-4">
@@ -90,6 +134,7 @@ const Increment = () => {
                         <BtnSubmit Title="Create Print Page" Class="bg-green-600 hover:bg-green-800 text-white" />
                     </form>
                 </div>
+
 
                 <div className="col-span-2 p-2 overflow-auto">
                     <table className="w-full border border-gray-200">
@@ -127,6 +172,44 @@ const Increment = () => {
                 </div>
             </div>
 
+
+
+
+            <div className="w-[10px] h-[10px] overflow-auto">
+
+                <div ref={contentRef} className="w-[2480px] h-[3508px] px-[300px] pt-[675px] pb-[300px] mx-auto">
+                    <div className={`w-full h-auto text-[50px] ${tiro.className}`} >
+
+
+                        <p>স্মারক নং-সিএমইএস/এইচআরডি/{convertDigitToUnicode('2025')}-{convertDigitToUnicode(ref)}<br />{formatedDateUnicode(dt)}</p>
+                        <br />
+                        <p>জনাব {nm1}<br />{nm2}<br />সিএমইএস, লালমাটিয়া, ঢাকা </p>
+                        <br />
+                        <p className="text-justify">বিষয় : <span className="font-bold">{convertDigitToUnicode(incomeYr)} অর্থবছরের মূল্যায়নের ভিত্তিতে বাৎসরিক বেতন ৫% বৃদ্ধি ও গত {formatedDateUnicode(activeDt)} তারিখ থেকে কার্যকর করণ প্রসঙ্গে।</span> </p>
+                        <br />
+
+                        <p className="text-justify">জনাব,<br />আপনার অবগতির জন্য জানানো যাচ্ছে যে, {convertDigitToUnicode(incomeYr)} অর্থবছরের স্টাফ পারফরমেন্স মূল্যায়নের ভিত্তিতে আপনার বাৎসরিক বেতন ৫% বৃদ্ধি করা হয়েছে। এ সিদ্ধান্ত গত {formatedDateUnicode(activeDt)} তারিখ থেকে কার্যকর হয়েছে।</p>
+
+                        <br />
+
+
+                        <p className="text-justify">বেতন বৃদ্ধির ফলে আপনার বর্তমান বেতন সর্বসাকুল্যে {convertDigitToUnicode(numberWithComma(sal))}/-({inwordUnicode(sal)}) টাকায় উন্নীত করা হয়েছে। আশা করি, এই সিদ্ধান্ত আপনার জন্য আনন্দদায়ক হবে এবং ভবিষ্যতেও আপনি প্রতিষ্ঠানের উন্নয়নে আত্মনিয়োগ করে যাবেন।</p>
+
+                        <br />
+
+                        <p>আপনার সার্বিক সাফল্য ও সুস্বাস্থ্য কামনা করছি।</p>
+                        <br />
+                        <p>ধন্যবাদান্তে,</p>
+
+                        <br /><br />
+                        <p className="mt-16">মোঃ ওমর ফারুক হায়দার<br />নির্বাহী পরিচালক<br />সিএমইএস</p>
+                        <br />
+                        <p> অনুলিপি:<br />১. এইচআরডি/পিএফ</p>
+
+                    </div>
+
+                </div>
+            </div>
 
 
 

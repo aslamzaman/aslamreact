@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { TextDt, BtnSubmit, TextEn, TextareaEn, BtnInput, TextareaUn, TextUn } from "@/components/Form";
-import { formatedDate, localStorageGetItem, localStorageSetItem } from "@/lib/utils";
-
+import { formatedDate } from "@/lib/utils";
+import { localStorageGetItem, localStorageSetItem } from "@/lib/DatabaseLocalStorage";
 
 
 

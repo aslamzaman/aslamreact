@@ -25,6 +25,7 @@ import { SampleReactToPrint } from "@/components/code/SampleReactToPrint";
 import { jsPDFFunction } from "@/components/code/JsPdfFunction";
 import { Utilities } from "@/components/code/Utilities";
 import { titleCamelCase } from "@/lib/utils";
+import Html2Canvas from "@/components/code/html2Canvas";
 
 
 
@@ -153,6 +154,11 @@ const Code = () => {
         setTitleText(`components/${tbl}/PrintPage.js`);
         setResult(SampleReactToPrint());
     }
+
+    const Html2CanvasHandler = () => {
+        setResult(Html2Canvas());
+    }
+
 
     const DropdownById = () => {
         const tblName = prompt("Collection Name, Referance Id(say: post, postId)");
@@ -348,6 +354,7 @@ const Code = () => {
                     <BtnEn Title="Help-jsPDF" Click={helpJsPdf} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                     <BtnEn Title="ReactToPrint" Click={SampleReactToPrintHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                     <BtnEn Title="MergeImages" Click={LoadImagesHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    <BtnEn Title="Html2Canvas" Click={Html2CanvasHandler} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                 </div>
                 </div>
 

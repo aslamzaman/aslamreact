@@ -6,7 +6,9 @@ import Edit from "@/components/mobilebill/Edit";
 import Delete from "@/components/mobilebill/Delete";
 import { jsPDF } from "jspdf";
 import { getDataFromFirebase } from "@/lib/firebaseFunction";
-import { formatedDate, formatedDateDot, inwordEnglish, localStorageGetItem } from "@/lib/utils";
+import { formatedDate, formatedDateDot, inwordEnglish } from "@/lib/utils";
+import { localStorageGetItem } from "@/lib/DatabaseLocalStorage";
+
 
 
 

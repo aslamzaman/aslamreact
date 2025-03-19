@@ -1,7 +1,8 @@
 import { localStorageGetItem } from "@/lib/DatabaseLocalStorage";
 import { getDataFromFirebase } from "@/lib/firebaseFunction";
-import {localStorageAddItem, sortArray } from "@/lib/utils";
+import { sortArray } from "@/lib/utils";
 import { evaluate } from 'mathjs';
+import { localStorageAddItem } from "@/lib/DatabaseLocalStorage";
 
 
 

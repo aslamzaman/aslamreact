@@ -1,11 +1,11 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { localStorageGetItem, formatedDateUnicode, convertDigitToUnicode } from "@/lib/utils";
+import { formatedDateUnicode, convertDigitToUnicode } from "@/lib/utils";
 import ReactToPrint from 'react-to-print';
 import { Tiro_Bangla } from 'next/font/google';
 const tiro = Tiro_Bangla({ subsets: ['bengali'], weight: "400" });
 import Link from "next/link";
-
+import { localStorageGetItem } from "@/lib/DatabaseLocalStorage";
 
 
 
