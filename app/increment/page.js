@@ -11,7 +11,7 @@ import { Tiro_Bangla } from 'next/font/google';
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 const tiro = Tiro_Bangla({ subsets: ['bengali'], weight: "400" });
-
+import LoadingDot from "@/components/LoadingDot";
 
 
 
@@ -20,6 +20,7 @@ const Increment = () => {
     const [waitMsg, setWaitMsg] = useState("");
     const [msg, setMsg] = useState("");
     const [busy, setBusy] = useState(false);
+    const [count, setCount] = useState(0);
 
     const [incomeYr, setIncomeYr] = useState("");
     const [dt, setDt] = useState("");
@@ -78,7 +79,7 @@ const Increment = () => {
         const htmlElement = contentRef.current;
         const pageW = doc.internal.pageSize.getWidth();
         const pageH = doc.internal.pageSize.getHeight();
-
+        setCount(0);
         for (let i = 0; i < increments.length; i++) {
             const nm = increments[i].name;
             const spName = nm.split(";");
@@ -87,11 +88,12 @@ const Increment = () => {
             setNm2(spName[1]);
             setSal(increments[i].salary);
 
-            await delay(50);
+            await delay(500);
             const canvas = await html2canvas(htmlElement);
             const url = canvas.toDataURL('images/png');
             doc.addImage(url, 'PNG', 0, 0, pageW, pageH);
             doc.addPage('p');
+            setCount(i + 1);
         }
 
         doc.deletePage(increments.length + 1);
@@ -100,26 +102,18 @@ const Increment = () => {
     }
 
 
-   
+
 
 
     return (
         <>
+            {busy ? (
+                <LoadingDot message={`Please wait [${count}] ...`} />
+            ) : null}
             <div className="w-full mb-3 mt-8">
                 <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Increment</h1>
                 <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
                 <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
-                {busy ? (
-                    <div>
-                        <div className="w-[20px] h-[20px] mx-auto">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="#000000ff" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-full h-full p-0.5 stroke-black animate-ping">
-                                <circle cx="12" cy="12" r="8" />
-                            </svg>
-
-                        </div>
-                        <p className="text-center">Please wait..</p>
-                    </div>
-                ) : null}
             </div>
 
 

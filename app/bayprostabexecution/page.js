@@ -11,10 +11,10 @@ import Upload from "@/components/bayprostabexecution/Upload";
 import Plus from '@/components/bayprostabexecution/Plus';
 
 
-import { numberWithComma, inwordBangla, formatedDate, formatedDateDot, unique, delay } from "@/lib/utils";
+import { numberWithComma, inwordBangla, formatedDate, formatedDateDot } from "@/lib/utils";
 import { localStorageRemoveItem } from "@/lib/DatabaseLocalStorage";
 import { Clear } from '@/components/Icons';
-import Loading from '@/components/Loading';
+import LoadingDot from '@/components/LoadingDot';
 
 require("@/app/fonts/SUTOM_MJ-normal");
 require("@/app/fonts/SUTOM_MJ-bold");
@@ -152,15 +152,13 @@ const Bayprostabexecution = () => {
   }
 
 
-  if (waitPage) {
-    return <Loading message="Please wait" />
-  }
-
-
-
-
   return (
     <>
+
+      {waitPage ? (
+        <LoadingDot message={`Please wait ...`} />
+      ) : null}
+
 
       <div className="w-full py-4">
         <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Bayprostab Execution</h1>
