@@ -11,7 +11,7 @@ import { Tiro_Bangla } from 'next/font/google';
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 const tiro = Tiro_Bangla({ subsets: ['bengali'], weight: "400" });
-import LoadingDot from "@/components/LoadingDot";
+import Loading from "@/components/Loading";
 
 
 
@@ -87,13 +87,12 @@ const Increment = () => {
             setNm1(spName[0]);
             setNm2(spName[1]);
             setSal(increments[i].salary);
-
+            setCount(i + 1);
             await delay(500);
             const canvas = await html2canvas(htmlElement);
             const url = canvas.toDataURL('images/png');
             doc.addImage(url, 'PNG', 0, 0, pageW, pageH);
             doc.addPage('p');
-            setCount(i + 1);
         }
 
         doc.deletePage(increments.length + 1);
@@ -107,9 +106,8 @@ const Increment = () => {
 
     return (
         <>
-            {busy ? (
-                <LoadingDot message={`Please wait [${count}] ...`} />
-            ) : null}
+            {busy ?<Loading message={`Creating page ${count}`} />: null}
+                                                   
             <div className="w-full mb-3 mt-8">
                 <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Increment</h1>
                 <p className="w-full text-center text-blue-300">&nbsp;{waitMsg}&nbsp;</p>
