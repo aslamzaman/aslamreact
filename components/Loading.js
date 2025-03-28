@@ -65,8 +65,10 @@ const Loading = ({ message }) => {
                             cy="5.4785972"
                             r="0.25500405" />
                     </svg>
-
                 </div>
+
+
+
                 <p className='w-fit text-center text-sx'>{message} <span className='animate-ping'>...</span></p>
         </div>
     )

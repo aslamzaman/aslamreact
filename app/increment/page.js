@@ -11,7 +11,7 @@ import { Tiro_Bangla } from 'next/font/google';
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 const tiro = Tiro_Bangla({ subsets: ['bengali'], weight: "400" });
-import Loading from "@/components/Loading";
+import LoadingDot from "@/components/LoadingDot";
 
 
 
@@ -106,7 +106,7 @@ const Increment = () => {
 
     return (
         <>
-            {busy ?<Loading message={`Creating page ${count}`} />: null}
+            {busy ?<LoadingDot message={`Creating page ${count}`} />: null}
                                                    
             <div className="w-full mb-3 mt-8">
                 <h1 className="w-full text-xl lg:text-3xl font-bold text-center text-blue-700">Increment</h1>
