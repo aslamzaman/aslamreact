@@ -98,7 +98,7 @@ const Home = () => {
             const canvas = await html2canvas(htmlElement);
             const imageUrl = canvas.toDataURL('images/png');
             // Create PDF file
-            doc.addImage(`\$\{imageUrl}`\, "PNG", 0, 0, 210, 297);
+            doc.addImage(\`\${imageUrl}\`, "PNG", 0, 0, 210, 297);
             doc.addPage('a4', 'p');
         }
         // Delete extra pdf page----
