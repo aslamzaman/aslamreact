@@ -113,7 +113,7 @@ const Home = () => {
         <section className="w-full p-4 mt-10 border border-gray-400 rounded-lg">
             <input type="file" onChange={fileChangeHandlerImage} accept=".jpg, .jpeg, .png, .bmp" multiple />
 
-            <div ref={contentRef} className="w-[2480px] h-[3508px] p-[300px]" >
+            <div ref={contentRef} className="w-[2480px] h-[3508px] p-[300px] flex items-center justify-center" >
                 <div className="w-full h-full bg-no-repeat bg-center bg-contain" style={{ backgroundImage: \`url("\${logoUrl}")\` }}></div> 
             </div>
             <button onClick={createPdfHandler}>Create PDF</button>
