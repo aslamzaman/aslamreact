@@ -1,5 +1,7 @@
 import { titleCamelCase } from "@/lib/utils";
 
+
+
 const Delete = (tbl, datas) => {
 
     const replaceQutation = datas.replaceAll('`', '');
@@ -13,13 +15,14 @@ const Delete = (tbl, datas) => {
     const str = `import React, { useState } from "react";
 import { BtnEn } from "@/components/Form";
 import { deleteDataFromFirebase } from "@/lib/firebaseFunction";
+import LoadingDot from "../LoadingDot";
 
 
 const Delete = ({ message, id, data }) => {
     const [${data[0]}, set${titleCamelCase(data[0])}] = useState("");
 
     const [show, setShow] = useState(false);
-    const [pointerEvent, setPointerEvent] = useState(true);
+    const [busy, setBusy] = useState(false);
 
 
     const showDeleteForm = () => {
@@ -36,14 +39,14 @@ const Delete = ({ message, id, data }) => {
 
     const deleteClick = async () => {
         try {
-            setPointerEvent(false);
+            setBusy(true);
             const msg = await deleteDataFromFirebase('${tbl}', id);
             message(msg);
         } catch (error) {
             console.log(error);
             message("Data deleting error");
         } finally {
-            setPointerEvent(true);
+           setBusy(false);
             setShow(false);
         }
     }
@@ -52,6 +55,7 @@ const Delete = ({ message, id, data }) => {
 
     return (
         <>
+            {busy ? <LoadingDot message="Please wait" /> : null}
             {show && (
                 <div className="fixed left-0 top-[60px] right-0 bottom-0 p-4 bg-black bg-opacity-30 backdrop-blur-sm z-10 overflow-auto">
                     <div className="w-full sm:w-11/12 md:w-9/12 lg:w-7/12 xl:w-1/2 mx-auto my-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-500">
@@ -76,7 +80,7 @@ const Delete = ({ message, id, data }) => {
                                     Are you sure to proceed with the deletion?</h1>
                                 <h1 className="text-center text-gray-600 font-bold">{${data[0]}}</h1>
                             </div>
-                            <div className={\`w-full mt-4 flex justify-start \${pointerEvent ? 'pointer-events-auto' : 'pointer-events-none'}\`}>
+                            <div className="w-full mt-4 flex justify-start pointer-events-auto">
                                 <BtnEn Title="Close" Click={closeDeleteForm} Class="bg-pink-700 hover:bg-pink-900 text-white mr-1" />
                                 <BtnEn Title="Yes Delete" Click={deleteClick} Class="bg-blue-600 hover:bg-blue-800 text-white" />
                             </div>
