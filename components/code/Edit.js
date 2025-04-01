@@ -14,13 +14,15 @@ const Edit = (tbl, datas) => {
     const str = `import React, { useState } from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
 import { updateDataToFirebase } from "@/lib/firebaseFunction";
+import LoadingDot from "../LoadingDot";
+
 
 
 const Edit = ({ message, id, data }) => {
 ${editPageStateVariables(data)}
 
     const [show, setShow] = useState(false);
-    const [pointerEvent, setPointerEvent] = useState(true);
+    const [busy, setBusy] = useState(false);
 
     const showEditForm = () => {
            setShow(true);
@@ -45,7 +47,7 @@ ${editPageCreateObject(data)}
     const saveHandler = async (e) => {
         e.preventDefault();
         try {
-            setPointerEvent(false);
+            setBusy(true);
             const newObject = createObject();
             const msg = await updateDataToFirebase("${tbl}",id, newObject);
             message(msg);
@@ -53,7 +55,7 @@ ${editPageCreateObject(data)}
             console.error("Error saving ${tbl} data:", error);
             message("Error saving ${tbl} data.");
         } finally {
-            setPointerEvent(true);
+            setBusy(false);
             setShow(false);
         }
     }
@@ -61,6 +63,7 @@ ${editPageCreateObject(data)}
 
     return (
         <>
+            {busy ? <LoadingDot message="Please wait" /> : null}
             {show && (
                 <div className="fixed left-0 top-[60px] right-0 bottom-0 p-4 bg-black bg-opacity-30 backdrop-blur-sm z-10 overflow-auto">
                     <div className="w-full sm:w-11/12 md:w-9/12 lg:w-7/12 xl:w-1/2 mx-auto my-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-500">
@@ -78,7 +81,7 @@ ${editPageCreateObject(data)}
                                 <div className="grid grid-cols-1 gap-4 my-4">
 ${editPageInputText(data)}                                    
                                 </div>
-                                <div className={\`w-full mt-4 flex justify-start \${pointerEvent ? 'pointer-events-auto' : 'pointer-events-none'}\`}>
+                                <div className="w-full mt-4 flex justify-start pointer-events-auto">
                                     <input type="button" onClick={closeEditForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />
                                     <BtnSubmit Title="Save" Class="bg-blue-600 hover:bg-blue-800 text-white" />
                                 </div>
