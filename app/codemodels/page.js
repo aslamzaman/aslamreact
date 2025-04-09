@@ -4,10 +4,10 @@ import { TextEn } from "@/components/Form";
 
 import Page from "@/components/codemodels/Page";
 import Add from "@/components/codemodels/Add";
-//import Edit from "@/components/codemodels/Edit";
-//import Delete from "@/components/codemodels/Delete";
+import Edit from "@/components/codemodels/Edit";
+import Delete from "@/components/codemodels/Delete";
 import LayoutPage from "@/components/codemodels/LayoutPage";
-import Model from "@/components/codemodels/Model";
+import Schema from "@/components/codemodels/Schema";
 
 
 
@@ -87,20 +87,19 @@ const Code = () => {
     }
 
     const ModelGenerate = () => {
-        setTitleText(`models/${tbl}Model.js`);
-        setResult(Model(tbl, fld));
+        setTitleText(`lib/Schema.js`);
+        setResult(Schema(tbl, fld));
     }
 
 
 
+    const copyPageHandler = () => {
+        navigator.clipboard.writeText(result);
+    }
 
-  const copyPageHandler = ()=>{
-
-  }  
-
-  const resultChangeHander = ()=>{
-
-  }
+    const resultChangeHander = (e) => {
+        setResult(e.target.value);
+    }
 
     return (
         <div className="pb-10">
@@ -118,16 +117,16 @@ const Code = () => {
             </div>
 
             <div className="w-full grid grid-cols-5 gap-2">
-<div className="w-full col-span-2 py-6">
-                <div className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2 overflow-auto">
+                <div className="w-full col-span-2 py-6">
+                    <div className="w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2 overflow-auto">
 
-                    <BtnEn Title="Page" Click={PageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                    <BtnEn Title="LayoutPage" Click={LayoutPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                    <BtnEn Title="Add" Click={AddGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                    <BtnEn Title="Edit" Click={EditGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                    <BtnEn Title="Delete" Click={DeleteGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                    <BtnEn Title="Model" Click={ModelGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                </div>
+                        <BtnEn Title="Page" Click={PageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="LayoutPage" Click={LayoutPageGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="Add" Click={AddGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="Edit" Click={EditGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="Delete" Click={DeleteGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="Schema" Click={ModelGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                    </div>
                 </div>
 
                 <div className="col-span-3 py-4 max-h-[800px] overflow-auto">

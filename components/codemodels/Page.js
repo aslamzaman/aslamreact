@@ -45,7 +45,7 @@ import { sortArray } from "@/lib/utils";
 
 
 const ${titleCase(tbl)} = () => {
-    const [${titleCase(tbl)}s, set${titleCase(tbl)}s] = useState([]);
+    const [${tbl}s, set${titleCase(tbl)}s] = useState([]);
     const [waitMsg, setWaitMsg] = useState("");
     const [msg, setMsg] = useState("Data ready");
 
@@ -81,16 +81,13 @@ const ${titleCase(tbl)} = () => {
             </div>
 
 
-            <div className="w-full lg:w-3/4 mx-auto  p-4 border-2 shadow-md rounded-md overflow-auto">
+            <div className="w-full p-4 mt-8 border-2 shadow-md rounded-md overflow-auto">
                 <table className="w-full border border-gray-200">
                     <thead>
                         <tr className="w-full bg-gray-200">
  ${thStr} 
-                            <th className="w-[95px] border-b border-gray-200 px-4 py-2">
-                                <div className="w-[90px] h-[45px] flex justify-end space-x-2 p-1 font-normal">
-                                    {/* <Print data={${tbl}s} /> */}
-                                    <Add message={messageHandler} />
-                                </div>
+                            <th className="font-normal flex justify-end border-b border-gray-200 px-4 py-1">
+                                <Add message={messageHandler} />
                             </th>
                         </tr>
                     </thead>

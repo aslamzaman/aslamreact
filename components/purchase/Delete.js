@@ -1,32 +1,11 @@
-
-
-
-
-const Delete = (tbl, datas) => {
-
-
-    const titleCase = (str) => {
-        return str.split(" ")
-            .map(item => item.charAt(0).toUpperCase() + item.slice(1))
-            .join(" ");
-    }
-
-
-    const splitData = datas.split(",");
-    const data = splitData.map(s => s.trim());
-
-    //--------------------------
-
-
-
-    const str = `import React, { useState } from "react";
+import React, { useState } from "react";
 import { BtnEn } from "@/components/Form";
 import { deleteDataFromFirebase } from "@/lib/firebaseFunction";
 import LoadingDot from "../LoadingDot";
 
 
 const Delete = ({ message, id, data }) => {
-    const [${data[0]}, set${titleCase(data[0])}] = useState("");
+    const [productId, setProductId] = useState("");
 
     const [show, setShow] = useState(false);
     const [busy, setBusy] = useState(false);
@@ -34,8 +13,8 @@ const Delete = ({ message, id, data }) => {
 
     const showDeleteForm = () => {
         setShow(true);
-        const {${data[0]}} = data;
-        set${titleCase(data[0])}(${data[0]});
+        const {productId} = data;
+        setProductId(productId);
     }
 
 
@@ -47,7 +26,7 @@ const Delete = ({ message, id, data }) => {
     const deleteClick = async () => {
         try {
             setBusy(true);
-            const msg = await deleteDataFromFirebase('${tbl}', id);
+            const msg = await deleteDataFromFirebase('purchase', id);
             message(msg);
         } catch (error) {
             console.log(error);
@@ -65,8 +44,8 @@ const Delete = ({ message, id, data }) => {
             {busy ? <LoadingDot message="Please wait" /> : null}
             {show && (
                 <div className="fixed left-0 top-[60px] right-0 bottom-0 p-4 bg-black bg-opacity-30 backdrop-blur-sm z-10 overflow-auto">
-                    <div className="w-full lg:w-3/4 mx-auto my-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-500">
-                        <div className="px-4 md:px-6 py-2 flex justify-between items-center border-b border-gray-300">
+                    <div className="w-full sm:w-11/12 md:w-9/12 lg:w-7/12 xl:w-1/2 mx-auto my-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-500">
+                        <div className="px-6 md:px-6 py-2 flex justify-between items-center border-b border-gray-300">
                             <h1 className="text-xl font-bold text-blue-600">Delete Existing Data</h1>
                             <button onClick={closeDeleteForm} className="w-8 h-8 p-0.5 bg-gray-50 hover:bg-gray-300 rounded-md transition duration-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-full h-full stroke-black">
@@ -75,7 +54,7 @@ const Delete = ({ message, id, data }) => {
                             </button>
 
                         </div>
-                        <div className="p-4 flex flex-col space-y-4">
+                        <div className="p-4 lg:p-6 flex flex-col space-y-4">
                             <div className="w-full">
                                 <svg height="60" width="60" xmlns="http://www.w3.org/2000/svg" className="bg-white-100 mx-auto">
                                     <path d="M30 3 L3 57 L57 57 Z" className="fill-none stroke-red-700 stroke-[5px]" />
@@ -85,7 +64,7 @@ const Delete = ({ message, id, data }) => {
 
                                 <h1 className="text-sm text-center text-gray-600 mt-4">
                                     Are you sure to proceed with the deletion?</h1>
-                                <h1 className="text-center text-gray-600 font-bold">{${data[0]}}</h1>
+                                <h1 className="text-center text-gray-600 font-bold">{productId}</h1>
                             </div>
                             <div className="w-full mt-4 flex justify-start pointer-events-auto">
                                 <BtnEn Title="Close" Click={closeDeleteForm} Class="bg-pink-700 hover:bg-pink-900 text-white mr-1" />
@@ -106,9 +85,4 @@ const Delete = ({ message, id, data }) => {
 export default Delete;
     
 
-    `;
-
-    return str;
-}
-
-export default Delete;
+    
