@@ -178,6 +178,10 @@ const MenuData = [
                 url: '/code'
             },
             {
+                label: 'Code Models',
+                url: '/codemodels'
+            },
+            {
                 label: 'Local Storage Code',
                 url: '/codelocal'
             },
