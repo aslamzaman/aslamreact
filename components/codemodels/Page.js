@@ -54,7 +54,8 @@ const ${titleCase(tbl)} = () => {
         const getData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const data = await getDataFromFirebase("${tbl}");
+                const userId = sessionStorage.getItem('user');
+                const data = await getDataFromFirebase("${tbl}", userId);
                 const sortedData = data.sort((a, b) => sortArray(new Date(b.createdAt), new Date(a.createdAt)));
                 console.log(sortedData);
                 set${titleCase(tbl)}s(sortedData);
