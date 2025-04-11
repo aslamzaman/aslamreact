@@ -84,7 +84,7 @@ ${resetVer}    }
         <>
             {busy ? <LoadingDot message="Please wait" /> : null}
             {show && (
-                <div className="fixed left-0 top-[60px] right-0 bottom-0 p-4 bg-black bg-opacity-30 backdrop-blur-sm z-10 overflow-auto">
+                <div className="fixed left-0 top-[60px] right-0 bottom-0 p-4 bg-gray-500/50 z-10 overflow-auto">
                     <div className="w-full lg:w-3/4 mx-auto my-8 bg-white border-2 border-gray-300 rounded-md shadow-md duration-500">
                         <div className="p-4 flex justify-between items-center border-b border-gray-300 rounded-t-md">
                             <h1 className="text-xl font-bold text-blue-600">Add New Data</h1>
