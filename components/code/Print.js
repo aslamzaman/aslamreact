@@ -92,7 +92,7 @@ const Print = ({ data }) => {
     return (
         <>
             {show && (
-                <div className="fixed inset-0 py-16 bg-black bg-opacity-30 backdrop-blur-sm z-10 overflow-auto">
+                <div className="fixed inset-0 py-16 bg-gray-500/50 z-10 overflow-auto">
 
                     <div className="w-11/12 md:w-3/4 mx-auto mb-10 bg-white border-2 border-gray-300 rounded-md shadow-md duration-300">
 
