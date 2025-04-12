@@ -107,7 +107,7 @@ ${tdStr}
                             ))
                         ) : (
                             <tr>
-                                <td colSpan={${data.length}} className="text-center py-10 px-4">
+                                <td colSpan={${data.length+1}} className="text-center py-10 px-4">
                                     Data not available.
                                 </td>
                             </tr>
