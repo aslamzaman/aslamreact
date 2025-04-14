@@ -63,7 +63,7 @@ const ${titleCamelCase(tbl)} = () => {
                 </div>
                 
                 
-                <div className="w-full lg:w-3/4 mx-auto border-2 border-gray-200 p-4 shadow-md rounded-md">
+                <div className="w-full lg:w-3/4 mx-auto bg-white border-2 border-gray-200 p-4 shadow-md rounded-md">
                 <div className="w-full overflow-auto">
                     <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
                     <div className="w-full flex justify-end">
