@@ -196,6 +196,10 @@ const MenuData = [
             {
                 label: 'Formats',
                 url: '/format'
+            },
+            {
+                label: 'Image Resizer',
+                url: '/imagesizer'
             }
         ]
     },
