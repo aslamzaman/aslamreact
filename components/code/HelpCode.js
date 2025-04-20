@@ -129,6 +129,14 @@ const createPdfHandler = async (e) => {
         a.remove();
       */
 
+ /*
+    const button = document.createElement('button');
+    button.type = 'reset';
+    document.forms[0].appendChild(button);
+    button.click();
+    button.remove();
+    */
+
   }
   catch (err) {
       console.log(err);
