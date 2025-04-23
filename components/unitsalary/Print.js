@@ -66,7 +66,7 @@ const Print = ({ data, message }) => {
         doc.text(`${mnth}-${yr}`, 149.2, 27, null, null, "center");
 
         doc.setLineWidth(0.15);
-        doc.line(14, 32, 287, 32);
+        doc.line(14, 30, 287, 30);
         doc.line(14, 37, 287, 37);
 
         doc.setFontSize(13);
@@ -127,17 +127,17 @@ const Print = ({ data, message }) => {
         doc.text(`${numberWithComma(gt)}`, 220, y, null, null, "right");
 
         doc.line(14, y + 1, 287, y + 1); // Horizontal line
-        doc.line(14, 25, 14, y + 1);
-        doc.line(21, 25, 21, y + 1);
-        doc.line(63, 25, 63, y + 1);
-        doc.line(90, 25, 90, y + 1);
-        doc.line(113, 25, 113, y + 1);
-        doc.line(136, 25, 136, y + 1);
-        doc.line(158, 25, 158, y + 1); // correction
-        doc.line(180, 25, 180, y + 1);
-        doc.line(202, 25, 202, y + 1);
-        doc.line(224, 25, 224, y + 1);
-        doc.line(287, 25, 287, y + 1);
+        doc.line(14, 30, 14, y + 1);
+        doc.line(21, 30, 21, y + 1);
+        doc.line(63, 30, 63, y + 1);
+        doc.line(90, 30, 90, y + 1);
+        doc.line(113, 30, 113, y + 1);
+        doc.line(136, 30, 136, y + 1);
+        doc.line(158, 30, 158, y + 1); // correction
+        doc.line(180, 30, 180, y + 1);
+        doc.line(202, 30, 202, y + 1);
+        doc.line(224, 30, 224, y + 1);
+        doc.line(287, 30, 287, y + 1);
         doc.setFont("SutonnyMJ", "normal");
 
         doc.text("†Pqvig¨vb", 14, y + 22, null, null, "left");
