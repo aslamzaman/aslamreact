@@ -60,18 +60,18 @@ const Print = ({ data, message }) => {
         console.log(staffs)
         doc.setFont("SutonnyMJ", "normal");
         doc.setFontSize(18);
-        doc.text(`†m›Uvi di g¨vm GWz‡Kkb Bb mv‡qÝ (wmGgBGm)`, 149.2, 10, null, null, "center");
-        doc.text(`BDwbU óvd‡\`i †eZb mxU`, 149.2, 16, null, null, "center");
+        doc.text(`†m›Uvi di g¨vm GWz‡Kkb Bb mv‡qÝ (wmGgBGm)`, 149.2, 15, null, null, "center");
+        doc.text(`BDwbU óvd‡\`i †eZb mxU`, 149.2, 21, null, null, "center");
         doc.setFontSize(15);
-        doc.text(`${mnth}-${yr}`, 149.2, 22, null, null, "center");
+        doc.text(`${mnth}-${yr}`, 149.2, 27, null, null, "center");
 
         doc.setLineWidth(0.15);
-        doc.line(14, 25, 287, 25);
         doc.line(14, 32, 287, 32);
+        doc.line(14, 37, 287, 37);
 
         doc.setFontSize(13);
 
-        let y = 36;
+        let y = 41;
         doc.setFont("SutonnyMJ", "bold");
         //     µg bs	bvg	c`ex	BDwbU	‡hvM`vb	 Gwiqvi 	 GwcÖj-20 	 ‡g-20 	 ‡gvU 	‡PK bs 
         const sp = mnth.split("-");
