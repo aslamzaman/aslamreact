@@ -90,7 +90,7 @@ const Add = ({ message }) => {
                                     <TextEn Title="Pic" Id="pic" Change={e => setPic(e.target.value)} Value={pic} Chr={150} />
                                     <TextareaEn Title="Director" Id="director" Rows="2" Change={e => setDirector(e.target.value)} Value={director} />
                                     <TextareaEn Title="Writer" Id="writer" Rows="2" Change={e => setWriter(e.target.value)} Value={writer} />
-                                    <TextareaEn Title="Cast" Id="cast" Rows="5" Change={e => setCast(e.target.value)} Value={cast} />
+                                    <TextareaEn Title="Cast" Id="cast" Rows="14" Change={e => setCast(e.target.value)} Value={cast} />
                                 </div>
                                 <div className="w-full flex justify-start">
                                     <input type="button" onClick={closeAddForm} value="Close" className="bg-pink-600 hover:bg-pink-800 text-white text-center mt-3 mx-0.5 px-4 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 cursor-pointer" />
