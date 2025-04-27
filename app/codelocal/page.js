@@ -86,7 +86,7 @@ const CodeLocal = () => {
     const downloadCreateHandler = () => {
         local();
         setPageText(Download(tbl, check));
-        setTitleTxt(`components/${tbl}/Dowload.js`);
+        setTitleTxt(`components/${tbl}/Download.js`);
     }
 
     const databaseHandler = () => {

@@ -267,7 +267,12 @@ const MenuData = [
             {
                 label: 'General Certifcate',
                 url: '/certificate/general'
+            },
+            {
+                label: 'Movie',
+                url: '/movie'
             }
+
 
         ]
     }
