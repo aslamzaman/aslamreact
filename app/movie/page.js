@@ -69,8 +69,9 @@ const Movie = () => {
                         <tbody>
                             {
                                 movies.length ? movies.map((movie,i) => {
+                                    const isTrailer = movie.trailer;
                                     return (
-                                        <tr className="border-b border-gray-200 hover:bg-gray-100" key={movie.id}>
+                                        <tr className={`border-b border-gray-200 hover:bg-gray-100 ${isTrailer?'text-blue-700':'text-black'}`} key={movie.id}>
                                             <td className="text-center py-2 px-4">{i+1}</td>
                                             <td className="text-start py-2 px-4">{movie.name}</td>
                                             <td className="text-start py-2 px-4">{movie.category}</td>
