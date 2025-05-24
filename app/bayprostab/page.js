@@ -112,15 +112,15 @@ const Bayprostab = () => {
       payType: payType,
       cheque: cheque
     }
-
+console.log(data)
     setTimeout(() => {
       BayprostabPreparation.central({ doc, data });
       BayprostabPreparation.tableOne({ doc }, bayprostabs, 12, 90.5, 102, 131.5, 101, 55);
-      BayprostabPreparation.payment({ doc }, bayprostabs, 174.7, 172, 49, payType);
+      BayprostabPreparation.payment({ doc }, data, 174.7, 172, 49, payType);
       doc.addPage("a4", "p");
       BayprostabPreparation.completePlan({ doc, data });
       BayprostabPreparation.tableOne({ doc }, bayprostabs, 12, 90.5, 102, 131.5, 107, 55);
-      BayprostabPreparation.payment({ doc }, bayprostabs, 166, 172, 64.5, payType);
+      BayprostabPreparation.payment({ doc }, data, 166, 172, 64.5, payType);
 
       if (project === 'GO') {
         doc.addPage("a4", "p");
