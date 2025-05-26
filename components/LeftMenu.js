@@ -63,6 +63,10 @@ const MenuData = [
             {
                 label: 'TA Bill',
                 url: '/tabill'
+            },
+            {
+                label: 'Cheque Deposite',
+                url: '/deposit'
             }
         ]
     },
