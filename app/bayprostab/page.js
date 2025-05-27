@@ -115,7 +115,7 @@ const Bayprostab = () => {
 console.log(data)
     setTimeout(() => {
       BayprostabPreparation.central({ doc, data });
-      BayprostabPreparation.tableOne({ doc }, bayprostabs, 12, 90.5, 102, 131.5, 101, 55);
+      BayprostabPreparation.tableOne({ doc }, bayprostabs, 15, 90.5, 102, 131.5, 101, 55);
       BayprostabPreparation.payment({ doc }, data, 174.7, 172, 49, payType);
       doc.addPage("a4", "p");
       BayprostabPreparation.completePlan({ doc, data });
