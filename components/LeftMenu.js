@@ -182,6 +182,10 @@ const MenuData = [
                 url: '/code'
             },
             {
+                label: 'Code MERN',
+                url: '/codemern'
+            },
+            {
                 label: 'Code Models',
                 url: '/codemodels'
             },
