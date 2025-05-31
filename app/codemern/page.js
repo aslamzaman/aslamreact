@@ -11,6 +11,7 @@ import MongooseDB from "@/components/codemern/MongooseDB";
 import MongooseModels from "@/components/codemern/MongooseModels";
 import MongooseRoute from "@/components/codemern/MongooseRoute";
 import MongooseRouteDynamic from "@/components/codemern/MongooseRouteDynamic";
+import { MongodbFunction } from "@/components/codemern/MongodbFunction";
 
 
 
@@ -103,14 +104,20 @@ const Codemern = () => {
     }
 
     const MongooseRouteHandle = () => {
-        setTitleText(`api/post/route.js`);
+        setTitleText(`api/${tbl}/route.js`);
         setResult(MongooseRoute(tbl, fld));
     }
 
     const MongooseRouteDynamicHandle = () => {
-        setTitleText(`api/post/[id]/route.js`);
+        setTitleText(`api/${tbl}/[id]/route.js`);
         setResult(MongooseRouteDynamic(tbl, fld));
     }
+
+    const MongooseFunctionHandle = () => {
+        setTitleText(`lib/mongodbFunction.js`);
+        setResult(MongodbFunction());
+    }
+
 
 
     const resultChangeHander = (e) => {
@@ -126,7 +133,7 @@ const Codemern = () => {
 
     return (
         <div className="pb-10">
-            <h1 className="w-full text-center text-3xl text-gray-500 font-bold py-7">Nextjs Code Generator</h1>
+            <h1 className="w-full text-center text-3xl text-gray-500 font-bold py-7">MERN Code Generator</h1>
             <p className="w-full text-center text-gray-400">npx create-next-app@14.1.3</p>
 
             <div className="w-full px-4 grid grid-cols-5 gap-4 mt-12">
@@ -153,7 +160,8 @@ const Codemern = () => {
                         <BtnEn Title="Model" Click={MongooseModelHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Route" Click={MongooseRouteHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Dynamic Route" Click={MongooseRouteDynamicHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        
+                        <BtnEn Title="Functions" Click={MongooseFunctionHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+
                     </div>
                 </div>
 

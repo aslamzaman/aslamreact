@@ -16,6 +16,7 @@ const Edit = (tbl, datas) => {
     const str = `import React, { useState } from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
 import LoadingDot from "../LoadingDot";
+import { getSingleDataFromMongoDB, updateDataToMongoDB } from "@/lib/mongodbFunction";
 
 
 
@@ -28,18 +29,11 @@ ${editPageStateVariables(data)}
     const showEditForm = async () => {
             setShow(true);
             try{
-                const response = await fetch(\`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}/\${id}\`, {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" }
-                });
-                if (!response.ok) {
-                    throw new Error("Failed to fetch data");
-                }
-                const data = await response.json();
+                const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}/\${id}\`;
+                const data = await getSingleDataFromMongoDB(url, '${tbl}', id);
                 // console.log(data);
 ${editPageDestructureData(data)}
 ${editPageSetVariables(data)}               
-                setWaitMsg('');
             }catch(err){
                 console.error(err);
             }
@@ -63,18 +57,9 @@ ${editPageCreateObject(data)}
         try {
             setBusy(true);
             const newObject = createObject();
-            const apiUrl = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/customer/\${id}\`;
-            const requestOptions = {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newObject)
-            };
-            const response = await fetch(apiUrl, requestOptions);
-            if (response.ok) {
-                message(\`Updated successfully completed at \${new Date().toISOString()}\`);
-            } else {
-                throw new Error("Failed to create customer");
-            }
+            const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}/\${id}\`;
+            const msg = await updateDataToMongoDB(url, '${tbl}', newObject, id);
+            message(msg);
         } catch (error) {
             console.error("Error saving ${tbl} data:", error);
             message("Error saving ${tbl} data.");

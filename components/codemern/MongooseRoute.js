@@ -6,7 +6,7 @@ const MongooseRoute = (tbl, datas) => {
   const splitData = datas.split(",");
   const data = splitData.map(s => s.trim());
   const newData = data.map(item => item);
-  const dataToString = newData.slice(0,newData.length-1).join(', ');
+  const dataToString = newData.slice(0,newData.length).join(', ');
   console.log(dataToString);
 
   const str = `    import { NextResponse } from 'next/server';

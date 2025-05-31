@@ -16,6 +16,7 @@ const Add = (tbl, datas) => {
     const str = `import React, { useState } from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
 import LoadingDot from "../LoadingDot";
+import { addDataToMongoDB } from "@/lib/mongodbFunction";
 
 const Add = ({ message }) => {
 ${addPageStateVariables(data)}    
@@ -50,18 +51,9 @@ ${addPageCreateObject(data)}
         e.preventDefault();
         try {
             const newObject = createObject();
-            const apiUrl = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}\`;
-            const requestOptions = {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newObject)
-            };
-            const response = await fetch(apiUrl, requestOptions);
-            if (response.ok) {
-                message(\`${titleCamelCase(tbl)} is created at \${new Date().toISOString()}\`);
-            } else {
-                throw new Error("Failed to create customer");
-            }
+            const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}\`;
+            const msg = await addDataToMongoDB(url, '${tbl}', newObject);
+            message(msg);
         } catch (error) {
             console.error("Error saving ${tbl} data:", error);
             message("Error saving ${tbl} data.");

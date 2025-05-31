@@ -14,6 +14,7 @@ const Page = (tbl, datas) => {
   
 
     const str = `${importToPageHeader(tbl)}
+import { getDataFromMongoDB } from "@/lib/mongodbFunction";
 
 
 
@@ -26,14 +27,8 @@ ${pageStateVariables(tbl)}
         const getData = async () => {
             setWaitMsg('Please Wait...');
             try {
-                const response = await fetch(\`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}\`, {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" }
-                });
-                if (!response.ok) {
-                    throw new Error("Failed to fetch data");
-                }
-                const data = await response.json();
+                const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}\`;
+                const data = await getDataFromMongoDB(url, '${tbl}');
                 // console.log(data);
                 set${titleCase(tbl)}s(data);
                 setWaitMsg('');

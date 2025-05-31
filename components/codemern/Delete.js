@@ -15,6 +15,7 @@ const Delete = (tbl, datas) => {
     const str = `import React, { useState } from "react";
 import { BtnEn } from "@/components/Form";
 import LoadingDot from "../LoadingDot";
+import { getSingleDataFromMongoDB, deleteDataFromMongoDB } from "@/lib/mongodbFunction";
 
 
 const Delete = ({ message, id }) => {
@@ -26,23 +27,15 @@ const Delete = ({ message, id }) => {
 
     const showDeleteForm = async () => {
         setShow(true);
-        setWaitMsg('Please wait...')
         try{
-                const response = await fetch(\`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}/\${id}\`, {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" }
-                });
-                if (!response.ok) {
-                    throw new Error("Failed to fetch data");
-                }
-                const data = await response.json();
-                 console.log(data);
-                const {${data[0]}} = data;
-                set${titleCamelCase(data[0])}(${data[0]})          
-                setWaitMsg('');
-            }catch(err){
-                console.error(err);
-            }
+            const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}/\${id}\`;
+            const data = await getSingleDataFromMongoDB(url, '${tbl}', id);    
+            console.log(data);
+            const {${data[0]}} = data;
+            set${titleCamelCase(data[0])}(${data[0]})          
+        }catch(err){
+            console.error(err);
+        }
     }
 
 
@@ -54,16 +47,9 @@ const Delete = ({ message, id }) => {
     const deleteClick = async () => {
         try {
             setBusy(true);
-            const response = await fetch(\`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}/\${id}\`, {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" }
-            });
-            if (!response.ok) {
-                throw new Error("Failed to fetch data");
-            }
-            const data = await response.json();
-            console.log(data);
-            message(\`Deleted successfully completed. id: \${id}\`);
+            const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}/\${id}\`;
+            const msg = await deleteDataFromMongoDB(url, '${tbl}', id);
+            message(msg);
         } catch (error) {
             console.log(error);
             message("Data deleting error");

@@ -8,7 +8,7 @@ const MongooseModels = (tbl, datas) => {
 
     
     let obj = "";
-    for(let i = 0; i < data.length-1; i++){
+    for(let i = 0; i < data.length; i++){
         obj+= `            ${data[i]}: { type: String, required: true },\n`;
     }
     obj+= `            isDeleted: { type: Boolean, default: false }`;
