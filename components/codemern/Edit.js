@@ -1,5 +1,5 @@
-import { editPageStateVariables, editPageDestructureData, editPageSetVariables, editPageCreateObject, editPageInputText } from "./Fnc";
-
+import { editPageInputText } from "./Fnc";
+import { titleCamelCase } from "@/lib/utils"
 
 const Edit = (tbl, datas) => {
 
@@ -10,8 +10,11 @@ const Edit = (tbl, datas) => {
 
     //----------------------------------------------------------------
 
-
-
+    const creatData = data.join(", ");
+    const setData = data.map(item => (`                setName(${item});`));
+    const setFinal = setData.join("\n");
+    const createStateVarialble = data.map(item =>(`    const [${item}, set${titleCamelCase(item)}] = useState('');`));
+    const createStateVarialbleFinal = createStateVarialble.join("\n");
 
     const str = `import React, { useState } from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
@@ -21,7 +24,7 @@ import { getSingleDataFromMongoDB, updateDataToMongoDB } from "@/lib/fetchData";
 
 
 const Edit = ({ message, id }) => {
-${editPageStateVariables(data)}
+${createStateVarialbleFinal}
 
     const [show, setShow] = useState(false);
     const [busy, setBusy] = useState(false);
@@ -33,10 +36,8 @@ ${editPageStateVariables(data)}
             setWaitMsg("Please wait...");
             try{
                 const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}/\${id}\`;
-                const data = await getSingleDataFromMongoDB(url, '${tbl}', id);
-                // console.log(data);
-${editPageDestructureData(data)}
-${editPageSetVariables(data)}               
+                const { ${creatData} } = await getSingleDataFromMongoDB(url, '${tbl}', id);
+${setFinal}              
             }catch(err){
                 console.error(err);
             }finally{
@@ -51,9 +52,7 @@ ${editPageSetVariables(data)}
 
 
     const createObject = () => {
-        return {
-${editPageCreateObject(data)}
-        }
+        return {${creatData}};
     }
 
 

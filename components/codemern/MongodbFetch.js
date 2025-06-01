@@ -1,6 +1,5 @@
 export const MongodbFunction = () => {
-    const str = `// npm install idb-keyval@6.2.1
-    import { get, set, del } from "idb-keyval";
+    const str = `import { get, set, del } from "idb-keyval";
 
 
 

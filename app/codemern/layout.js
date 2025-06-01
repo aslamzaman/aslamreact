@@ -5,5 +5,5 @@ export const metadata = {
 }
 
 export default function CodemernLayout({ children }) {
-  return <>{children}</> 
+  return <Layout>{children}</Layout> 
 }

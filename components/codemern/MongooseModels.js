@@ -7,12 +7,13 @@ const MongooseModels = (tbl, datas) => {
     const data = splitData.map(s => s.trim());
 
     
+    /*
     let obj = "";
     for(let i = 0; i < data.length; i++){
         obj+= `            ${data[i]}: { type: String, required: true },\n`;
     }
-    obj+= `            isDeleted: { type: Boolean, default: false }`;
-  
+    */
+  const obj = data.map(item => (`            ${item}: { type: String, required: true }`)).join(", \n"); 
 
     const str = `import mongoose, { Schema } from "mongoose";
 	    

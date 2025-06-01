@@ -11,7 +11,7 @@ import MongooseDB from "@/components/codemern/MongooseDB";
 import MongooseModels from "@/components/codemern/MongooseModels";
 import MongooseRoute from "@/components/codemern/MongooseRoute";
 import MongooseRouteDynamic from "@/components/codemern/MongooseRouteDynamic";
-import { MongodbFunction } from "@/components/codemern/MongodbFunction";
+import { MongodbFunction } from "@/components/codemern/MongodbFetch";
 import { Form } from "@/components/codemern/Form";
 import { LoadingDot } from "@/components/codemern/LodingForm";
 
@@ -146,14 +146,14 @@ const Codemern = () => {
 
     return (
         <div className="pb-10">
-            <h1 className="w-full text-center text-3xl text-gray-500 font-bold py-7">MERN Code Generator</h1>
-            <p className="w-full text-center text-gray-400">
+            <h1 className="w-full text-center text-3xl text-gray-500 font-bold pt-7">MERN Code Generator</h1>
+            <p className="w-full text-center text-gray-400 text-xs">
                 npx create-next-app@14.1.3<br />
                 npm install idb-keyval@6.2.1<br />
                 npm install mongoose@8.6.4
             </p>
 
-            <div className="w-full px-4 grid grid-cols-5 gap-4 mt-12">
+            <div className="w-full px-4 grid grid-cols-5 gap-4 mt-8">
                 <div>
                     <TextEn Title="Table (staff)" Id="tbl" Change={e => setTbl(e.target.value)} Value={tbl} Chr={20} />
                 </div>

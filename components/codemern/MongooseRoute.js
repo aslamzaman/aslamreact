@@ -17,7 +17,7 @@ const MongooseRoute = (tbl, datas) => {
     export const GET = async () => {
       try {
         await Connect();
-        const ${tbl}s = await ${titleCamelCase(tbl)}Model.find({isDeleted: false}).sort({_id:'desc'});
+        const ${tbl}s = await ${titleCamelCase(tbl)}Model.find({}).sort({_id:'desc'});
         return NextResponse.json( ${tbl}s );
       } catch (error) {
         console.error('GET Error:', error);

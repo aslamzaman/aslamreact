@@ -8,9 +8,6 @@ export const LoadingDot = () => {
                         <circle cx="12" cy="12" r="11" />
                     </svg>
                 </div>
-
-
-
                 <p className='w-fit text-center text-sx lg:text-lg'>{message} <span className='animate-ping'>...</span></p>
         </div>
     )

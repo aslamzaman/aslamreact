@@ -67,9 +67,13 @@ const LayoutPage = (tbl, datas) => {
 
 
 
-    const str = `    import Layout from "@/components/Layout";
+    const str = `// import Layout from "@/components/Layout";
     
-    
+    const Layout = ({ children }) =>{
+       return <>{ children }</> 
+    }
+
+
     export const metadata = {
       title: '${titleCase(tbl)}',
       description: 'Apps created by Aslam Zaman',

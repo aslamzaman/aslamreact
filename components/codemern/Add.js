@@ -1,4 +1,5 @@
-import { addPageStateVariables, addPageResetVariables, addPageCreateObject, addPageInputText } from "./Fnc";
+import { addPageInputText } from "./Fnc";
+import { titleCamelCase } from "@/lib/utils"
 
 const Add = (tbl, datas) => {
 
@@ -10,6 +11,12 @@ const Add = (tbl, datas) => {
 
 
     //----------------------------------------------------------------
+    const creatData = data.join(", ");
+    const createStateVarialble = data.map(item =>(`    const [${item}, set${titleCamelCase(item)}] = useState('');`));
+    const createStateVarialbleFinal = createStateVarialble.join("\n");
+    const resetVarialble = data.map(item =>(`       set${titleCamelCase(item)}('');`));
+    const resetVarialbleFinal = resetVarialble.join("\n");
+
 
 
     const str = `import React, { useState } from "react";
@@ -18,7 +25,7 @@ import LoadingDot from "../LoadingDot";
 import { addDataToMongoDB } from "@/lib/fetchData";
 
 const Add = ({ message }) => {
-${addPageStateVariables(data)}    
+${createStateVarialbleFinal}   
 
     const [show, setShow] = useState(false);
     const [busy, setBusy] = useState(false);
@@ -35,14 +42,12 @@ ${addPageStateVariables(data)}
 
 
     const resetVariables = () => {
-${addPageResetVariables(data)}
+${resetVarialbleFinal}
     }
 
 
     const createObject = () => {
-        return {
-${addPageCreateObject(data)}
-        }
+        return {${creatData}};
     }
 
 

@@ -186,10 +186,6 @@ const MenuData = [
                 url: '/codemern'
             },
             {
-                label: 'Code Models',
-                url: '/codemodels'
-            },
-            {
                 label: 'Local Storage Code',
                 url: '/codelocal'
             },
