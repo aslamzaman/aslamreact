@@ -147,7 +147,11 @@ const Codemern = () => {
     return (
         <div className="pb-10">
             <h1 className="w-full text-center text-3xl text-gray-500 font-bold py-7">MERN Code Generator</h1>
-            <p className="w-full text-center text-gray-400">npx create-next-app@14.1.3</p>
+            <p className="w-full text-center text-gray-400">
+                npx create-next-app@14.1.3<br />
+                npm install idb-keyval@6.2.1<br />
+                npm install mongoose@8.6.4
+            </p>
 
             <div className="w-full px-4 grid grid-cols-5 gap-4 mt-12">
                 <div>
