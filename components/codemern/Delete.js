@@ -15,7 +15,7 @@ const Delete = (tbl, datas) => {
     const str = `import React, { useState } from "react";
 import { BtnEn } from "@/components/Form";
 import LoadingDot from "../LoadingDot";
-import { getSingleDataFromMongoDB, deleteDataFromMongoDB } from "@/lib/mongodbFunction";
+import { getSingleDataFromMongoDB, deleteDataFromMongoDB } from "@/lib/fetchData";
 
 
 const Delete = ({ message, id }) => {
@@ -23,18 +23,23 @@ const Delete = ({ message, id }) => {
 
     const [show, setShow] = useState(false);
     const [busy, setBusy] = useState(false);
+    const [waitMsg, setWaitMsg] = useState("");
+
 
 
     const showDeleteForm = async () => {
         setShow(true);
+        setWaitMsg("Please wait...");
         try{
             const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}/\${id}\`;
             const data = await getSingleDataFromMongoDB(url, '${tbl}', id);    
             console.log(data);
             const {${data[0]}} = data;
             set${titleCamelCase(data[0])}(${data[0]})          
-        }catch(err){
+			}catch(err){
             console.error(err);
+        }finally{
+            setWaitMsg("");
         }
     }
 
@@ -45,8 +50,8 @@ const Delete = ({ message, id }) => {
 
 
     const deleteClick = async () => {
+		setBusy(true);
         try {
-            setBusy(true);
             const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}/\${id}\`;
             const msg = await deleteDataFromMongoDB(url, '${tbl}', id);
             message(msg);
@@ -83,7 +88,7 @@ const Delete = ({ message, id }) => {
                                     <path d="M30 23 L30 40" className="fill-none stroke-red-700 stroke-[5px]" />
                                     <path d="M30 45 L30 50" className="fill-none stroke-red-700 stroke-[5px]" />
                                 </svg>
-
+                                <p className="text-center">{waitMsg}</p>
                                 <h1 className="text-sm text-center text-gray-600 mt-4">
                                     Are you sure to proceed with the deletion?</h1>
                                 <h1 className="text-center text-gray-600 font-bold">{${data[0]}}</h1>

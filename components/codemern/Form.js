@@ -1,8 +1,8 @@
-
-
+export const Form = () => {
+    const str = `
 export const BtnEn = ({ Title, Click, Class }) => {
   return (
-    <button onClick={Click} className={`text-center mt-3 mx-0.5 px-3 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 ${Class} cursor-pointer`}>{Title}</button>
+    <button onClick={Click} className={\`text-center mt-3 mx-0.5 px-3 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 \${Class} cursor-pointer\`}>{Title}</button>
 
   )
 }
@@ -10,7 +10,7 @@ export const BtnEn = ({ Title, Click, Class }) => {
 
 export const BtnInput = ({ Title, Click, Class }) => {
   return (
-    <input type="button" onClick={Click} className={`text-center mt-3 mx-0.5 px-3 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 ${Class} cursor-pointer`} value={Title} />
+    <input type="button" onClick={Click} className={\`text-center mt-3 mx-0.5 px-3 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 \${Class} cursor-pointer\`} value={Title} />
   )
 }
 
@@ -18,20 +18,20 @@ export const BtnInput = ({ Title, Click, Class }) => {
 
 export const BtnEnSm = ({ Title, Click, Class }) => {
   return (
-    <button onClick={Click} className={`text-center mt-3 mx-0.5 px-3 py-2 text-sm font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 text-white ${Class}`}>{Title}</button>
+    <button onClick={Click} className={\`text-center mt-3 mx-0.5 px-3 py-2 text-sm font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 text-white \${Class}\`}>{Title}</button>
   )
 }
 
 
 export const BtnSubmit = ({ Title, Class }) => {
   return (
-    <button type="submit" className={`text-center mt-3 mx-0.5 px-3 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 ${Class}`}>{Title}</button>
+    <button type="submit" className={\`text-center mt-3 mx-0.5 px-3 py-2 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 \${Class}\`}>{Title}</button>
   )
 }
 
 export const BtnSubmitSm = ({ Title, Class }) => {
   return (
-    <button type="submit" className={`text-xs text-center mx-0.5 px-2 py-0.5 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 ${Class}`}>{Title}</button>
+    <button type="submit" className={\`text-xs text-center mx-0.5 px-2 py-0.5 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 \${Class}\`}>{Title}</button>
   )
 }
 
@@ -145,7 +145,7 @@ export const TextNum = ({ Title, Id, Change, Value }) => {
 export const TextFile = ({ Title, Id, Change, Accept, Class }) => {
   return (
     <div className="w-full flex flex-col items-start">
-      <label className={`text-xs font-semibold mb-1 ${Class} opacity-50`} htmlFor={Id}>{Title}</label>
+      <label className={\`text-xs font-semibold mb-1 \${Class} opacity-50\`} htmlFor={Id}>{Title}</label>
       <input onChange={Change} type="file" id={Id} name={Id} required className="w-full px-2 py-1.5 text-gray-600 ring-1 focus:ring-4 ring-blue-300 outline-none rounded duration-300" accept={Accept} />
     </div>
   )
@@ -209,4 +209,6 @@ export const TextareaUn = ({ Title, Id, Rows, Change, Value }) => {
     </div>
   )
 }
-
+`;
+    return str;
+}

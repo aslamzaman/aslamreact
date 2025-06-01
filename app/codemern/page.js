@@ -12,6 +12,8 @@ import MongooseModels from "@/components/codemern/MongooseModels";
 import MongooseRoute from "@/components/codemern/MongooseRoute";
 import MongooseRouteDynamic from "@/components/codemern/MongooseRouteDynamic";
 import { MongodbFunction } from "@/components/codemern/MongodbFunction";
+import { Form } from "@/components/codemern/Form";
+import { LoadingDot } from "@/components/codemern/LodingForm";
 
 
 
@@ -94,12 +96,12 @@ const Codemern = () => {
     }
 
     const MongooseHandle = () => {
-        setTitleText(`lib/DB.js`);
+        setTitleText(`lib/db.js`);
         setResult(MongooseDB());
     }
 
     const MongooseModelHandle = () => {
-        setTitleText(`lib/Models.js`);
+        setTitleText(`lib/models.js`);
         setResult(MongooseModels(tbl, fld));
     }
 
@@ -114,10 +116,21 @@ const Codemern = () => {
     }
 
     const MongooseFunctionHandle = () => {
-        setTitleText(`lib/mongodbFunction.js`);
+        setTitleText(`lib/fetchData.js`);
         setResult(MongodbFunction());
     }
 
+
+    const FormGenerate = () => {
+        setTitleText(`components/Form.js`);
+        setResult(Form());
+    }
+
+
+    const LoadingFormGenerate = () => {
+        setTitleText(`components/LoadingDot.js`);
+        setResult(LoadingDot());
+    }
 
 
     const resultChangeHander = (e) => {
@@ -160,7 +173,9 @@ const Codemern = () => {
                         <BtnEn Title="Model" Click={MongooseModelHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Route" Click={MongooseRouteHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
                         <BtnEn Title="Dynamic Route" Click={MongooseRouteDynamicHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
-                        <BtnEn Title="Functions" Click={MongooseFunctionHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="FetchFunctions" Click={MongooseFunctionHandle} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="Form" Click={FormGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
+                        <BtnEn Title="LoadingForm" Click={LoadingFormGenerate} Class="bg-indigo-700 hover:bg-indigo-900 text-white mr-1 text-xs" />
 
                     </div>
                 </div>

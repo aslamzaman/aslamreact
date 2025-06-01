@@ -1,4 +1,3 @@
-import { titleCamelCase } from "@/lib/utils";
 import { addPageStateVariables, addPageResetVariables, addPageCreateObject, addPageInputText } from "./Fnc";
 
 const Add = (tbl, datas) => {
@@ -16,7 +15,7 @@ const Add = (tbl, datas) => {
     const str = `import React, { useState } from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
 import LoadingDot from "../LoadingDot";
-import { addDataToMongoDB } from "@/lib/mongodbFunction";
+import { addDataToMongoDB } from "@/lib/fetchData";
 
 const Add = ({ message }) => {
 ${addPageStateVariables(data)}    
@@ -49,6 +48,7 @@ ${addPageCreateObject(data)}
 
     const saveHandler = async (e) => {
         e.preventDefault();
+		setBusy(true);
         try {
             const newObject = createObject();
             const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}\`;

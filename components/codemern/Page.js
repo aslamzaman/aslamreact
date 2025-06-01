@@ -14,7 +14,7 @@ const Page = (tbl, datas) => {
   
 
     const str = `${importToPageHeader(tbl)}
-import { getDataFromMongoDB } from "@/lib/mongodbFunction";
+import { getDataFromMongoDB } from "@/lib/fetchData";
 
 
 
@@ -30,10 +30,11 @@ ${pageStateVariables(tbl)}
                 const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}\`;
                 const data = await getDataFromMongoDB(url, '${tbl}');
                 // console.log(data);
-                set${titleCase(tbl)}s(data);
-                setWaitMsg('');
+                set${titleCase(tbl)}s(data);               
             } catch (error) {
                 console.error("Error fetching data:", error);
+            }finally{
+                setWaitMsg("");
             }
         };
         getData();

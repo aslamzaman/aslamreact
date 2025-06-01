@@ -10,8 +10,8 @@ const MongooseRoute = (tbl, datas) => {
   console.log(dataToString);
 
   const str = `    import { NextResponse } from 'next/server';
-    import { Connect } from '@/lib/Db';
-    import { ${titleCamelCase(tbl)}Model } from '@/lib/Models';
+    import { Connect } from '@/lib/db';
+    import { ${titleCamelCase(tbl)}Model } from '@/lib/models';
     
     
     export const GET = async () => {

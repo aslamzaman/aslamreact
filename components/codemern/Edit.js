@@ -16,7 +16,7 @@ const Edit = (tbl, datas) => {
     const str = `import React, { useState } from "react";
 import { TextEn, BtnSubmit } from "@/components/Form";
 import LoadingDot from "../LoadingDot";
-import { getSingleDataFromMongoDB, updateDataToMongoDB } from "@/lib/mongodbFunction";
+import { getSingleDataFromMongoDB, updateDataToMongoDB } from "@/lib/fetchData";
 
 
 
@@ -25,9 +25,12 @@ ${editPageStateVariables(data)}
 
     const [show, setShow] = useState(false);
     const [busy, setBusy] = useState(false);
+    const [waitMsg, setWaitMsg] = useState("");
+
 
     const showEditForm = async () => {
             setShow(true);
+            setWaitMsg("Please wait...");
             try{
                 const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}/\${id}\`;
                 const data = await getSingleDataFromMongoDB(url, '${tbl}', id);
@@ -36,13 +39,15 @@ ${editPageDestructureData(data)}
 ${editPageSetVariables(data)}               
             }catch(err){
                 console.error(err);
+            }finally{
+                setWaitMsg("");
             }
     };
 
 
     const closeEditForm = () => {
         setShow(false);
-    };
+		};
 
 
     const createObject = () => {
@@ -54,8 +59,8 @@ ${editPageCreateObject(data)}
 
     const saveHandler = async (e) => {
         e.preventDefault();
-        try {
-            setBusy(true);
+		setBusy(true);
+        try {            
             const newObject = createObject();
             const url = \`\${process.env.NEXT_PUBLIC_BASE_URL}/api/${tbl}/\${id}\`;
             const msg = await updateDataToMongoDB(url, '${tbl}', newObject, id);
@@ -63,7 +68,7 @@ ${editPageCreateObject(data)}
         } catch (error) {
             console.error("Error saving ${tbl} data:", error);
             message("Error saving ${tbl} data.");
-        } finally {
+        }finally {
             setBusy(false);
             setShow(false);
         }
@@ -86,6 +91,7 @@ ${editPageCreateObject(data)}
 
                         </div>
                         <div className="px-6 pb-6 text-black">
+                            <p className="text-center">{waitMsg}</p>
                             <form onSubmit={saveHandler} >
                                 <div className="grid grid-cols-1 gap-4 my-4">
 ${editPageInputText(data)}                                    
