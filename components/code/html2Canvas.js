@@ -96,7 +96,7 @@ const Home = () => {
             // Screen shot---------------
             const htmlElement = contentRef.current;
             const canvas = await html2canvas(htmlElement, {
-                scale: 2,
+                scale: 2, //  Especially Chrome browser have a maximum limit for canvas dimensions 32,768 pixels width or height
                 logging: false,
                 useCORS: true,
                 allowTaint: true,
