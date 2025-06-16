@@ -95,7 +95,12 @@ const Home = () => {
 
             // Screen shot---------------
             const htmlElement = contentRef.current;
-            const canvas = await html2canvas(htmlElement);
+            const canvas = await html2canvas(htmlElement, {
+                scale: 2,
+                logging: false,
+                useCORS: true,
+                allowTaint: true,
+            });
             const imageUrl = canvas.toDataURL('images/png');
             // Create PDF file
             doc.addImage(\`\${imageUrl}\`, "PNG", 0, 0, 210, 297);
