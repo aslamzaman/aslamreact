@@ -7,16 +7,17 @@ import { getDataFromIndexedDB } from "@/lib/DatabaseIndexedDB";
 import { formatedDate, inwordEnglish, numberWithComma, titleCamelCase } from "@/lib/utils";
 import { jsPDF } from "jspdf";
 import { set, del } from "idb-keyval";
+import { BtnSubmit, TextDt } from "@/components/Form";
 
 
 const initialData = [
     {
         "id": 1748235535742,
         "name": "Eassy Dhaka (Ground Floor)",
-        "bank": "Modhumoti Bank PLC. Uttara Branch",
+        "bank": "Modhumoti Bank PLC. Pragati Sarani Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": ""
+        "tk": 0
     },
     {
         "id": 1748235663022,
@@ -24,7 +25,7 @@ const initialData = [
         "bank": "United Commercial Bank PLC Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": ""
+        "tk": 0
     },
     {
         "id": 1748235728117,
@@ -32,7 +33,7 @@ const initialData = [
         "bank": "United Commercial Bank PLC Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": ""
+        "tk": 0
     },
     {
         "id": 1748235766117,
@@ -40,7 +41,7 @@ const initialData = [
         "bank": "United Commercial Bank PLC Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": ""
+        "tk": 0
     },
     {
         "id": 1748235801557,
@@ -48,15 +49,15 @@ const initialData = [
         "bank": "United Commercial Bank PLC Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": ""
+        "tk": 0
     },
     {
         "id": 1748235856869,
         "name": "Globe Forwarding & Freight (Fourth Floor)",
-        "bank": "Dhaka Bank PLC Uttara Branch",
+        "bank": "Dhaka Bank PLC",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": ""
+        "tk": 0
     },
     {
         "id": 1748235882941,
@@ -64,7 +65,7 @@ const initialData = [
         "bank": "Shahjalal Islami Bank PLC Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": ""
+        "tk": 0
     },
     {
         "id": 1748235904077,
@@ -72,7 +73,7 @@ const initialData = [
         "bank": "Shahjalal Islami Bank PLC Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": ""
+        "tk": 0
     }
 ]
 
@@ -85,6 +86,7 @@ const Deposit = () => {
     const [msg, setMsg] = useState("");
 
     const [gt, setGt] = useState("");
+    const [dt, setDt] = useState("");
 
 
 
@@ -105,6 +107,7 @@ const Deposit = () => {
             }
         };
         load();
+        setDt(formatedDate(new Date()));
     }, [msg]);
 
 
@@ -116,7 +119,9 @@ const Deposit = () => {
 
 
 
-    const printHandler = async () => {
+    const printHandler = async (e) => {
+         e.preventDefault();
+
         if (deposits.length < 1) {
             setWaitMsg("No data found!");
             return false;
@@ -134,7 +139,7 @@ const Deposit = () => {
         doc.setFont("times", "normal");
         doc.setFontSize(10);
         doc.addImage("/images/chairman/cheque_deposit_slip_1.png", "PNG", 0, 0, 210, 297);
-        doc.text(`${formatedDate(new Date())}`, 196.5, 61.5, null, null, "right");
+        doc.text(`${formatedDate(dt)}`, 196.5, 61.5, null, null, "right");
 
 
         let y = 81;
@@ -171,12 +176,12 @@ const Deposit = () => {
         doc.text("Depositor:", 19, y + 20, null, null, "left");
 
         doc.text("Signature:", 19, y + 40, null, null, "left");
-        doc.text("Name: Aslam Zaman", 19, y + 45.5, null, null, "left");
-        doc.text("Address: House# 5/4, Block -F, Lalmatia, Dhaka -1207", 19, y + 51, null, null, "left");
-        doc.text("Mobile Number: 01720025151", 19, y + 56.5, null, null, "left");
-        doc.text("NID Number: 779 602 1652", 19, y + 62, null, null, "left");
-        doc.text("Relationship With A/C Holder: Service", 19, y + 67.5, null, null, "left");
-        doc.text("Source of Fund: House Rent", 19, y + 73, null, null, "left");
+        doc.text("Name: Aslam Zaman", 19, y + 45, null, null, "left");
+        doc.text("Address: House# 5/4, Block -F, Lalmatia, Dhaka -1207", 19, y + 50, null, null, "left");
+        doc.text("Mobile Number: 01720025151", 19, y + 55, null, null, "left");
+        doc.text("NID Number: 779 602 1652", 19, y + 60, null, null, "left");
+        doc.text("Relationship With A/C Holder: Service", 19, y + 65, null, null, "left");
+        doc.text("Source of Fund: House Rent", 19, y + 70, null, null, "left");
 
 
         doc.save(new Date().toISOString() + "-Deposit_Slip.pdf");
@@ -210,8 +215,14 @@ const Deposit = () => {
             <div className="w-full bg-white border-2 border-gray-200 p-4 shadow-md rounded-md">
                 <div className="w-full overflow-auto">
                     <p className="w-full text-sm text-center text-pink-600">&nbsp;{msg}&nbsp;</p>
-                    <button onClick={initialDataHandler}>Initial Data</button>
-                    <div className="w-full flex justify-end">
+
+                    <div className="w-full mb-4 flex justify-between">
+                        <button onClick={initialDataHandler}>Initial Data</button>
+
+                        <form onSubmit={printHandler} className="w-auto flex justify-end space-x-2">
+                            <TextDt Title="Date" Id="dt" Change={e => setDt(e.target.value)} Value={dt} />
+                            <button type="submit" className="text-center mt-5 mx-0.5 px-3 py-0.5 font-semibold rounded-md focus:ring-1 ring-blue-200 ring-offset-2 duration-300 bg-blue-600 hover:bg-blue-800 text-white">Print</button>
+                        </form>
 
                     </div>
                     <table className="w-full border border-gray-200">
@@ -224,7 +235,7 @@ const Deposit = () => {
                                 <th className="text-end border-b border-gray-200 px-4 py-2">Taka</th>
                                 <th className="w-[100px] font-normal">
                                     <div className="w-full flex justify-end items-center pr-2.5 font-normal">
-                                        <button onClick={printHandler}>Print</button>
+
                                         <Add message={messageHandler} />
                                     </div>
                                 </th>
