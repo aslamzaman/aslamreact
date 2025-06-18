@@ -22,7 +22,7 @@ const initialData = [
     {
         "id": 1748235663022,
         "name": "Weber Power Solution (First Floor)",
-        "bank": "United Commercial Bank PLC Uttara Branch",
+        "bank": "United Commercial Bank PLC. Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
         "tk": 0
@@ -30,7 +30,7 @@ const initialData = [
     {
         "id": 1748235728117,
         "name": "Weber Power Solution (First Floor)",
-        "bank": "United Commercial Bank PLC Uttara Branch",
+        "bank": "United Commercial Bank PLC. Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
         "tk": 0
@@ -38,7 +38,7 @@ const initialData = [
     {
         "id": 1748235766117,
         "name": "Weber Power Solution (Second Floor)",
-        "bank": "United Commercial Bank PLC Uttara Branch",
+        "bank": "United Commercial Bank PLC. Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
         "tk": 0
@@ -46,7 +46,7 @@ const initialData = [
     {
         "id": 1748235801557,
         "name": "Weber Power Solution (Second Floor)",
-        "bank": "United Commercial Bank PLC Uttara Branch",
+        "bank": "United Commercial Bank PLC. Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
         "tk": 0
@@ -54,7 +54,7 @@ const initialData = [
     {
         "id": 1748235856869,
         "name": "Globe Forwarding & Freight (Fourth Floor)",
-        "bank": "Dhaka Bank PLC",
+        "bank": "Dhaka Bank PLC.",
         "cheque": "",
         "dt": formatedDate(new Date()),
         "tk": 0
@@ -62,7 +62,7 @@ const initialData = [
     {
         "id": 1748235882941,
         "name": "Zepto Engineering Services  (Fifth Floor)",
-        "bank": "Shahjalal Islami Bank PLC Uttara Branch",
+        "bank": "Shahjalal Islami Bank PLC. Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
         "tk": 0
@@ -70,7 +70,7 @@ const initialData = [
     {
         "id": 1748235904077,
         "name": "Zepto Engineering Services  (Fifth Floor)",
-        "bank": "Shahjalal Islami Bank PLC Uttara Branch",
+        "bank": "Shahjalal Islami Bank PLC. Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
         "tk": 0
