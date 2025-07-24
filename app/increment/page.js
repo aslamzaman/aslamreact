@@ -51,7 +51,7 @@ const Increment = () => {
         }
         getData();
 
-        setIncomeYr("2023-2024");
+        setIncomeYr("2024-2025");
         setDt(formatedDate(new Date()));
         setActiveDt(formatedDate(new Date()));
 
