@@ -12,8 +12,7 @@ const montsArray = ["January", "February", "March", "April", "May", "June", "Jul
 const Link3 = () => {
     const [msg, setMsg] = useState("Data ready");
 
-    const [dt, setDt] = useState('');
-    const [taka, setTaka] = useState('1764');
+    const [dt, setDt] = useState('');  
     const [months, setMonths] = useState('');
     const [yr, setYr] = useState('');
 
@@ -50,14 +49,13 @@ const Link3 = () => {
 
                 doc.text(`${months} ${yr}`, 114, 77, null, null, "left");
                 //-------------------------------------------------------------
-                doc.text(`- ${1764 - parseFloat(taka)}.00`, 175.3, 97.1, null, null, "right");
+                doc.text(`- 1680.00`, 175.3, 97.1, null, null, "right");
                 //-------------------------------------------------------------
 
                 doc.setFont("times", "bold");
-                doc.text(`${1932 - (1764 - parseInt(taka))}.00`, 175.3, 179.3, null, null, "right"); // Total Taka
-                let total = `${1932 - (1764 - parseInt(taka))}`;
+                doc.text(`1848.00`, 175.3, 179.3, null, null, "right"); // Total Taka
                 doc.setFont("times", "normal");
-                let t = inwordEnglish(parseInt(total));
+                let t = inwordEnglish(parseInt(1848));
                 doc.text(`${titleCamelCase(t)} Taka Only`, 40, 188, null, null, "left"); // Inword
                 //--------------------------------------------------------------------
 
@@ -115,8 +113,7 @@ const Link3 = () => {
                             <option value="2038">2038</option>
                             <option value="2039">2039</option>
                             <option value="2040">2040</option>
-                        </DropdownEn>
-                        <TextNum Title="Taka" Id="taka" Change={e => setTaka(e.target.value)} Value={taka} />
+                        </DropdownEn>                        
                     </div>
                     <BtnSubmit Title="Create Electric Bill" Class="bg-blue-600 hover:bg-blue-800 text-white" />
 
