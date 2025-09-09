@@ -17,7 +17,7 @@ const initialData = [
         "bank": "Modhumoti Bank PLC. Pragati Sarani Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": 0
+        "tk": 40000
     },
     {
         "id": 1748235663022,
@@ -25,7 +25,7 @@ const initialData = [
         "bank": "United Commercial Bank PLC. Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": 0
+        "tk": 35750
     },
     {
         "id": 1748235728117,
@@ -33,7 +33,7 @@ const initialData = [
         "bank": "United Commercial Bank PLC. Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": 0
+        "tk": 14250
     },
     {
         "id": 1748235766117,
@@ -41,7 +41,7 @@ const initialData = [
         "bank": "United Commercial Bank PLC. Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": 0
+        "tk": 27000
     },
     {
         "id": 1748235801557,
@@ -49,7 +49,7 @@ const initialData = [
         "bank": "United Commercial Bank PLC. Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": 0
+        "tk": 23000
     },
     {
         "id": 1748235856869,
@@ -57,7 +57,7 @@ const initialData = [
         "bank": "Dhaka Bank PLC.",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": 0
+        "tk": 47500
     },
     {
         "id": 1748235882941,
@@ -65,7 +65,7 @@ const initialData = [
         "bank": "Shahjalal Islami Bank PLC. Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": 0
+        "tk": 27000
     },
     {
         "id": 1748235904077,
@@ -73,7 +73,7 @@ const initialData = [
         "bank": "Shahjalal Islami Bank PLC. Uttara Branch",
         "cheque": "",
         "dt": formatedDate(new Date()),
-        "tk": 0
+        "tk": 10000
     }
 ]
 
